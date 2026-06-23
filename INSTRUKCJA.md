@@ -11,7 +11,7 @@ z czatu w Claude Code. Twoje klucze i obrazki zostają u Ciebie na dysku.
 ---
 
 ## Krok 1 — zainstaluj apkę
-1. Pobierz plik `thumbforge-…-arm64.dmg`
+1. Pobierz instalator `thumbforge-…-arm64.dmg` z naszego **Discorda** (kanał dla beta-testerów)
 2. Otwórz go i **przeciągnij** ikonę *thumbforge* na folder **Applications**
 3. Uruchom apkę. Za **pierwszym** razem macOS powie „niezidentyfikowany deweloper" —
    wtedy **prawy klik** na ikonie → **Otwórz** → jeszcze raz **Otwórz**
