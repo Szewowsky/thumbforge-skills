@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # Re-kopiuje 6 skilli z repo thumbforge do tego marketplace, żeby nie driftowały.
 # Źródło prawdy = .claude/skills/ w repo thumbforge; ten plugin to tylko opakowanie do dystrybucji.
-# Użycie: ./sync.sh [/ścieżka/do/repo/thumbforge]
+# Użycie: ./sync.sh [/ścieżka/do/repo/thumbforge]   (domyślnie: siblingowe ../thumbforge)
 set -euo pipefail
 
-SRC="${1:-/Users/robert/Windsurf Projekty/thumbforge}/.claude/skills"
+HERE="$(cd "$(dirname "$0")" && pwd)"
+SRC="${1:-$HERE/../thumbforge}/.claude/skills"
 DEST="$(cd "$(dirname "$0")" && pwd)/plugins/thumbforge/skills"
 SKILLS=(tf-generate tf-reverse tf-scenario tf-preset tf-assets thumbforge)
 
