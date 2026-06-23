@@ -61,7 +61,7 @@ Discover the dimension before you pick it (see
 ```bash
 thumbforge list-presets               # built-in archetypes + this account's customs
 thumbforge list-styles                # background / text / recipe styles (built-in + custom)
-pnpm cli preset:slots hero-pointing # the slots a preset exposes (refs bind at generation)
+pnpm cli preset:slots hero-pointing   # repo/dev-only: slot detail; thin fallback is preset:show
 thumbforge preset:show hero-pointing  # the 6 spec blocks: EDITABLE vs FROZEN, with bodies
 ```
 
@@ -132,8 +132,8 @@ fix the block, do not work around it. `[FACE LOCK]` / `[PRESERVE]` /
 ```bash
 thumbforge preset:edit <custom-id> --name "Nowa nazwa" --text-color "#0AC6AA" \
   --glow-color "#0AC6AA"
-pnpm cli preset:preview <custom-id> --from "/ABS/path/to/cover.png"
-pnpm cli preset:delete <custom-id>   # soft-delete; old sessions still resolve on retry
+pnpm cli preset:preview <custom-id> --from "/ABS/path/to/cover.png"  # repo/dev-only
+pnpm cli preset:delete <custom-id>   # repo/dev-only soft-delete; old sessions still resolve on retry
 ```
 
 `preset:edit` takes the same style/block flags as `preset:create` (patch
@@ -155,9 +155,9 @@ including the custom styles you wired in. To actually render images, hand off to
 **/tf-generate** with `--preset <custom-id>` — that is a separate **paid** stage
 with its own dry-run and its own consent.
 
-Before filling `$FACE`/`$ICON`, run
-`pnpm cli refs:contact-sheet --category <category> --out <dir>` or inspect
-ambiguous `_thumb.png` previews. A validation dry-run should use refs whose
+Before filling `$FACE`/`$ICON`, use `thumbforge list-refs` as the thin-client
+index and inspect ambiguous `_thumb.png` previews. In repo/dev only, you may run
+`pnpm cli refs:contact-sheet --category <category> --out <dir>`. A validation dry-run should use refs whose
 visible content matches the slot, not merely ids that sound right.
 
 ## Chain with tf-reverse (both directions)
@@ -218,6 +218,7 @@ bezpośredniego CLI — raz wykonaj `pnpm link --global` (albo używaj równowa�
 `pnpm cli <komenda>`).
 
 Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `generate`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `upload-ref`, `grid`.
-Komendy `edit`, `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:delete`
+Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
+Komendy `edit`, `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
 są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast
 „dostępne tylko w trybie repo (dev)".
