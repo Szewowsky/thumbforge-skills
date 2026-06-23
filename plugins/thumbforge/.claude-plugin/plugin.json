@@ -1,0 +1,9 @@
+{
+  "name": "thumbforge",
+  "description": "Steruj cienkim klientem CLI Thumbforge z czatu: generuj miniatury z tematu (tf-generate), klonuj cudzą miniaturę (tf-reverse), rób koncepty ze scenariusza (tf-scenario), autoruj presety/style (tf-preset) i zarządzaj referencjami (tf-assets). Router thumbforge niesie wspólny protokół płatnych callów i katalog komend.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Robert Szewczyk"
+  },
+  "homepage": "https://github.com/Szewowsky/thumbforge-skills"
+}

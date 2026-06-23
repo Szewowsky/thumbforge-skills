@@ -1,0 +1,14 @@
+{
+  "name": "thumbforge-skills",
+  "owner": {
+    "name": "Robert Szewczyk"
+  },
+  "description": "Thumbforge — skille Claude Code do generowania, klonowania i autoringu miniatur YouTube przez headless CLI thumbforge.",
+  "plugins": [
+    {
+      "name": "thumbforge",
+      "source": "./plugins/thumbforge",
+      "description": "Pakiet 6 skilli (thumbforge router + tf-generate / tf-reverse / tf-scenario / tf-preset / tf-assets) sterujących cienkim klientem CLI thumbforge. Wymaga zainstalowanej apki Thumbforge (.dmg) + CLI z menu tray."
+    }
+  ]
+}
