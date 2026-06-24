@@ -90,8 +90,9 @@ Estimate before you spend: `pnpm cli cost-estimate` is free.
 - Five built-in text styles: `heavy-bold`, `sandwich`, `chunky-3d`,
   `sandwich-with-badge`, `count-headline`. `list-styles` is the live list.
 - `count-headline` is the OG `icon-holder-grid` layout — a giant accent numeral
-  plus a white headline, fed as a pipe-split `--visible-text "6 | ZA DARMO"`
-  (segment 0 = numeral, segment 1 = headline). `icon-holder-grid` defaults to it
-  with accent colour `#FFB700`; other presets default to their own style.
+  plus a white headline, fed as either `--visible-text "6 | ZA DARMO"` or the
+  shorthand `--visible-text "6 ZA DARMO"` (leading digits become the numeral).
+  `icon-holder-grid` defaults to it with accent colour `#FFB700`; other presets
+  default to their own style.
 - With `--visible-text` present, the CLI bakes the preset's `defaultTextStyle`
   unless you pass `--text-style`. `--text-style none` suppresses text.

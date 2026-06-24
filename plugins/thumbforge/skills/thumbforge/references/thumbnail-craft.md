@@ -91,6 +91,7 @@ Pick the preset whose composition matches the story you're telling.
 | Screen show (person presenting a UI/screen) | `screen-show` | demos, tutorials, "how to use X" — needs a real `screen` ref |
 | Reaction close-up (face dominant, sandwich text top+bottom) | `reaction-shocked` | news/reaction — but see the expression caveat in `gotchas.md` |
 | Split before/after (two zones, old vs new) | `split-before-after` | transformations, comparisons, "this → that" |
+| Split hero (face centered, two glowing icon cards) | `split-hero` | tool-vs-tool / app-vs-app framing with warm-left and cool-right light |
 | Two people side by side | `collab-duo` / `host-plus-persona` | collabs, host + guest/persona (ref order is load-bearing) |
 
 Run `pnpm cli list-presets` for the live list (custom presets included).

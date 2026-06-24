@@ -5,8 +5,7 @@ analyses) is `pnpm cli list-presets`. **Run it** rather than trusting this
 snapshot — custom presets come and go, and ids must match exactly. This file is
 an orientation map for picking a built-in archetype.
 
-There are **10 built-in** archetypes (the project's `CLAUDE.md` still says "9" —
-that is stale; `host-plus-persona` was added later).
+There are **11 built-in** archetypes.
 
 | id | name | use it for |
 |---|---|---|
@@ -19,6 +18,7 @@ that is stale; `host-plus-persona` was added later).
 | `screen-show` | Screen Show | host presenting a screen / UI / dashboard |
 | `split-before-after` | Split Before/After | a before↔after split composition |
 | `collab-duo` | Collab Duo | two hosts side by side (see ordering rule) |
+| `split-hero` | Split Hero | centered face with two large glowing icon cards; uses `split-warm-cool` |
 | `host-plus-persona` | Host + Persona | the host plus a persona/character (see ordering rule) |
 
 > **`icon-holder-grid` ships a built-in headline style.** Its `defaultTextStyle`
@@ -27,6 +27,11 @@ that is stale; `host-plus-persona` was added later).
 > `#FFB700` (the numeral's accent — the headline is always white). Pass
 > `--visible-text "6 | ZA DARMO"` and the preset bakes that layout; override the
 > numeral colour with `--text-color` (e.g. brand teal `#0AC6AA`).
+
+> **`split-hero` ships the warm/cool background.** Its `defaultBackgroundStyle`
+> is `split-warm-cool`: warm orange/amber glow on the left half, cool teal/cyan
+> glow on the right half, blended through soft bokeh. It needs one face ref and
+> exactly two icon refs (left card, right card).
 
 ## Slots and references
 
@@ -50,3 +55,7 @@ surfaces the available reference images and their categories (e.g.
 The resolver wires "FIRST reference on the LEFT" copy to this order. If you
 reorder the refs, the model swaps host and guest. Never sort refs "to tidy up" —
 pass them host-first.
+
+`split-hero` is also order-sensitive: pass `--refs` as face first, then the left
+icon, then the right icon. The prompt anchors FIRST=face, SECOND=left card,
+THIRD=right card.
