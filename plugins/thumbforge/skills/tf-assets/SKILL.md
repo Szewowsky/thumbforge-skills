@@ -97,6 +97,25 @@ thumbforge upload-ref --file /tmp/tf-new-ref.png --category icon --name "<label>
 Deliver that path + a one-line note; the ref is immediately usable — pass the
 printed `/references/...` path to `--refs` in `tf-generate`.
 
+## Workflow — relabel / move / delete
+
+All three drive the same HTTP endpoints the web UI uses, over the thin client.
+**Rename** changes only the companion display label — the PNG path stays stable.
+**Move** changes the category folder, so the `/references/<cat>/<id>.png` path
+changes; existing sessions are rewritten to the new path automatically. **Delete**
+removes the reference (and breaks sessions that referenced it).
+
+```bash
+thumbforge rename-ref <id> --name "ChatGPT logo"   # relabel (empty/omitted --name clears the label)
+thumbforge move-ref   <id> --category inspiration  # change category
+thumbforge delete-ref <id>                          # remove the reference
+```
+
+Get `<id>` from `thumbforge list-refs`. The display `--name` is **sluggified**
+server-side (lowercased, non-alphanumerics → hyphens, leading/trailing
+separators stripped): `"__Codex Beta__"` is stored as `codex-beta`. Tell the
+user the stored label if it differs from what they typed.
+
 ## Load-bearing notes
 
 - **Paths are immutable forever.** Sessions store the exact `/references/<cat>/<id>.png`
@@ -126,7 +145,7 @@ tray → „Zainstaluj CLI"). W repozytorium (dev) `thumbforge` to launcher do
 bezpośredniego CLI — raz wykonaj `pnpm link --global` (albo używaj równoważnego
 `pnpm cli <komenda>`).
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `generate`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `upload-ref`, `grid`.
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `generate`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
 Komendy `edit`, `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
 są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast

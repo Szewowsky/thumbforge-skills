@@ -15,7 +15,7 @@ Run everything from the repo root: `/Users/robert/Windsurf Projekty/thumbforge`.
 | `list-refs` | no | no | reference images on disk | `--help` (`--category`) |
 | `inventory` | no | no | one-shot overview: presets + styles + models + refs | `--help` |
 | `list-sessions` | no | no | past generation sessions | `--help` |
-| `cost-estimate` | no | no | estimate batch cost (no provider call) | `--help` (`--count`, `--model`, `--quality`, `--preset`) |
+| `cost-estimate` | no | no | estimate batch cost (no provider call; cost is preset-independent) | `--help` (`--count`, `--model`, `--quality`, `--provider`) |
 | `generate` | **yes** | opt (export) | generate thumbnails (single or batch) | `--help` (`--visible-text`, `--text-style`, `--text-color`, `--glow-color`, `--background-style`, `--concepts-file`) |
 | `grid` | no | yes (`--out`) | compose an adaptive N-up review grid from images | `--help` (`--images`, `--out`) |
 | `reverse` | **yes** | no | analyze a competitor thumbnail → preset | `--help` (`--url`/`--file`, `--context`, `--apply`) |
