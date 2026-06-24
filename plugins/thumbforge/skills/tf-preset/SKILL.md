@@ -77,9 +77,10 @@ thumbforge style:create --type background --name "Teal studio" \
   --sentence "Dark cinematic teal studio gradient with soft rim light and restrained cyan accents."
 ```
 
-A text style is best seeded from a built-in, then tweaked (the SafeZoneGuardian
-auto-injects the edge-padding / central-85% / auto-scale phrases — never drop
-them):
+A text style is best seeded from a built-in (`heavy-bold`, `sandwich`,
+`chunky-3d`, `sandwich-with-badge`, `count-headline`), then tweaked (the
+SafeZoneGuardian auto-injects the edge-padding / central-85% / auto-scale phrases
+— never drop them):
 
 ```bash
 thumbforge style:create --type text --from heavy-bold --name "Teal heavy" --color "#0AC6AA"

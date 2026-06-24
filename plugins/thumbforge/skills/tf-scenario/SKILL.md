@@ -138,6 +138,13 @@ user expects one side-by-side preview of the variants every time:
 thumbforge grid <sessionId> --out "$HOME/Downloads/<temat-slug>/grid.png"
 ```
 
+> **Recovery after a client-side timeout.** A 4-variant high-quality batch can
+> exceed the thin client's poll window — the CLI may print "sesja … nie zwróciła
+> obrazów w limicie czasu" while the app keeps generating. The finals are NOT
+> lost: recover with the printed `sessionId` via
+> `thumbforge grid <sessionId> --out <dir>` (free), or pull individual files with
+> `fetch-media /api/media/generations/<sessionId>/<file>.png --out <path>`.
+
 Use the `sessionId` printed by the paid run. `grid` is **free** (no model call)
 and writes one PNG from the server's final images. Skip the grid only for a
 **single** image. Surface the grid path when you deliver the session id + finals.

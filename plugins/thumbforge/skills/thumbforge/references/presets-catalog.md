@@ -21,6 +21,13 @@ that is stale; `host-plus-persona` was added later).
 | `collab-duo` | Collab Duo | two hosts side by side (see ordering rule) |
 | `host-plus-persona` | Host + Persona | the host plus a persona/character (see ordering rule) |
 
+> **`icon-holder-grid` ships a built-in headline style.** Its `defaultTextStyle`
+> is `count-headline` (giant accent numeral + white headline, format
+> `"LICZBA | NAGŁÓWEK"`, e.g. `"6 | ZA DARMO"`) and `defaultTextColor` is
+> `#FFB700` (the numeral's accent — the headline is always white). Pass
+> `--visible-text "6 | ZA DARMO"` and the preset bakes that layout; override the
+> numeral colour with `--text-color` (e.g. brand teal `#0AC6AA`).
+
 ## Slots and references
 
 Each preset declares slots (e.g. a face/character slot, an icon slot, a
