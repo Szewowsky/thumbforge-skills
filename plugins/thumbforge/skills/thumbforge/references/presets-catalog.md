@@ -29,9 +29,10 @@ There are **11 built-in** archetypes.
 > numeral colour with `--text-color` (e.g. brand teal `#0AC6AA`).
 
 > **`split-hero` ships the warm/cool background.** Its `defaultBackgroundStyle`
-> is `split-warm-cool`: warm orange/amber glow on the left half, cool teal/cyan
-> glow on the right half, blended through soft bokeh. It needs one face ref and
-> exactly two icon refs (left card, right card).
+> is `split-warm-cool`: deep charcoal base with a warm amber glow zone on the
+> left and a cool cyan glow zone on the right, vertical rim split through the
+> focal axis, side halos, and dark bands reserved for optional text. It needs one
+> face ref and exactly two icon refs (left card, right card).
 
 ## Slots and references
 
