@@ -145,11 +145,14 @@ saved key on its own — you no longer source it. Full rules:
   rather than a usable face.
 - **NO_TEXT_GUARD.** If the user wants text on the thumbnail, pass `--visible-text`.
   An empty visible text triggers a guard in the resolver — that's intended.
-- **`--out`** is optional and, when given, must be absolute — it is an export
-  copy, not a cost lock (ADR 0005). The CLI always writes the canonical session
-  files to `public/generations`, so history and session previews work whether or
-  not `--out` is passed. Default it to `$HOME/Downloads/<temat-slug>` for a tidy
-  hand-off.
+- **`--out`** must be absolute — it is an export copy, not a cost lock (ADR 0005).
+  In the **dev CLI** it is optional: the CLI writes the canonical session files to
+  `public/generations`, so history and previews work whether or not `--out` is
+  passed. In **thin-client mode** (the installed `thumbforge` launcher driving the
+  running desktop app) `--out` is **REQUIRED** — the CLI can't write into the app's
+  userData, so it needs an export dir or `generate` errors `--out <absDir> jest
+  wymagany`. Either way, default it to `$HOME/Downloads/<temat-slug>` for a tidy
+  hand-off so the run never fails on a missing `--out`.
 - **Batch mode.** If the user wants several concepts for one video, prefer
   `--concepts-file <abs.json>` over repeated single-concept runs. It creates one
   session and reduces noisy duplicate-looking history rows. The discovery gate +

@@ -42,10 +42,13 @@ Notes:
   `list-refs`/`list-sessions` and `cost-estimate`.
 - Paid commands (`generate`, `reverse`, `analyze-transcript`, `eval`, `retry`,
   `edit`) need the triple lock — see `paid-call-protocol.md`.
-- `--out` is **optional** for `generate` (export policy, ADR 0005): omit it and
-  the images still land in `public/generations`; pass it to ALSO copy the finals
-  there. It stays **required** for the real run of `retry`, `edit`, and `eval`.
-  `reverse` and `analyze-transcript` have no `--out`.
+- `--out` is **optional** for `generate` in the **dev CLI** (export policy, ADR
+  0005): omit it and the images still land in `public/generations`; pass it to
+  ALSO copy the finals there. In **thin-client mode** (installed launcher → running
+  app) `--out` is **REQUIRED** for `generate` — the CLI can't reach the app's
+  userData, so omitting it errors `--out <absDir> jest wymagany`. It also stays
+  **required** for the real run of `retry`, `edit`, and `eval`. `reverse` and
+  `analyze-transcript` have no `--out`.
 - `list-refs` prints `/references/<category>/<id>.png` paths — feed those to
   `--refs`.
 - `refs:rethumb` is free + local: it rebuilds display thumbnails only and never
