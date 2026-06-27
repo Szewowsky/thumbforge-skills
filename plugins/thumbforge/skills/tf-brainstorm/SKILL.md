@@ -70,9 +70,13 @@ never re-run a `--confirm` command without fresh approval.
      nothing clips.
    - Keep the prompt specific enough to render: composition, subject, expression,
      background, lighting, text, and what to avoid.
-4. **Dry-run the handoff (free).**
+4. **Dry-run the handoff (free).** `generate` always needs a `--preset` carrier — even in
+   Swobodny prompt mode the server requires a non-empty preset id to enter generation. The
+   carrier's *prompt* is fully replaced by `--custom-prompt`, but the carrier still drives slot
+   auto-bind and ref ordering — so pick an archetype matching the concept's subject count (e.g.
+   `hero-chest-up` for one person, `collab-duo` for two); refs come from `--refs`.
    ```bash
-   thumbforge generate --topic "<topic>" \
+   thumbforge generate --preset hero-chest-up --topic "<topic>" \
      --custom-prompt "<freeform prompt>" \
      --refs <face,icon,...> \
      --provider openai --model gpt-image-2 --quality low \
@@ -81,7 +85,7 @@ never re-run a `--confirm` command without fresh approval.
    Show the resolved plan and cost estimate, then wait for explicit consent.
 5. **Paid run only after consent.**
    ```bash
-   THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge generate --topic "<topic>" \
+   THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge generate --preset hero-chest-up --topic "<topic>" \
      --custom-prompt "<freeform prompt>" \
      --refs <face,icon,...> \
      --provider openai --model gpt-image-2 --quality high \
@@ -112,6 +116,10 @@ Use Swobodny prompt only when no preset captures the idea.
 - `--custom-prompt` is Swobodny prompt mode: the resolver does not add
   FACE_LOCK, expression fragments, or text safe-zone phrases for you. Re-inject
   FACE_LOCK and safe-zone text whenever refs/faces/text are part of the concept.
+- `--custom-prompt` still needs a `--preset <archetype>` carrier — the server rejects a
+  generate with an empty preset id ("Podaj --preset"). The carrier's prompt is overridden by
+  `--custom-prompt`; choose it by subject count (single-subject archetype, or `collab-duo` for
+  two).
 - `medium` quality is blocked. Use `low` for dry-run/test framing and `high`
   for the final paid render.
 - More than one concept or variant means one batch/session/grid, never repeated
