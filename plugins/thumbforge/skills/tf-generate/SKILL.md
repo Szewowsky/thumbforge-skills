@@ -60,14 +60,22 @@ saved key on its own — you no longer source it. Full rules:
    picking. In repo/dev only, you may also run
    `pnpm cli refs:contact-sheet --category <category> --out <dir>`. Do not choose a
    face/icon/screen solely because the id or display name sounds right.
+   **Bramka discovery:** before you build any template, verify aloud that you have
+   (a) discovered live preset/style/ref ids, (b) read and applied
+   `../thumbforge/references/thumbnail-craft.md`, and (c) read and applied
+   `../thumbforge/references/gotchas.md`. PRZED budową template
+   przeczytaj+zastosuj `../thumbforge/references/thumbnail-craft.md` +
+   `../thumbforge/references/gotchas.md`; if you cannot name the layout/text
+   choice those docs imply, stay in discovery.
 2. **Pick defaults.** Choose a preset that fits the topic (see
-   `../thumbforge/references/presets-catalog.md`; for the design reasoning behind
-   the choice — layout, text, hooks — read `../thumbforge/references/thumbnail-craft.md`
-   and the pitfalls in `../thumbforge/references/gotchas.md`). Pick `--text-style`
-   (and any background/recipe direction) from the `list-styles` output of step 1, not
-   from memory — that is how this account's custom styles get used. Sensible defaults:
-   provider `openai`, model `gpt-image-2`, quality `low` for a test / `high` for a
-   final, `--variants 1`. Confirm real values with `thumbforge generate --help` and
+   `../thumbforge/references/presets-catalog.md`) and explain the design reason in
+   craft terms: text-left/face-right or justified exception, one clear headline,
+   no important element in the timestamp corner, and no clutter beyond the Rule of
+   3 unless the preset explicitly needs it. Pick `--text-style` (and any background
+   / recipe direction) from the `list-styles` output of step 1, not from memory —
+   that is how this account's custom styles get used. Sensible defaults: provider
+   `openai`, model `gpt-image-2`, quality `low` for a test / `high` for a final,
+   `--variants 1`. Confirm real values with `thumbforge generate --help` and
    `thumbforge inventory`. State the choices to the user; don't over-ask.
 3. **Estimate cost (free).**
    ```bash
@@ -155,8 +163,9 @@ saved key on its own — you no longer source it. Full rules:
   hand-off so the run never fails on a missing `--out`.
 - **Batch mode.** If the user wants several concepts for one video, prefer
   `--concepts-file <abs.json>` over repeated single-concept runs. It creates one
-  session and reduces noisy duplicate-looking history rows. The discovery gate +
-  JSON format live in `../thumbforge/references/discovery-contract.md`.
+  session and reduces noisy duplicate-looking history rows. >1 koncept/wariant ⇒ ZAWSZE jedna batch-sesja (`--concepts-file`), NIGDY pętla pojedynczych runów.
+  The discovery gate + JSON format live in
+  `../thumbforge/references/discovery-contract.md`.
 - Don't reorder slots, don't hand-build prompts — the CLI resolver owns that.
 
 ## Errors

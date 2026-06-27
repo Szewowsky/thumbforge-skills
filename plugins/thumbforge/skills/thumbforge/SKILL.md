@@ -13,9 +13,10 @@ description: >-
   once intent is clear — route to the task skills instead: generating thumbnails
   from a topic → tf-generate; cloning/adapting a competitor thumbnail from a
   URL/image → tf-reverse; turning a scenario/transcript into concepts →
-  tf-scenario; listing or adding reference images (face, icons, inspirations) →
-  tf-assets. NOT for editing the Next.js app, the web UI, or non-thumbforge
-  projects.
+  tf-scenario; brainstorming original concepts / Swobodny prompt →
+  tf-brainstorm; listing or adding reference images (face, icons,
+  inspirations) → tf-assets. NOT for editing the Next.js app, the web UI, or
+  non-thumbforge projects.
 argument-hint: "[what you want to do with thumbforge]"
 allowed-tools: Bash
 ---
@@ -141,6 +142,7 @@ Authoritative flags: `pnpm cli <cmd> --help`. Map: `references/cli-reference.md`
 - Generate thumbnails from a topic/preset → **`/tf-generate`**.
 - Clone/adapt a competitor thumbnail (URL or image) → **`/tf-reverse`**.
 - Turn a video scenario/transcript into concepts → **`/tf-scenario`**.
+- Brainstorm original thumbnail concepts / Swobodny prompt → **`/tf-brainstorm`**.
 - List or add reference images — face, icons, inspirations → **`/tf-assets`** (free).
 - Author or edit a custom preset (fork an archetype, edit a block) or a custom
   text/background style → **`/tf-preset`** (free). Also where a reverse-template
