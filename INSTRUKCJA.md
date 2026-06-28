@@ -52,6 +52,11 @@ albo `/tf-generate`. Claude:
 
 Gotowe miniatury lądują na dysku.
 
+**Nie masz pomysłu na układ?** Napisz „pokminmy miniaturę o [temat]" albo `/tf-brainstorm` —
+Claude zaproponuje 2-3 oryginalne koncepty (za darmo), złoży z wybranego gotowy prompt
+(z zachowaniem Twojej twarzy i bezpiecznego pola na tekst) i — dopiero po Twojej zgodzie —
+wygeneruje miniaturę.
+
 ---
 
 ## Co potrafią skille
