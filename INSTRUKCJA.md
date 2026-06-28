@@ -37,6 +37,7 @@ W terminalu:
 claude plugin marketplace add Szewowsky/thumbforge-skills
 claude plugin install thumbforge@thumbforge-skills
 ```
+(W oknie Claude Code te same komendy działają jako `/plugin marketplace add …` i `/plugin install …`.)
 Zrestartuj Claude Code. Powinieneś zobaczyć `/tf-generate` i spółkę po wpisaniu `/tf`.
 
 ## Krok 5 — rób miniatury 🎨
@@ -59,6 +60,7 @@ Gotowe miniatury lądują na dysku.
 | `/tf-generate` | miniatura z tematu |
 | `/tf-reverse` | skopiuj/zaadaptuj cudzą miniaturę (z linku/obrazka) |
 | `/tf-scenario` | miniatury ze scenariusza/transkryptu filmu |
+| `/tf-brainstorm` | wymyśl oryginalny koncept od zera (swobodny prompt) |
 | `/tf-preset` | własne szablony i style (za darmo) |
 | `/tf-assets` | dodaj swoje referencje: twarz, ikony, logo (za darmo) |
 
@@ -74,4 +76,4 @@ claude plugin update thumbforge@thumbforge-skills
 - **`thumbforge` nie działa w terminalu** → ikona tf w pasku menu → „Zainstaluj CLI".
 - **Generowanie nie rusza** → sprawdź klucz API w Ustawieniach apki.
 
-Pytania/feedback: [TODO: link do Discorda].
+Pytania/feedback: «WSTAW LINK DO DISCORDA» (zaproszenie do kanału beta).

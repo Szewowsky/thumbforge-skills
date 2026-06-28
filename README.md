@@ -30,7 +30,7 @@ W Claude Code:
 
 (Do lokalnego testu przed publikacją: `/plugin marketplace add /ścieżka/do/thumbforge-skills`.)
 
-## Co dostajesz (6 skilli)
+## Co dostajesz (7 skilli)
 
 | Skill | Po co | Płatne? |
 |-------|-------|---------|
@@ -38,6 +38,7 @@ W Claude Code:
 | `tf-generate` | Miniatury z tematu + presetu | tak (po Twojej zgodzie) |
 | `tf-reverse` | Sklonuj/zaadaptuj cudzą miniaturę (URL/obraz) | tak |
 | `tf-scenario` | Koncepty miniatur ze scenariusza/transkryptu | tak (sama generacja) |
+| `tf-brainstorm` | Wymyśl oryginalny koncept od zera (Swobodny prompt) | tak (po Twojej zgodzie) |
 | `tf-preset` | Autoring presetów i stylów (fork archetypu) | nie (pliki/SQLite) |
 | `tf-assets` | Przeglądaj i dodawaj referencje (twarz, ikony, inspiracje) | nie |
 
@@ -61,5 +62,5 @@ opakowanie do dystrybucji. Po zmianie skilli w repo odśwież je tutaj:
 ./sync.sh /inna/ścieżka/thumbforge
 ```
 
-Skrypt re-kopiuje 6 skilli i weryfikuje, że cross-ref `../thumbforge/references/`
+Skrypt re-kopiuje 7 skilli i weryfikuje, że cross-ref `../thumbforge/references/`
 się rozwiązuje. Potem commit + push.
