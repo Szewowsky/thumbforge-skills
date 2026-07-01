@@ -77,6 +77,11 @@ claude plugin update thumbforge@thumbforge-skills
 ```
 …i restart Claude Code.
 
+### Co nowego (wersja skilli 0.1.10, razem z beta.23)
+- **`/tf-edit` używa teraz `thumbforge edit`** — dry-run, negative-lock i płatny
+  edit idą przez cienki klient do uruchomionej apki; realny edit wymaga też
+  `--guide <annotation-doc.json>` i `--out <absDir>`.
+
 ### Co nowego (wersja skilli 0.1.9, razem z beta.23)
 - **Nowy `/tf-edit`** — poprawianie gotowej miniatury instrukcją z czatu
   (np. „zmień minę", „przyciemnij tło"). Płatne dopiero po Twojej zgodzie.

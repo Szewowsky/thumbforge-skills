@@ -16,7 +16,7 @@ do not export it or place it in persistent env files.
 Dry-run shape:
 
 ```bash
-pnpm cli edit \
+thumbforge edit \
   --session <sessionId> \
   --image <imageId> \
   --instruction "<instruction>"
@@ -25,7 +25,7 @@ pnpm cli edit \
 Real run shape after explicit approval:
 
 ```bash
-THUMBFORGE_ALLOW_PAID_CALLS=1 pnpm cli edit \
+THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge edit \
   --session <sessionId> \
   --image <imageId> \
   --instruction "<instruction>" \

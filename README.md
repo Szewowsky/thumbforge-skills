@@ -53,6 +53,12 @@ Kilka komend deweloperskich (`refs:contact-sheet`, `refs:rethumb`, `preset:previ
 fail-fast. Skille są tego świadome i kierują Cię na thin-owe odpowiedniki
 (`thumbforge inventory` zamiast `list-models` itd.).
 
+## Co nowego w 0.1.10
+
+- `/tf-edit` korzysta z `thumbforge edit` w cienkim kliencie: dry-run i
+  negative-lock są darmowe, a realny edit idzie do uruchomionej apki i wymaga
+  `--guide <annotation-doc.json>` + `--out <absDir>` + zgody na paid call.
+
 ## Utrzymanie (dla autora)
 
 Źródło prawdy skilli to `.claude/skills/` w repo `thumbforge`. Ten marketplace to

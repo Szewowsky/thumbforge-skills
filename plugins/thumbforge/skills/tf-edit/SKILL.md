@@ -12,11 +12,12 @@ allowed-tools: Bash
 # tf-edit
 
 Instruction-only correction of an existing image. In product terms this is the
-thumbforge edit flow; in the repo it runs through `pnpm cli edit` because the
-thin client does not support paid edit yet. The user triggers; you operate. The
-flow is always: resolve target → craft identity-safe instruction → dry-run with
-cost → get consent → paid edit → inspect result → optionally iterate or set
-final in the UI.
+thumbforge edit flow. On the packaged app it runs through `thumbforge edit`
+(thin client → running app → new version in app userData); in repo/dev,
+the local launcher reaches the same edit command. The user triggers; you
+operate. The flow is always: resolve target → craft identity-safe instruction →
+dry-run with cost → get consent → paid edit → inspect result → optionally
+iterate or set final in the UI.
 
 ## Not for
 
@@ -30,7 +31,7 @@ final in the UI.
 ```bash
 cd "/Users/robert/Windsurf Projekty/thumbforge"
 thumbforge --help            # thin/dev launcher reachable? (free)
-pnpm cli edit --help         # repo/dev-only edit flags (free)
+thumbforge edit --help       # thin edit flags (free)
 thumbforge inventory         # models/styles/refs/key availability (free)
 ```
 
@@ -69,21 +70,22 @@ edit without fresh approval. `THUMBFORGE_SECRET` auto-loads from `.env.local`
    cropping, faces, or the timestamp corner.
 4. **Dry-run (free).** Run without `--confirm` and show the plan + cost:
    ```bash
-   pnpm cli edit \
+   thumbforge edit \
      --session <sessionId> \
      --image <imageId> \
      --instruction "<instruction with FACE_LOCK + central 85% safe-zone guardrails>" \
      [--refs <ref1,ref2>] \
      [--guide <annotation-doc.json>]
    ```
-   Dry-run must print `(dry-run` and the `THUMBFORGE_ALLOW_PAID_CALLS=1` reminder.
+   Dry-run must print `edit plan`, `koszt`, and the
+   `THUMBFORGE_ALLOW_PAID_CALLS=1` reminder.
    If it cannot resolve the session or cost, stop and fix that before asking for
    consent.
-5. **Paid edit (only after consent).** Current repo/dev CLI uses the editor
-   guide-ref instruction flow, so the real path needs an annotation-doc JSON
-   (`--guide`) plus an absolute output directory. No binary mask is used here.
+5. **Paid edit (only after consent).** The thin client uses the editor guide-ref
+   instruction flow, so the real path needs an annotation-doc JSON (`--guide`)
+   plus an absolute output directory lock (`--out`). No binary mask is used here.
    ```bash
-   THUMBFORGE_ALLOW_PAID_CALLS=1 pnpm cli edit \
+   THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge edit \
      --session <sessionId> \
      --image <imageId> \
      --instruction "<final instruction>" \
@@ -94,8 +96,8 @@ edit without fresh approval. `THUMBFORGE_SECRET` auto-loads from `.env.local`
    ```
 6. **Verify and deliver.** Open the output/session in the UI. If the result
    preserves identity/text and is the desired version, tell the user the session,
-   image/version, output dir, and next action. If not, explain the failure mode
-   and dry-run a revised instruction before asking for another paid consent.
+   image/version, and next action. If not, explain the failure mode and dry-run a
+   revised instruction before asking for another paid consent.
 
 ## Load-bearing rules
 
@@ -117,12 +119,11 @@ testera z samą aplikacją (.dmg, bez repo) `thumbforge` jest wbudowany w apkę
 `thumbforge` to launcher do bezpośredniego CLI — raz wykonaj `pnpm link --global`
 (albo używaj równoważnego `pnpm cli <komenda>`).
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`,
-`cost-estimate`, `generate`, `reverse`, `analyze-transcript`, `preset:create`,
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `preset:create`,
 `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`,
 `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
-Komendy `edit`, `retry`, `eval`, `list-models`, `refs:contact-sheet`,
+Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`,
 `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete` są
 **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast
 „dostępne tylko w trybie repo (dev)".
