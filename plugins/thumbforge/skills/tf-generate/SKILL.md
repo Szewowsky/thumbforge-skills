@@ -2,17 +2,9 @@
 name: tf-generate
 description: >-
   Generate YouTube thumbnail candidates with the thumbforge CLI from a topic and
-  a preset. Use when Robert wants Claude to produce thumbnail images for a video
-  idea — "/tf-generate", "zrób miniaturę o…", "wygeneruj thumbnail", "potrzebuję
-  miniatury na film o X", or hands you a topic plus optional reference images and
-  wants candidates. You operate the CLI: pick a sensible preset/model, dry-run to
-  show the plan and cost, and only spend money after Robert's explicit per-call
-  consent. NOT for cloning or adapting a specific competitor's thumbnail from a
-  URL/image (use tf-reverse), NOT for inferring a thumbnail from a video
-  scenario/transcript (use tf-scenario), and NOT for editing an already-generated
-  image or re-running a past session as-is — those are the paid `edit` / `retry`
-  commands; fall back to the thumbforge umbrella, which drives them by hand.
-  Prefer this skill whenever the ask is "make me a thumbnail for this topic".
+  a preset. Use when the user wants thumbnail images for a video idea —
+  "/tf-generate", "zrób miniaturę o…", "wygeneruj thumbnail", or gives a topic
+  plus optional reference images and wants candidates.
 argument-hint: "[topic] [--preset <id>] [--refs <paths>] [--variants N]"
 allowed-tools: Bash
 ---
@@ -22,6 +14,13 @@ allowed-tools: Bash
 Topic + preset + references → 1..N thumbnails, via `thumbforge generate`. The user
 triggers; you operate. The flow is always: discover inputs → pick defaults →
 estimate cost → dry-run → get consent → paid run → preview grid → deliver paths.
+
+## Not for
+
+- Cloning/adapting a competitor's thumbnail from a URL or image → `tf-reverse`.
+- A thumbnail from a video scenario/transcript → `tf-scenario`.
+- Editing an already-generated image by instruction → `tf-edit`.
+- Inventing an original concept / freeform prompt → `tf-brainstorm`.
 
 ## Step 0 — Bootstrap (paid skill)
 

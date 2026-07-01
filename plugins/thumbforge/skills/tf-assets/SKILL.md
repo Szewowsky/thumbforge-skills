@@ -2,16 +2,9 @@
 name: tf-assets
 description: >-
   Manage the thumbforge reference-image library — list what's there and add new
-  assets. Use when Robert wants to see or grow the pool of reference images that
-  the other skills compose into thumbnails: "/tf-assets", "pokaż moje
-  referencje/assety", "jakie mam ikony/refy", "dodaj ikonę/logo do thumbforge",
-  "wgraj moją twarz", "dodaj referencję z tego pliku", "ściągnij to logo i dodaj
-  jako ref". It lists refs grouped by category (with a visual preview on request)
-  and adds new ones from a local file or a URL. This is FREE — no model call, no
-  paid lock. NOT for generating thumbnails (tf-generate), cloning a competitor's
-  thumbnail into a preset (tf-reverse), or turning a scenario into slots
-  (tf-scenario) — but it pairs with them: the refs you add here are exactly what
-  those skills feed to the image model.
+  assets. Use when the user wants to see or grow the pool of reference images
+  (faces, icons, inspirations) — "/tf-assets", "pokaż moje referencje",
+  "dodaj ikonę/logo", "wgraj moją twarz". Free — no model call.
 argument-hint: "[list | add <file-or-url>] [--category <c>] [--name <label>]"
 allowed-tools: Bash, Read
 ---
@@ -24,6 +17,12 @@ logos/app icons, screenshots, inspiration thumbnails. This skill lists and adds
 them. Both operations are **free** — `list-refs` reads disk, `upload-ref` writes
 a file; neither calls a model or touches an API key. No dry-run / `--confirm` /
 env needed.
+
+## Not for
+
+- Generating thumbnails → `tf-generate`.
+- Cloning a competitor's thumbnail into a preset → `tf-reverse`.
+- Turning a scenario into slots → `tf-scenario`.
 
 ## Step 0 — Bootstrap
 

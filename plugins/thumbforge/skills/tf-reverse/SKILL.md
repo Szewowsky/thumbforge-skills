@@ -1,17 +1,10 @@
 ---
 name: tf-reverse
 description: >-
-  Clone or adapt a competitor's YouTube thumbnail into Robert's own style with
-  the thumbforge reverse analyzer. Use when Robert points at someone else's
-  thumbnail or video and wants the same template for his topic — "/tf-reverse",
-  "sklonuj ten thumbnail", "zrób preset z tego filmu", "podrób tę miniaturę",
-  "zaadaptuj ten układ do mojego tematu", typically with a YouTube URL or an
-  image. You operate the CLI: dry-run the analysis, show the plan, and only run
-  the paid vision analysis after Robert's explicit per-call consent; the analyzed
-  template is saved as a reusable custom preset. NOT for generating from a plain
-  topic with an existing preset (use tf-generate), and NOT for inferring a
-  thumbnail from a video scenario/transcript (use tf-scenario). Prefer this skill
-  whenever the source is a specific existing thumbnail Robert wants to reproduce.
+  Clone or adapt a competitor's YouTube thumbnail into the user's own style with
+  the thumbforge reverse analyzer. Use when reusing someone else's thumbnail
+  template — "/tf-reverse", "sklonuj ten thumbnail", "zrób preset z tego filmu",
+  usually with a YouTube URL or image. Saved as a reusable preset.
 argument-hint: "<youtube-url-or-image> [--context <my topic>]"
 allowed-tools: Bash
 ---
@@ -21,6 +14,12 @@ allowed-tools: Bash
 A competitor thumbnail (URL or image) → vision analysis → a reusable custom
 preset → optionally a generation on it. Via `thumbforge reverse`. The user triggers;
 you operate.
+
+## Not for
+
+- Generating from a plain topic with an existing preset → `tf-generate`.
+- A thumbnail from a video scenario/transcript → `tf-scenario`.
+- Refining the analyzed template afterwards → `tf-preset`.
 
 ## Step 0 — Bootstrap (paid skill)
 

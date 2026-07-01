@@ -2,19 +2,10 @@
 name: tf-preset
 description: >-
   Author and edit custom thumbnail presets and styles with the thumbforge CLI —
-  the headless twin of the web fork builder. Use when Robert wants to build,
-  fork, or tweak a reusable template or style rather than render images:
-  "/tf-preset", "stwórz preset", "sforkuj <archetyp>", "zrób custom styl
-  tła/tekstu", "zmień kompozycję/tło/styl tekstu presetu", "zmień nazwę/kolor
-  marki presetu", "dopieść preset z reverse". A custom preset is a FORK of a
-  built-in archetype (a Fork-preset); a custom style is a standalone background
-  sentence or text-style brick that presets and generation both reuse. This is
-  FREE — file/SQLite CRUD, no model call, no paid lock. NOT for generating
-  thumbnails (tf-generate), cloning a competitor's thumbnail into a preset
-  (tf-reverse — then come back here to refine the result), turning a scenario
-  into concepts (tf-scenario), or listing/adding reference images (tf-assets).
-  Prefer this skill whenever the ask is to build or change a preset/style, not to
-  produce an image.
+  the headless fork builder. Use when building, forking, or tweaking a reusable
+  template or style rather than rendering images —
+  "/tf-preset", "stwórz preset", "sforkuj archetyp", "zmień tło lub styl tekstu".
+  Free CRUD.
 argument-hint: "[create|edit|show a preset or style] [--from <base>] [--block <name>]"
 allowed-tools: Bash, Read
 ---
@@ -36,6 +27,13 @@ lock — local file + SQLite writes):
 A style is the LEGO brick; a Fork-preset is the model that snaps a background
 style + a text style + the frozen face/composition logic together. Build a brick
 once, reuse it across presets and across generations.
+
+## Not for
+
+- Generating thumbnails → `tf-generate`.
+- Cloning a competitor's thumbnail into a preset → `tf-reverse` (then refine here).
+- Turning a scenario into concepts → `tf-scenario`.
+- Listing or adding reference images → `tf-assets`.
 
 ## Step 0 — Bootstrap
 

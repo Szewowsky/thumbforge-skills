@@ -2,17 +2,9 @@
 name: tf-scenario
 description: >-
   Turn a video scenario or transcript into thumbnail concepts with the thumbforge
-  CLI. Use when Robert has the script/outline/transcript of a planned or recorded
-  video and wants thumbnail ideas from it — "/tf-scenario", "mam scenariusz, zrób
-  miniatury", "z tego transkryptu zrób thumbnail", "na podstawie tego skryptu
-  zaproponuj miniaturę", or pastes/points at a scenario file. You read the scenario
-  in-context and propose concrete thumbnail concepts for free, then generate them as
-  a separate dry-run-and-consent step. NOT for a plain topic with no scenario (use
-  tf-generate), and NOT for cloning a competitor's thumbnail (use tf-reverse). This
-  needs the script/transcript text in hand (pasted or in a file) — a bare video URL
-  is not an input; if Robert only has a link, that is tf-reverse, or fetch the
-  transcript text first. Prefer this skill whenever the starting material is the
-  video's script/transcript rather than a one-line topic.
+  CLI. Use when the user has the script/transcript of a video and wants
+  thumbnail ideas from it — "/tf-scenario", "mam scenariusz, zrób miniatury",
+  "z tego transkryptu zrób thumbnail". Needs the script text in hand.
 argument-hint: "<scenario text or file> [--preset <id>]"
 allowed-tools: Bash, Read
 ---
@@ -28,6 +20,11 @@ limit), costs nothing, and never hits a free-tier rate wall. The paid
 `analyze-transcript` command stays available as a **fallback** (headless/automation,
 or when the transcript isn't in context). Image generation is **always** a separate
 paid stage with its own consent.
+
+## Not for
+
+- A plain topic with no scenario → `tf-generate`.
+- Cloning a competitor's thumbnail → `tf-reverse`.
 
 ## Step 0 — Bootstrap (free)
 

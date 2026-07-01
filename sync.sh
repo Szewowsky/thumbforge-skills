@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Re-kopiuje 7 skilli z repo thumbforge do tego marketplace, żeby nie driftowały.
+# Re-kopiuje 8 skilli z repo thumbforge do tego marketplace, żeby nie driftowały.
 # Źródło prawdy = .claude/skills/ w repo thumbforge; ten plugin to tylko opakowanie do dystrybucji.
 # Użycie: ./sync.sh [/ścieżka/do/repo/thumbforge]   (domyślnie: siblingowe ../thumbforge)
 set -euo pipefail
@@ -7,7 +7,7 @@ set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 SRC="${1:-$HERE/../thumbforge}/.claude/skills"
 DEST="$(cd "$(dirname "$0")" && pwd)/plugins/thumbforge/skills"
-SKILLS=(tf-generate tf-reverse tf-scenario tf-preset tf-assets tf-brainstorm thumbforge)
+SKILLS=(tf-generate tf-reverse tf-scenario tf-preset tf-assets tf-brainstorm tf-edit thumbforge)
 
 [ -d "$SRC" ] || { echo "Brak źródła: $SRC" >&2; exit 1; }
 

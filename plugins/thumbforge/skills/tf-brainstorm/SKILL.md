@@ -1,18 +1,10 @@
 ---
 name: tf-brainstorm
 description: >-
-  Brainstorm original YouTube thumbnail concepts and turn the chosen concept
-  into a safe freeform thumbforge custom prompt. Use when Robert wants to invent
-  a thumbnail from scratch — "/tf-brainstorm", "pokminmy miniaturę", "wymyśl
-  thumbnail", "brainstorm miniatury", "zrób swobodny prompt", or provides topic,
-  references, and inspiration but not a fixed preset. You guide a short ideation
-  loop, read the craft/gotchas guardrails, compose a custom prompt that
-  reinjects FACE_LOCK and text safe-zone rules when refs/faces are used, then
-  hand off to `thumbforge generate --custom-prompt --refs` with the paid
-  protocol. NOT for generating directly from an existing preset (use
-  tf-generate), cloning a competitor thumbnail (use tf-reverse), inferring
-  concepts from a transcript (use tf-scenario), editing reusable presets/styles
-  (use tf-preset), or listing/adding refs (use tf-assets).
+  Brainstorm original YouTube thumbnail concepts and turn the chosen one into a
+  safe freeform thumbforge custom prompt. Use when inventing a thumbnail from
+  scratch — "/tf-brainstorm", "wymyśl thumbnail", "brainstorm miniatury",
+  "zrób swobodny prompt", or a topic plus references but no fixed preset.
 argument-hint: "[topic/inspiration] [--refs <paths>] [--custom-prompt]"
 allowed-tools: Bash, Read
 ---
@@ -23,6 +15,14 @@ Original concept → Swobodny prompt → handoff to `thumbforge generate
 --custom-prompt`. This skill is for ideation and prompt composition first; it
 does not spend during the brainstorm. The paid stage is a normal generate call
 with dry-run-first, explicit consent, and the triple lock.
+
+## Not for
+
+- Generating directly from an existing preset → `tf-generate`.
+- Cloning a competitor's thumbnail → `tf-reverse`.
+- Concepts from a transcript → `tf-scenario`.
+- Editing reusable presets/styles → `tf-preset`.
+- Listing or adding reference images → `tf-assets`.
 
 ## Step 0 — Bootstrap (paid handoff skill)
 

@@ -66,6 +66,7 @@ wygeneruje miniaturę.
 | `/tf-reverse` | skopiuj/zaadaptuj cudzą miniaturę (z linku/obrazka) |
 | `/tf-scenario` | miniatury ze scenariusza/transkryptu filmu |
 | `/tf-brainstorm` | wymyśl oryginalny koncept od zera (swobodny prompt) |
+| `/tf-edit` | popraw już wygenerowaną miniaturę instrukcją tekstową |
 | `/tf-preset` | własne szablony i style (za darmo) |
 | `/tf-assets` | dodaj swoje referencje: twarz, ikony, logo (za darmo) |
 
@@ -75,6 +76,12 @@ claude plugin marketplace update thumbforge-skills
 claude plugin update thumbforge@thumbforge-skills
 ```
 …i restart Claude Code.
+
+### Co nowego (wersja skilli 0.1.9, razem z beta.23)
+- **Nowy `/tf-edit`** — poprawianie gotowej miniatury instrukcją z czatu
+  (np. „zmień minę", „przyciemnij tło"). Płatne dopiero po Twojej zgodzie.
+- **Krótsze, czytelniejsze opisy skilli** — lepiej się uruchamiają, gdy masz
+  wiele skilli naraz (wcześniej długie opisy potrafiły „gubić" skill).
 
 ## Coś nie działa?
 - **„Nie znaleziono serwera"** przy komendzie → apka nie jest uruchomiona. Odpal ją z Aplikacji.

@@ -8,7 +8,7 @@
     {
       "name": "thumbforge",
       "source": "./plugins/thumbforge",
-      "description": "Pakiet 7 skilli (thumbforge router + tf-generate / tf-reverse / tf-scenario / tf-brainstorm / tf-preset / tf-assets) sterujących cienkim klientem CLI thumbforge. Wymaga zainstalowanej apki Thumbforge (.dmg) + CLI z menu tray."
+      "description": "Pakiet 8 skilli (thumbforge router + tf-generate / tf-reverse / tf-scenario / tf-brainstorm / tf-edit / tf-preset / tf-assets) sterujących cienkim klientem CLI thumbforge. Wymaga zainstalowanej apki Thumbforge (.dmg) + CLI z menu tray."
     }
   ]
 }

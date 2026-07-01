@@ -1,22 +1,10 @@
 ---
 name: thumbforge
 description: >-
-  Entry point and router for the thumbforge thumbnail CLI (pnpm cli). Use when
-  Robert wants to drive thumbforge from chat — "odpal thumbforge", "co potrafi
-  thumbforge", "/thumbforge", or when you need the shared paid-call protocol,
-  command catalog, preset list, or bootstrap check before a thumbforge task.
-  This skill operates the CLI on Robert's behalf: it picks sane defaults,
-  dry-runs first, shows the plan and cost, and only runs a paid call after
-  Robert's explicit per-call consent. Consult it whenever a request touches
-  thumbnail generation, cloning a competitor thumbnail, or a video scenario in
-  this repo, even if Robert doesn't name the CLI. NOT for the actual work itself
-  once intent is clear — route to the task skills instead: generating thumbnails
-  from a topic → tf-generate; cloning/adapting a competitor thumbnail from a
-  URL/image → tf-reverse; turning a scenario/transcript into concepts →
-  tf-scenario; brainstorming original concepts / Swobodny prompt →
-  tf-brainstorm; listing or adding reference images (face, icons,
-  inspirations) → tf-assets. NOT for editing the Next.js app, the web UI, or
-  non-thumbforge projects.
+  Entry point and router for the thumbforge thumbnail CLI. Use when the user
+  wants to drive thumbforge from chat, needs the command catalog, preset list,
+  or a bootstrap check before a thumbnail task — generating, cloning, editing,
+  or planning thumbnails. Routes to a task skill (see Routing).
 argument-hint: "[what you want to do with thumbforge]"
 allowed-tools: Bash
 ---
@@ -122,7 +110,7 @@ Authoritative flags: `pnpm cli <cmd> --help`. Map: `references/cli-reference.md`
 | `analyze-transcript` | **yes** | infer slots from a scenario → **tf-scenario** |
 | `eval` | **yes** | golden-set eval (out of core scope) |
 | `retry` | **yes** | re-run a session (out of core scope) |
-| `edit` | **yes** | instruction-edit an image (out of core scope) |
+| `edit` | **yes** | instruction-edit an image → **tf-edit** |
 | `config-set` | no | store an encrypted key (the user does setup) |
 | `upload-ref` | no | add a reference image → **tf-assets** |
 | `refs:rethumb` | no | rebuild reference `_thumb.png` previews → **tf-assets** |
@@ -147,10 +135,13 @@ Authoritative flags: `pnpm cli <cmd> --help`. Map: `references/cli-reference.md`
 - Author or edit a custom preset (fork an archetype, edit a block) or a custom
   text/background style → **`/tf-preset`** (free). Also where a reverse-template
   preset gets refined before generation.
-- Editing an already-generated image (`edit`), re-running a past session as-is
-  (`retry`), or a golden-set `eval` — these are paid but out of the core skill
-  set. Handle them **here**, by hand, via `docs/cli.md` + the paid-call protocol
-  with the same locks. The task skills redirect these asks back to this umbrella.
+- Editing an already-generated image by instruction (`edit`) → **`/tf-edit`**.
+- Re-running a past session as-is (`retry`) or a golden-set `eval` — these are
+  paid but out of the core task-skill set. Handle them **here**, by hand, via
+  `docs/cli.md` + the paid-call protocol with the same locks.
+
+**Not for** the actual generation once intent is clear (route above), the Next.js
+app, the web UI, or non-thumbforge projects.
 
 ## Errors
 
