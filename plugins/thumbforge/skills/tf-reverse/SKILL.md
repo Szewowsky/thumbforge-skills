@@ -60,8 +60,21 @@ Full rules: `../thumbforge/references/paid-call-protocol.md`.
      --context "<your video's topic>" \
      --model claude-opus-4-8-thinking \
      --apply \
+     --save-expression "<nazwa miny>" \
      --confirm
    ```
+   **`--save-expression [name]` (beta.28, free add-on to the same paid call):**
+   when the source thumbnail has a clear facial expression/pose, the analyzer
+   returns an *expression proposal* (mina + optional poza). With the flag, the
+   proposal is saved as a reusable **custom expression** and becomes the cloned
+   preset's `defaultExpression`. Name collisions get a numeric suffix
+   (`"Mina" → "Mina 2"`), so re-runs don't create duplicates. If the user's ask
+   mentions the source's expression/pose ("ta mina", "ta poza") — propose the
+   flag in the SAME call; a second analysis later costs money. Without the flag
+   the CLI prints the detected proposal plus a ready free `expression:create`
+   command, so nothing is lost. A proposal that violates the channel's banned
+   moods is rejected with a note and the preset falls back to the nearest
+   built-in expression — that is expected, not an error.
 4. **Deliver.** Report the new `presetId` + a one-line summary (template, icons
    adapted). No JSON dump.
 5. **Optional chain → refine or generate.** The `presetId` from `reverse --apply`
@@ -69,6 +82,11 @@ Full rules: `../thumbforge/references/paid-call-protocol.md`.
    - **Refine it first (free) → `/tf-preset`** with `preset:edit <presetId>` —
      rename, swap the text/background style, or tweak an editable block (start from
      `preset:show <presetId> --block <name>`). No spend.
+   - **Reuse the saved expression elsewhere:** an expression saved with
+     `--save-expression` is an ordinary custom expression — any later
+     generation on ANY preset can pick it via `--expression <id>` (tf-generate)
+     or the UI picker. Presets that own a load-bearing gesture degrade it to
+     the face-half automatically.
    - **Generate on it (paid) → `/tf-generate`** with `--preset <presetId>` (the
      preset id comes from this `reverse --apply` run, so that dimension is already
      chosen). The discovery gate still applies to the OTHER dimensions of the
@@ -90,6 +108,7 @@ Full rules: `../thumbforge/references/paid-call-protocol.md`.
 | `--context <text>` | **topic of the user's (your) video** — see P0 below |
 | `--model <id>` | analyzer override (default `claude-opus-4-8-thinking`; dry-run shows availability) |
 | `--apply` | save the analyzed template as a custom preset (do it in the paid call) |
+| `--save-expression [name]` | save the detected expression/pose as a reusable custom expression bound as the preset's default (beta.28; name optional — deterministic + dedup suffix) |
 | `--confirm` | spend money (also needs the env) |
 
 `reverse` has no `--out` — it produces a preset, not an image.

@@ -5,7 +5,7 @@ analyses) is `pnpm cli list-presets`. **Run it** rather than trusting this
 snapshot — custom presets come and go, and ids must match exactly. This file is
 an orientation map for picking a built-in archetype.
 
-There are **11 built-in** archetypes.
+There are **12 built-in** archetypes.
 
 | id | name | use it for |
 |---|---|---|
@@ -14,6 +14,7 @@ There are **11 built-in** archetypes.
 | `icon-holder-grid` | Icon Holder Grid | a grid of tool/app icons (comparisons, roundups) |
 | `icon-holder-mascot` | Icon Holder + Mascot | a primary icon/logo plus a mascot character |
 | `icon-holder-single` | Icon Holder Single | one dominant icon/logo as the focal point |
+| `phone-hold` | Telefon w dłoni | host on the left holding a smartphone on the right; the phone screen recreates the selected screen ref; default LED banner + orange tech glow |
 | `reaction-shocked` | Reaction Close-up | shocked/expressive face close-up reaction |
 | `screen-show` | Screen Show | host presenting a screen / UI / dashboard |
 | `split-before-after` | Split Before/After | a before↔after split composition |
@@ -33,6 +34,12 @@ There are **11 built-in** archetypes.
 > left and a cool cyan glow zone on the right, vertical rim split through the
 > focal axis, side halos, and dark bands reserved for optional text. It needs one
 > face ref and exactly two icon refs (left card, right card).
+
+> **`phone-hold` ships the channel's phone-in-hand layout.** Its
+> `defaultTextStyle` is `led-banner` and `defaultBackgroundStyle` is
+> `dark-orange-tech-glow`. Pass refs host-first, then the phone screen ref; the
+> screen is anchored by the `screen_ref` slot, so the resolver can still place it
+> correctly even when other sidebar refs exist.
 
 ## Slots and references
 
