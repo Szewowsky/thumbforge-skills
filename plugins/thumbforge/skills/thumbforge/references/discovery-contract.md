@@ -95,13 +95,19 @@ needs, skip it and pick a better candidate or ask the user for a new reference.
 
 ## Batch-first generation (one Run, not a loop)
 
+**Najpierw rozróżnij: warianty ≠ koncepty.** N kandydatów JEDNEGO konceptu
+(user: „zrób 4 miniatury o X") ⇒ zwykłe `generate --variants N` — jeden run,
+jedna sesja `0/N`, ZERO JSON-a. `--concepts-file` jest wyłącznie dla N RÓŻNYCH
+konceptów (inne presety/teksty/refy per sztuka).
+
 When you have **more than one** concept/archetype, generate them ALL in a single
 `pnpm cli generate --concepts-file <abs.json>` — one logical Run, one dry-run,
 one consent. The CLI may split a >4-image Run into several review-sized sessions,
 then print `/sessions/batch/<runId>` for combined review. Never loop
 single-concept `generate` calls: that creates unrelated sessions (the "x2/x4"
-duplicate-history problem). Use a single `--preset` call only for a single
-concept.
+duplicate-history problem) — dotyczy też wariantów: N osobnych runów zamiast
+`--variants N` to ten sam antywzorzec. Use a single `--preset` call only for
+a single concept.
 
 `--concepts-file` takes an **absolute** path to JSON that is either an array or
 `{ "concepts": [ … ] }`. Per-concept fields:

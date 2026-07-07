@@ -73,8 +73,14 @@ saved key on its own — you no longer source it. Full rules:
    3 unless the preset explicitly needs it. Pick `--text-style` (and any background
    / recipe direction) from the `list-styles` output of step 1, not from memory —
    that is how this account's custom styles get used. Sensible defaults: provider
-   `openai`, model `gpt-image-2`, quality `low` for a test / `high` for a final,
-   `--variants 1`. Confirm real values with `thumbforge generate --help` and
+   `openai`, model `gpt-image-2`, quality `low` for a test / `high` for a final.
+   **ILE OBRAZÓW — mapowanie liczby (load-bearing):** user chce N kandydatów
+   JEDNEGO konceptu („zrób 4 miniatury", „batch 4 sztuk") ⇒ `--variants N` w
+   JEDNYM runie — jedna sesja `0/N ready`. N RÓŻNYCH konceptów (inne
+   presety/teksty/refy) ⇒ `--concepts-file`. `--variants 1` TYLKO gdy user nie
+   podał żadnej liczby. NIGDY nie tłumacz „N miniatur" na N osobnych runów
+   `generate` — to daje N sesji `0/1` w historii, N consentów i N szans na
+   fail w połowie. Confirm real values with `thumbforge generate --help` and
    `thumbforge inventory`. State the choices to the user; don't over-ask.
 3. **Estimate cost (free).**
    ```bash
@@ -160,11 +166,12 @@ saved key on its own — you no longer source it. Full rules:
   userData, so it needs an export dir or `generate` errors `--out <absDir> jest
   wymagany`. Either way, default it to `$HOME/Downloads/<temat-slug>` for a tidy
   hand-off so the run never fails on a missing `--out`.
-- **Batch mode.** If the user wants several concepts for one video, prefer
-  `--concepts-file <abs.json>` over repeated single-concept runs. It creates one
-  session and reduces noisy duplicate-looking history rows. >1 koncept/wariant ⇒ ZAWSZE jedna batch-sesja (`--concepts-file`), NIGDY pętla pojedynczych runów.
-  The discovery gate + JSON format live in
-  `../thumbforge/references/discovery-contract.md`.
+- **Batch mode — variants ≠ concepts.** N kandydatów JEDNEGO konceptu ⇒
+  `--variants N` w jednym runie (jedna sesja, bez JSON-a). N RÓŻNYCH konceptów
+  dla jednego filmu ⇒ `--concepts-file <abs.json>` (jeden logiczny Run, jeden
+  dry-run, jeden consent). NIGDY pętla pojedynczych runów `generate` — tworzy
+  niepowiązane sesje `0/1` i zaśmieca historię. The discovery gate + JSON
+  format live in `../thumbforge/references/discovery-contract.md`.
 - Don't reorder slots, don't hand-build prompts — the CLI resolver owns that.
 
 ## Errors
