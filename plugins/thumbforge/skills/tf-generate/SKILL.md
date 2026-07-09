@@ -74,7 +74,8 @@ saved key on its own — you no longer source it. Full rules:
    / recipe direction) from the `list-styles` output of step 1, not from memory —
    that is how this account's custom styles get used. Sensible defaults: provider
    `openai`, model `gpt-image-2`, quality `low` for a test / `high` for a final.
-   **ILE OBRAZÓW — mapowanie liczby (load-bearing):** user chce N kandydatów
+   **ILE OBRAZÓW — mapowanie liczby (load-bearing):** >1 koncept/wariant ⇒ ZAWSZE jedna batch-sesja.
+   User chce N kandydatów
    JEDNEGO konceptu („zrób 4 miniatury", „batch 4 sztuk") ⇒ `--variants N` w
    JEDNYM runie — jedna sesja `0/N ready`. N RÓŻNYCH konceptów (inne
    presety/teksty/refy) ⇒ `--concepts-file`. `--variants 1` TYLKO gdy user nie
