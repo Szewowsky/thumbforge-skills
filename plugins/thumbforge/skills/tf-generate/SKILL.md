@@ -74,8 +74,8 @@ saved key on its own — you no longer source it. Full rules:
    / recipe direction) from the `list-styles` output of step 1, not from memory —
    that is how this account's custom styles get used. Sensible defaults: provider
    `openai`, model `gpt-image-2`, quality `low` for a test / `high` for a final.
-   **ILE OBRAZÓW — mapowanie liczby (load-bearing):** >1 koncept/wariant ⇒ ZAWSZE jedna batch-sesja.
-   User chce N kandydatów
+   **ILE OBRAZÓW — mapowanie liczby (load-bearing):** >1 koncept/wariant ⇒
+   ZAWSZE jedna batch-sesja, nigdy pętla runów. User chce N kandydatów
    JEDNEGO konceptu („zrób 4 miniatury", „batch 4 sztuk") ⇒ `--variants N` w
    JEDNYM runie — jedna sesja `0/N ready`. N RÓŻNYCH konceptów (inne
    presety/teksty/refy) ⇒ `--concepts-file`. `--variants 1` TYLKO gdy user nie
@@ -121,6 +121,10 @@ saved key on its own — you no longer source it. Full rules:
    and uses the server's final images for that session. Skip the grid only for a
    **single** image (a 1-up grid is pointless). Surface the grid path
    in the delivery alongside the individual finals.
+   A `--concepts-file` run planning **more than 4 images** splits into several
+   sessions (≤4 images each) and prints several sessionIds — run `grid` once
+   per sessionId; there is no cross-session grid. For a single 2×2 review
+   sheet, keep the batch at exactly 4 images.
 7. **Deliver.** Report the session id, UI path (`/history` / `/sessions/<id>`),
    exported PNG dir, the preview-grid path (step 6), and a one-line summary (preset,
    model, quality, variants, cost). No JSON dumps.

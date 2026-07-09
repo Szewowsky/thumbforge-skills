@@ -105,6 +105,7 @@ Authoritative flags: `pnpm cli <cmd> --help`. Map: `references/cli-reference.md`
 | `inventory` | no | one-shot overview: presets + styles + models + refs |
 | `list-sessions` | no | past generation sessions |
 | `cost-estimate` | no | estimate batch cost (no provider call) |
+| `grid <sessionId>` | no | compose a review grid PNG from one session's finals → **tf-generate** |
 | `generate` | **yes** | generate thumbnails → **tf-generate** |
 | `reverse` | **yes** | clone a competitor thumbnail → **tf-reverse** |
 | `analyze-transcript` | **yes** | infer slots from a scenario → **tf-scenario** |
