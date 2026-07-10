@@ -11,35 +11,29 @@ allowed-tools: Bash
 
 # thumbforge (umbrella)
 
-The user triggers, you operate. The thumbforge CLI (`pnpm cli`) is the engine;
+The user triggers, you operate. The installed `thumbforge` command is the default;
 this skill is the operator's manual: how to drive it safely, pick defaults,
 dry-run, and never burn a paid call without the user's explicit say-so. For a
 concrete task, route to a task skill (see Routing). Use this skill directly for
 bootstrap checks, the command catalog, or the shared paid-call protocol.
 
-## Step 0 — Bootstrap
+## Step 0 — Bootstrap thin-first
 
-Run from the repo root: `/Users/robert/Windsurf Projekty/thumbforge`.
+1. Always start with `thumbforge --help` (free). Before this handshake, do not
+   inspect repo files, environment files, config, references, or machine paths.
+2. If it fails, tell the user: „Uruchom aplikację Thumbforge; CLI instaluje się samo, a w razie potrzeby użyj tray → Zainstaluj CLI.” Do not guess a repo path.
+3. After the handshake, dev mode is allowed only when this deterministic check
+   succeeds in the current working directory:
+   ```bash
+   node -e 'const p=require(process.cwd()+"/package.json");process.exit(p.name==="thumbforge"?0:1)' 2>/dev/null
+   ```
+   Success means repo/dev commands may use `pnpm cli`; failure means stay on the
+   thin `thumbforge` surface. A directory name or the presence of `.env.local`
+   is not evidence of dev mode.
 
-```bash
-cd "/Users/robert/Windsurf Projekty/thumbforge"
-thumbforge --help                  # CLI reachable? (free)
-test -f .env.local && grep -q THUMBFORGE_SECRET .env.local \
-  && echo "secret: ok" || echo "secret: MISSING in .env.local"
-test -s data/config.json && echo "config: present" || echo "config: MISSING"
-ls public/references/*/*.png >/dev/null 2>&1 \
-  && echo "refs: present" || echo "refs: none yet"
-```
-
-Never print the contents of `data/config.json` or `.env.local` — only their
-presence. `config.json` holds encrypted API keys; checking presence is enough.
-If `secret` or `config` is missing, paid commands will fail — tell the user to set
-keys (`pnpm --silent cli config-set --provider <p> --key <k>`) and ensure
-`THUMBFORGE_SECRET` is in `.env.local`; don't try to run a paid call.
-
-The authoritative flag reference is always `pnpm cli <command> --help` (generated
-from code, never drifts). `docs/cli.md` is the human overview. Confirm flags
-there rather than trusting any example in a skill.
+The authoritative flag reference is always `thumbforge <command> --help`
+(generated from code, never drifts). Confirm flags there rather than trusting
+any example in a skill.
 
 ## Paid-call protocol (triple lock)
 
