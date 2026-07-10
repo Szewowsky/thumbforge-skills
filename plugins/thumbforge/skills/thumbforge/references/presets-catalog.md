@@ -1,7 +1,7 @@
 # Preset catalog (built-in archetypes)
 
 The live, authoritative list (including this account's custom presets from reverse
-analyses) is `pnpm cli list-presets`. **Run it** rather than trusting this
+analyses) is `thumbforge list-presets`. **Run it** rather than trusting this
 snapshot — custom presets come and go, and ids must match exactly. This file is
 an orientation map for picking a built-in archetype.
 
@@ -48,8 +48,7 @@ style-inspiration slot). The CLI resolver binds the `--refs` you pass to those
 slots in order. You don't manage slots by hand — pick a preset, pass the relevant
 refs, and let the resolver place them.
 
-To see a preset's slots, run `pnpm cli list-presets` (and, if you need detail,
-the project's `src/lib/presets.ts` is the source). `list-refs --category <c>`
+To see a preset's slots, run `thumbforge preset:show <id>`. `list-refs --category <c>`
 surfaces the available reference images and their categories (e.g.
 `character-primary` is the host's face, `icon` is logos/app icons).
 

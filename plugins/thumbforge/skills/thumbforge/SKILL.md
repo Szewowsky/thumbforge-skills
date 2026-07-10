@@ -42,17 +42,17 @@ Paid commands (`generate`, `reverse`, `eval`, `retry`, `analyze-transcript`,
 env `THUMBFORGE_ALLOW_PAID_CALLS=1` + flag `--confirm` + the dry-run-default being
 overridden. The discipline that keeps this safe:
 
-1. **Secret auto-loads.** The CLI reads `THUMBFORGE_SECRET` from `.env.local`
-   itself (allowlist loader — ADR 0005); you no longer source it. Just keep the
-   secret in `.env.local` (a pre-set env var wins).
+1. **The app owns keys.** The thin CLI inherits configured provider/analyzer keys
+   from the running app. Never inspect or source secret/config files. In verified
+   repo/dev mode, the direct CLI owns its separate dev configuration.
 2. **Dry-run first.** Run the command WITHOUT `--confirm`, show the user the plan +
    estimated cost (`cost-estimate` for generate), and wait.
 3. **Consent is per-call, not per-session.** Only after the user says yes in this
    turn, run the paid command. Never re-issue a `--confirm` command without fresh
    consent — not on retry, not after an error, not after Ctrl-C.
 4. **Keep `THUMBFORGE_ALLOW_PAID_CALLS=1` inline** on the one command line. Never
-   `export` it, never put it in `.env.local` — otherwise `--confirm` becomes the
-   only remaining lock.
+   `export` it or persist it — otherwise `--confirm` becomes the only remaining
+   lock.
 5. **Chained flows = separate consent.** reverse→generate and scenario→generate
    are multiple paid stages; each gets its own dry-run and its own approval.
 
@@ -81,14 +81,14 @@ exist — discover them. Two rules, full detail in `references/discovery-contrac
 
 1. Reply in Polish (full diacritics ą/ć/ę/ł/ń/ó/ś/ź/ż), no emoji. Technical args
    (`--preset hero-pointing`) stay as-is.
-2. No raw ULIDs or JSON dumps in chat. Deliver output **paths**
-   (`public/generations/...`) + a one-line summary (preset, model, cost).
+2. No raw JSON dumps in chat. Deliver exported output **paths**, the Run/session
+   id needed for follow-up commands, and a one-line summary (preset, model, cost).
 3. Pick sane defaults; ask one thing at a time, only when genuinely missing.
 4. Don't narrate "running cost-estimate", "calling the model". Show the result.
 
 ## Command catalog
 
-Authoritative flags: `pnpm cli <cmd> --help`. Map: `references/cli-reference.md`.
+Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.md`.
 
 | Command | Paid? | Purpose |
 |---|---|---|
@@ -99,7 +99,7 @@ Authoritative flags: `pnpm cli <cmd> --help`. Map: `references/cli-reference.md`
 | `inventory` | no | one-shot overview: presets + styles + models + refs |
 | `list-sessions` | no | past generation sessions |
 | `cost-estimate` | no | estimate batch cost (no provider call) |
-| `grid <sessionId>` | no | compose a review grid PNG from one session's finals → **tf-generate** |
+| `grid <sessionId>` / `grid --batch <batchId>` | no | compose a session grid or whole Grid Runu → **tf-generate** |
 | `generate` | **yes** | generate thumbnails → **tf-generate** |
 | `reverse` | **yes** | clone a competitor thumbnail → **tf-reverse** |
 | `analyze-transcript` | **yes** | infer slots from a scenario → **tf-scenario** |
@@ -132,8 +132,8 @@ Authoritative flags: `pnpm cli <cmd> --help`. Map: `references/cli-reference.md`
   preset gets refined before generation.
 - Editing an already-generated image by instruction (`edit`) → **`/tf-edit`**.
 - Re-running a past session as-is (`retry`) or a golden-set `eval` — these are
-  paid but out of the core task-skill set. Handle them **here**, by hand, via
-  `docs/cli.md` + the paid-call protocol with the same locks.
+  paid but out of the core task-skill set. Handle them only in verified repo/dev
+  mode, with the paid-call protocol and the same locks.
 
 **Not for** the actual generation once intent is clear (route above), the Next.js
 app, the web UI, or non-thumbforge projects.
@@ -143,8 +143,8 @@ app, the web UI, or non-thumbforge projects.
 Common failures and fixes: `references/troubleshooting.md`. Quick hits:
 `command not found` → you used a stale name (`list`/`cost` don't exist; use
 `list-presets`/`cost-estimate`). `429` → Google free-tier wall (use the default
-Anthropic analyzer). Missing `THUMBFORGE_SECRET` → ensure it is in `.env.local`
-(the CLI auto-loads it).
+Anthropic analyzer). Missing provider/analyzer key → configure it in the running
+app's Settings; only verified repo/dev mode uses separate dev configuration.
 
 ## Reference docs
 
@@ -160,11 +160,9 @@ Load on demand:
 
 ## Cienki klient (tester) i tryb dev
 
-Komendy w tym skillu wołają **`thumbforge`** — cienki klient HTTP. U testera z samą
-aplikacją (.dmg, bez repo) `thumbforge` jest wbudowany w apkę (instalacja: ikona w
-tray → „Zainstaluj CLI"). W repozytorium (dev) `thumbforge` to launcher do
-bezpośredniego CLI — raz wykonaj `pnpm link --global` (albo używaj równoważnego
-`pnpm cli <komenda>`).
+Komendy w tym skillu wołają domyślnie **`thumbforge`** — cienki klient HTTP.
+`pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym kontraktem po
+manifeście `package.json` z `name === "thumbforge"` w cwd.
 
 Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.

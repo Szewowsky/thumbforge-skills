@@ -26,17 +26,15 @@ paid stage with its own consent.
 - A plain topic with no scenario → `tf-generate`.
 - Cloning a competitor's thumbnail → `tf-reverse`.
 
-## Step 0 — Bootstrap (free)
+## Step 0 — Bootstrap thin-first
 
-```bash
-cd "/Users/robert/Windsurf Projekty/thumbforge"
-thumbforge --help            # CLI reachable? (free)
-```
+Run `thumbforge --help` (free). If it fails: „Uruchom aplikację Thumbforge; CLI instaluje się samo, a w razie potrzeby użyj tray → Zainstaluj CLI.”
+Then follow the shared [Bootstrap thin-first contract](../thumbforge/SKILL.md#step-0--bootstrap-thin-first); do not inspect repo files or guess a machine path before the handshake.
 
 Triple lock for each real generation (step 3): env `THUMBFORGE_ALLOW_PAID_CALLS=1`
-(inline, never `export`) + `--confirm` + dry-run-first. Consent is per-call.
-`THUMBFORGE_SECRET` **auto-loads** from `.env.local` (allowlist — ADR 0005); you no
-longer source it. Full rules: `../thumbforge/references/paid-call-protocol.md`.
+(inline, never `export`) + `--confirm` + dry-run-first. Consent is per-call. The
+running app owns the configured keys; do not inspect or source secret/config
+files. Full rules: `../thumbforge/references/paid-call-protocol.md`.
 
 ## Workflow
 
@@ -113,12 +111,13 @@ per `../thumbforge/references/discovery-contract.md`, then:
 ```bash
 THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge generate \
   --topic "<shared topic>" --concepts-file /abs/path/concepts.json \
-  --provider openai --model gpt-image-2 --quality medium \
+  --provider openai --model gpt-image-2 --quality low \
+  --out "$HOME/Downloads/<temat-slug>" \
   --confirm
 ```
 
-`--out <absDir>` is optional here (ADR 0005) — add it only to also copy the
-finals out of `public/generations`.
+The thin client requires the absolute `--out <absDir>` export directory; only
+verified repo/dev mode may omit it and use separate dev storage.
 
 `provider`/`model`/`quality`/`topic` are global (shared by the batch); per-concept
 `preset`/`visibleText`/`textStyle`/`glowColor`/`refs` live in the JSON. Dry-run first
@@ -198,11 +197,9 @@ the default extractor; pass `--model` or use in-context analysis instead. Missin
 
 ## Cienki klient (tester) i tryb dev
 
-Komendy w tym skillu wołają **`thumbforge`** — cienki klient HTTP. U testera z samą
-aplikacją (.dmg, bez repo) `thumbforge` jest wbudowany w apkę (instalacja: ikona w
-tray → „Zainstaluj CLI"). W repozytorium (dev) `thumbforge` to launcher do
-bezpośredniego CLI — raz wykonaj `pnpm link --global` (albo używaj równoważnego
-`pnpm cli <komenda>`).
+Komendy w tym skillu wołają domyślnie **`thumbforge`** — cienki klient HTTP.
+`pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym kontraktem po
+manifeście `package.json` z `name === "thumbforge"` w cwd.
 
 Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.

@@ -1,15 +1,16 @@
 # thumbforge CLI — command map
 
-**The authoritative flag reference is `pnpm cli <command> --help`** — it is
+**The authoritative flag reference is `thumbforge <command> --help`** — it is
 generated from code and never drifts. This file is a thin map (command → purpose
-→ where to get flags). The fuller human-readable overview is `docs/cli.md`. Do
-not memorize flag tables here; run `--help` when you need exact flags.
+→ where to get flags). Do not memorize flag tables here; run `--help` when you
+need exact flags.
 
-Run everything from the repo root: `/Users/robert/Windsurf Projekty/thumbforge`.
+Run the initial handshake from any directory: `thumbforge --help`. Use `pnpm cli`
+only for commands marked repo/dev-only and only after the shared manifest check.
 
 | Command | Paid? | Needs `--out`? | Purpose | Flags |
 |---|---|---|---|---|
-| `list-models` | no | no | image models + pricing | `--help` |
+| `list-models` | no | no | repo/dev-only image models + pricing (thin: `inventory`) | `--help` |
 | `list-presets` | no | no | built-in + custom presets | `--help` |
 | `list-styles` | no | no | text / background / recipe styles (built-in + custom) | `--help` (`--type text\|background\|recipe`) |
 | `list-refs` | no | no | reference images on disk | `--help` (`--category`) |
@@ -17,7 +18,7 @@ Run everything from the repo root: `/Users/robert/Windsurf Projekty/thumbforge`.
 | `list-sessions` | no | no | past generation sessions | `--help` |
 | `cost-estimate` | no | no | estimate batch cost (no provider call; cost is preset-independent) | `--help` (`--count`, `--model`, `--quality`, `--provider`) |
 | `generate` | **yes** | opt (export) | generate thumbnails (single or batch) | `--help` (`--visible-text`, `--text-style`, `--text-color`, `--glow-color`, `--background-style`, `--concepts-file`) |
-| `grid` | no | yes (`--out`) | compose an adaptive N-up review grid from images | `--help` (`--images`, `--out`) |
+| `grid` | no | yes (`--out`) | session grid or Grid Runu | `--help` (`<sessionId>` / `--batch`) |
 | `reverse` | **yes** | no | analyze a competitor thumbnail → preset | `--help` (`--url`/`--file`, `--context`, `--apply`) |
 | `analyze-transcript` | **yes** | no | infer slot values from a scenario | `--help` (`--text`, `--preset`) |
 | `eval` | **yes** | yes (real run) | golden-set eval | `--help` |
@@ -42,7 +43,7 @@ Notes:
   `list-refs`/`list-sessions` and `cost-estimate`.
 - Paid commands (`generate`, `reverse`, `analyze-transcript`, `eval`, `retry`,
   `edit`) need the triple lock — see `paid-call-protocol.md`.
-- `--out` is **optional** for `generate` in the **dev CLI** (export policy, ADR
+- `--out` is **optional** for `generate` only in the verified **dev CLI** (export policy, ADR
   0005): omit it and the images still land in `public/generations`; pass it to
   ALSO copy the finals there. In **thin-client mode** (installed launcher → running
   app) `--out` is **REQUIRED** for `generate` — the CLI can't reach the app's
@@ -65,8 +66,9 @@ Notes:
   only, non-hex silently dropped like `--text-color`. On `preset:create` /
   `preset:edit`, the same flag stores the fork's default glow; on `generate`, it
   is a one-run override.
-- `grid` is free + local (sharp compose, no provider). Candidates from separate
-  sessions: pass them with `--images a.png,b.png,c.png,d.png`.
+- `grid` is free and server-composed (no provider): use `<sessionId>` for one
+  session or `--batch <batchId>` for the whole Run. Arbitrary `--images` is a
+  repo/dev-only legacy surface.
 - **Styles:** `list-styles` shows built-in + this account's custom text/background/
   recipe styles. `generate` has `--text-style`, `--text-color`, `--glow-color`, and
   `--background-style` (single-concept); for **batch** set the same per-concept in
@@ -77,7 +79,7 @@ Notes:
   sessions and prints `/sessions/batch/<runId>`; prefer it over looping single
   `generate` calls. Per concept: `preset`/`visibleText`/`textStyle`/`textColor`/
   `glowColor`/`refs`/`slotValues`/`quantity`; `provider`/`model`/`quality`/
-  `topic` stay global flags.
+  `topic` may be per concept; the top-level `--topic` remains a fallback.
 - **Discovery:** before proposing, list the dimension you're about to pick — or run
   `inventory` for all of them at once. See `discovery-contract.md`.
 - **Custom presets/styles (free):** `preset:*` / `style:*` are file/SQLite CRUD —

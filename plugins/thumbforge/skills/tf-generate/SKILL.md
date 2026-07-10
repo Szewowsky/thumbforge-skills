@@ -104,10 +104,9 @@ provider key; do not inspect or source secret/config files. Full rules:
    ```
    `--out` is an **export policy, not a lock** (ADR 0005): default it to an
    absolute `$HOME/Downloads/<temat-slug>` so the user always knows where the PNGs
-   are (override on request; if `~/Downloads` is unavailable, fall back to the
-   repo `public/generations`). Omit `--out` entirely and the images still land in
-   `public/generations` (UI / `/sessions/batch/<run>`). The cost lock stays
-   `--confirm` + `ALLOW=1`.
+   are (override on request). The thin client requires `--out`; only verified
+   repo/dev mode may omit it and rely on its separate dev storage. The cost lock
+   stays `--confirm` + `ALLOW=1`.
 6. **Preview grid (ALWAYS, for 2+ images).** After a successful paid run that
    produced **two or more** images, ALWAYS compose a review grid and open it — the
    user expects a single side-by-side preview every time, not just on request.
@@ -147,7 +146,7 @@ provider key; do not inspect or source secret/config files. Full rules:
 | `--quality <tier>` | quality tier (low test / high final) |
 | `--variants <n>` | images per preset (default 1) |
 | `--concepts-file <abs.json>` | batch mode: one logical Run with per-concept preset/text/refs/glow/quantity; >4 images split into ≤4-image sessions |
-| `--out <absDir>` | optional export dir — also copy finals here; omit and images still land in `public/generations` |
+| `--out <absDir>` | required thin-client export dir; optional only in verified repo/dev mode |
 | `--confirm` | spend money (also needs the env) |
 
 ## Load-bearing rules

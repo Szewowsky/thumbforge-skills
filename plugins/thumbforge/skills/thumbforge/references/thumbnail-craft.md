@@ -6,7 +6,7 @@ any creator, any niche, any language. Channel-specific taste (brand voice, exact
 wording, preferred expressions) is the user's input, not a rule here.
 
 **How thumbforge applies it:** the CLI `generate` does **not** take a raw prompt —
-the resolver (`src/lib/presets.ts`) builds the prompt from the **preset**. So you
+the resolver builds the prompt from the **preset**. So you
 steer the design through four levers, not free text:
 
 - `--preset` — the composition archetype (see §5)
@@ -94,7 +94,7 @@ Pick the preset whose composition matches the story you're telling.
 | Split hero (face centered, two glowing icon cards) | `split-hero` | tool-vs-tool / app-vs-app framing with warm-left and cool-right light |
 | Two people side by side | `collab-duo` / `host-plus-persona` | collabs, host + guest/persona (ref order is load-bearing) |
 
-Run `pnpm cli list-presets` for the live list (custom presets included).
+Run `thumbforge list-presets` for the live list (custom presets included).
 
 ## 6. Hooks that pull clicks
 
@@ -122,7 +122,7 @@ The preset declares slots; `--refs` fills them. Typical mapping:
 **Series-continuity toolkit.** For an episodic series, keep the look consistent:
 
 1. Upload the **previous episode's final thumbnail** as an `inspiration` ref
-   (`pnpm cli upload-ref --category inspiration`). It carries palette, layout, and
+   (`thumbforge upload-ref --category inspiration`). It carries palette, layout, and
    motif without touching identity.
 2. Upload the **brand logo** as an `icon` ref.
 3. Pass face + logo + prev-final together; the resolver places them.

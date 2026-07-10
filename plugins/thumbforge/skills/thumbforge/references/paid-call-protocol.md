@@ -18,16 +18,10 @@ Paid commands: `generate`, `reverse`, `analyze-transcript`, `eval`, `retry`,
 
 ## Environment
 
-The CLI **auto-loads** `THUMBFORGE_SECRET` from repo-root `.env.local` (an
-allowlist loader — ADR 0005). You do **not** source it manually: a direct
-`pnpm cli generate … --confirm` decrypts the saved key on its own. A pre-set
-`THUMBFORGE_SECRET` in the env wins, and a missing `.env.local` is a no-op.
-
-The loader reads **only** `THUMBFORGE_SECRET` — never any other line in the
-file. That is the point: even if `THUMBFORGE_ALLOW_PAID_CALLS=1` ended up in
-`.env.local`, the loader would not import it, so the cost lock cannot collapse to
-`--confirm` alone from the file. Still keep `ALLOW=1` out of `.env.local` and any
-persistent env as defense-in-depth (rule 3).
+The thin CLI inherits provider/analyzer keys from the running app. Do **not**
+inspect or source secret/config files. The direct repo CLI has separate dev
+configuration, but it is available only after the shared cwd manifest check.
+In both modes keep `THUMBFORGE_ALLOW_PAID_CALLS=1` inline and ephemeral.
 
 ## Five rules that keep it safe
 
@@ -38,9 +32,8 @@ persistent env as defense-in-depth (rule 3).
    fresh consent — not on retry, not after an error, not after Ctrl-C, not
    "because he approved a similar one earlier".
 3. **`THUMBFORGE_ALLOW_PAID_CALLS=1` stays inline** on the single command line.
-   Never `export` it, never add it to `.env.local` or any persistent env. The
-   secret loader ignores it from the file (allowlist), but a parent-env `ALLOW=1`
-   would still make `--confirm` the only remaining lock — half the protection gone.
+   Never `export` it or add it to any persistent env. A parent-env `ALLOW=1`
+   would make `--confirm` the only remaining lock — half the protection gone.
 4. **Chained flows = separate consent per stage.** `reverse → generate` and
    `analyze-transcript → generate` are multiple paid stages. Each gets its own
    dry-run, its own cost line, and its own approval. One yes never authorizes the
@@ -52,33 +45,33 @@ persistent env as defense-in-depth (rule 3).
 
 ```bash
 # 1) dry-run (free) — show the plan + cost, then WAIT
-pnpm cli generate --preset hero-pointing --topic "..." --quality low --refs /references/character-primary/<id>.png
-pnpm cli cost-estimate --count 1 --model gpt-image-2 --quality low
+thumbforge generate --preset hero-pointing --topic "..." --quality low --refs /references/character-primary/<id>.png
+thumbforge cost-estimate --count 1 --model gpt-image-2 --quality low
 
-# 2) only after the user approves in this turn (secret auto-loads from .env.local):
-THUMBFORGE_ALLOW_PAID_CALLS=1 pnpm cli generate \
+# 2) only after the user approves in this turn:
+THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge generate \
   --preset hero-pointing --topic "..." --quality low \
   --refs /references/character-primary/<id>.png \
   --confirm
 ```
 
-`--out` is optional (export policy, ADR 0005): omit it and the images still land
-in `public/generations` (visible in the UI / `/sessions/batch/<run>`); pass
-`--out <absDir>` to ALSO copy the finals somewhere handy.
+The thin client requires an absolute `--out` export directory. In verified
+repo/dev mode only, `--out` is optional because canonical files land in the dev
+generations root.
 
 `reverse` (one paid invocation, no `--out`):
 
 ```bash
-pnpm cli reverse --url "<yt>" --context "<the user's topic>"      # dry-run, no vision call
-THUMBFORGE_ALLOW_PAID_CALLS=1 pnpm cli reverse \
+thumbforge reverse --url "<yt>" --context "<the user's topic>"      # dry-run, no vision call
+THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge reverse \
   --url "<yt>" --context "<the user's topic>" --apply --confirm
 ```
 
 `analyze-transcript` (no `--out`, requires `--preset`):
 
 ```bash
-pnpm cli analyze-transcript --text "<scenario>" --preset hero-pointing    # dry-run
-THUMBFORGE_ALLOW_PAID_CALLS=1 pnpm cli analyze-transcript \
+thumbforge analyze-transcript --text "<scenario>" --preset hero-pointing    # dry-run
+THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge analyze-transcript \
   --text "<scenario>" --preset hero-pointing --confirm
 ```
 

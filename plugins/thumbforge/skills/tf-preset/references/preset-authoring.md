@@ -1,8 +1,7 @@
 # Preset authoring — fork model, validator rules, style anatomy, recipes
 
-Deep reference for `tf-preset`. The CLI command surface is in `docs/cli.md`
-(§"Custom presets" / §"Custom styles") and `pnpm cli <command> --help`; this doc
-is the *why* and the *gotchas*.
+Deep reference for `tf-preset`. The authoritative command surface is
+`thumbforge <command> --help`; this doc is the *why* and the *gotchas*.
 
 ## The fork model
 
@@ -38,8 +37,8 @@ A preset's `spec.positive` is six blocks, in this fixed order:
 | `[STYLE]` | editable | look, lighting, `{background_style_block}` |
 | `[PRESERVE]` | **frozen** | anti-drift constraints — byte-equal to base |
 
-Inspect any preset's blocks with `pnpm cli preset:show <id>`. Pull one editable
-block's raw bytes with `pnpm cli preset:show <id> --block composition` (also
+Inspect any preset's blocks with `thumbforge preset:show <id>`. Pull one editable
+block's raw bytes with `thumbforge preset:show <id> --block composition` (also
 `elements` / `style`, and `face-lock` / `expression` / `preserve` for reading).
 
 ## Validator rules (plain language)
@@ -69,7 +68,7 @@ re-fork.
 > The validator does **not** check that a `--background-style` / `--text-style`
 > id actually exists. A typo'd or deleted style id is stored as-is and the preset
 > silently loses that style at generation. Always confirm style ids against
-> `pnpm cli list-styles` before wiring them in.
+> `thumbforge list-styles` before wiring them in.
 
 ## Style anatomy
 
@@ -98,7 +97,7 @@ over the fork default.
 ## Starter recipes (worked patterns)
 
 Five small, reusable forks. Build the styles first, confirm their ids with
-`pnpm cli list-styles`, then fork. Validate each with a free `generate` dry-run;
+`thumbforge list-styles`, then fork. Validate each with a free `generate` dry-run;
 real rendering is a separate paid step in **tf-generate**.
 
 1. **SaaS Screen Roast** — base `screen-show`. For "reviewing a landing page /
@@ -112,7 +111,7 @@ real rendering is a separate paid step in **tf-generate**.
    second (no swap); host left/centre, persona an equal subject, no random props.
 4. **Case Study** — base `collab-duo`. For "built this with X" case studies. A
    large readable screen panel, warm accent background without one dominating
-   colour blob. (Use a `duo-screen` custom base only if `pnpm cli list-presets`
+   colour blob. (Use a `duo-screen` custom base only if `thumbforge list-presets`
    shows it — it is not a built-in.)
 5. **Clean Hero Pointing** — base `hero-pointing`. Fast single-subject thumbnails
    pointing at one icon/object. Minimal background, strong rim light, low clutter;

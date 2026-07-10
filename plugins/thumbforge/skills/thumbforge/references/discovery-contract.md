@@ -17,18 +17,18 @@ NOT "run every `list-*` on every turn".
 
 | You are about to choose… | Discover first (free) | Skip the lookup when… |
 |---|---|---|
-| an archetype / preset | `pnpm cli list-presets` | the user named `--preset <id>` |
-| a text / background / recipe style | `pnpm cli list-styles [--type text\|background\|recipe]` | the user named the style |
-| which refs fill the slots | `pnpm cli list-refs [--category <c>]`, then visually inspect candidates when the choice is ambiguous | the user gave explicit ref paths |
-| a model | `pnpm cli list-models` | sticking to the documented default |
+| an archetype / preset | `thumbforge list-presets` | the user named `--preset <id>` |
+| a text / background / recipe style | `thumbforge list-styles [--type text\|background\|recipe]` | the user named the style |
+| which refs fill the slots | `thumbforge list-refs [--category <c>]`, then visually inspect candidates when the choice is ambiguous | the user gave explicit ref paths |
+| a model | `thumbforge inventory` | sticking to the documented default |
 
-**Shortcut:** `pnpm cli inventory` (free) prints all four dimensions at once
+**Shortcut:** `thumbforge inventory` (free) prints all four dimensions at once
 (presets + styles + models + refs, built-in AND custom) — one call instead of
 four. Prefer it when you're about to propose and want the whole account picture
 (e.g. tf-scenario's 4 diverse concepts). Use the individual `list-*` when you only
 need one dimension.
 
-A pure `pnpm cli retry <session>` chooses nothing new → no discovery needed.
+A pure repo/dev-only `pnpm cli retry <session>` chooses nothing new → no discovery needed.
 
 **The static maps in `thumbnail-craft.md` (§5 archetype→preset) are DESIGN
 REASONING** — which composition suits which story. They are NOT the source of
@@ -45,7 +45,7 @@ falls back to a generic prompt, so the gate has to hold here, in the skill).
   "hero + gesture" role. Never skip a custom just because it isn't in the static
   catalog; surfacing the user's own customs is the whole point of discovery.
   (Note: `list-presets` does NOT print a preset's slots — for slot detail the
-  source is `src/lib/presets.ts`.)
+  source is `thumbforge preset:show <id>`.)
 - `list-styles` marks `built-in` / `custom` per row, grouped TEXT / BACKGROUND /
   RECIPE. A user's custom styles only appear here — the static 4-style text list is
   reasoning-only.
@@ -64,14 +64,15 @@ falls back to a generic prompt, so the gate has to hold here, in the skill).
 
 `list-refs` is the index, not the final judgment. When a category has several
 plausible refs, or when identity/pose matters, inspect the existing
-`<id>_thumb.png` images before choosing. Prefer a local contact sheet:
+`<id>_thumb.png` images before choosing. In the thin client, inspect candidates
+in the app's References library. In verified repo/dev mode, a contact sheet is available:
 
 ```bash
 pnpm cli refs:contact-sheet --category <category> --out /tmp/thumbforge-ref-sheets
 ```
 
-Then inspect the written PNG. For a handful of candidates, reading the relevant
-`public/references/<category>/<id>_thumb.png` files directly is also fine.
+Then inspect the written PNG. Do not assume a repo `public/` tree exists for a
+tester or buyer.
 
 Choose refs by what is actually visible, not by the filename or display name. A
 file named after a person can still be a torso crop, hoodie, logo, or other poor
@@ -101,7 +102,7 @@ jedna sesja `0/N`, ZERO JSON-a. `--concepts-file` jest wyłącznie dla N RÓŻNY
 konceptów (inne presety/teksty/refy per sztuka).
 
 When you have **more than one** concept/archetype, generate them ALL in a single
-`pnpm cli generate --concepts-file <abs.json>` — one logical Run, one dry-run,
+`thumbforge generate --concepts-file <abs.json>` — one logical Run, one dry-run,
 one consent. The CLI may split a >4-image Run into several review-sized sessions,
 then print `/sessions/batch/<runId>` for combined review. Never loop
 single-concept `generate` calls: that creates unrelated sessions (the "x2/x4"

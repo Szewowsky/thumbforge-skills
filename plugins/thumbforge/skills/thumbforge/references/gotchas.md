@@ -83,7 +83,7 @@ Latin, CJK. Mitigation:
 - `medium` — the sweet spot to compare concepts (text legible, face faithful).
 - `high` — ship quality; spend it on the chosen winner, not the whole batch.
 
-Estimate before you spend: `pnpm cli cost-estimate` is free.
+Estimate before you spend: `thumbforge cost-estimate` is free.
 
 ## Text styles
 

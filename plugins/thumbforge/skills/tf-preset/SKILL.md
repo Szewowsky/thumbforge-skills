@@ -35,21 +35,18 @@ once, reuse it across presets and across generations.
 - Turning a scenario into concepts → `tf-scenario`.
 - Listing or adding reference images → `tf-assets`.
 
-## Step 0 — Bootstrap
+## Step 0 — Bootstrap thin-first
 
-```bash
-cd "/Users/robert/Windsurf Projekty/thumbforge"
-thumbforge --help            # CLI reachable? (free)
-```
+Run `thumbforge --help` (free). If it fails: „Uruchom aplikację Thumbforge; CLI instaluje się samo, a w razie potrzeby użyj tray → Zainstaluj CLI.”
+Then follow the shared [Bootstrap thin-first contract](../thumbforge/SKILL.md#step-0--bootstrap-thin-first); do not inspect repo files or guess a machine path before the handshake.
 
 No `THUMBFORGE_SECRET`, no `THUMBFORGE_ALLOW_PAID_CALLS`, no `--confirm` — every
 command here costs nothing. If you reach for a paid invocation you are in the
 wrong skill (generation lives in **tf-generate**; see Routing in the `thumbforge`
 umbrella).
 
-The authoritative flags are always `pnpm cli <command> --help`. `docs/cli.md`
-(§"Custom presets" / §"Custom styles") is the human overview. Deep mechanics and
-the validator rules live in [references/preset-authoring.md](references/preset-authoring.md).
+The authoritative flags are always `thumbforge <command> --help`. Deep mechanics
+and validator rules live in [references/preset-authoring.md](references/preset-authoring.md).
 
 ## Workflow — inspect first (free, always)
 
@@ -210,11 +207,9 @@ Load on demand:
 
 ## Cienki klient (tester) i tryb dev
 
-Komendy w tym skillu wołają **`thumbforge`** — cienki klient HTTP. U testera z samą
-aplikacją (.dmg, bez repo) `thumbforge` jest wbudowany w apkę (instalacja: ikona w
-tray → „Zainstaluj CLI"). W repozytorium (dev) `thumbforge` to launcher do
-bezpośredniego CLI — raz wykonaj `pnpm link --global` (albo używaj równoważnego
-`pnpm cli <komenda>`).
+Komendy w tym skillu wołają domyślnie **`thumbforge`** — cienki klient HTTP.
+`pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym kontraktem po
+manifeście `package.json` z `name === "thumbforge"` w cwd.
 
 Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
