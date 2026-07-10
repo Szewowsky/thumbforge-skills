@@ -113,7 +113,8 @@ saved key on its own — you no longer source it. Full rules:
    `--confirm` + `ALLOW=1`.
 6. **Preview grid (ALWAYS, for 2+ images).** After a successful paid run that
    produced **two or more** images, ALWAYS compose a review grid and open it — the
-   user expects a single side-by-side preview every time, not just on request:
+   user expects a single side-by-side preview every time, not just on request.
+   For one session use its `sessionId`:
    ```bash
    thumbforge grid <sessionId> --out "$HOME/Downloads/<temat-slug>/grid.png"
    ```
@@ -121,10 +122,13 @@ saved key on its own — you no longer source it. Full rules:
    and uses the server's final images for that session. Skip the grid only for a
    **single** image (a 1-up grid is pointless). Surface the grid path
    in the delivery alongside the individual finals.
-   A `--concepts-file` run planning **more than 4 images** splits into several
-   sessions (≤4 images each) and prints several sessionIds — run `grid` once
-   per sessionId; there is no cross-session grid. For a single 2×2 review
-   sheet, keep the batch at exactly 4 images.
+   A `--concepts-file` Run planning **more than 4 images** splits into several
+   sessions (≤4 images each) and prints one `batchId`. Compose exactly one **Grid
+   Runu** from all final images:
+   ```bash
+   thumbforge grid --batch <batchId> --out "$HOME/Downloads/<temat-slug>/grid.png"
+   ```
+   **Grid Runu dla batcha >4 = jedno `grid --batch`, nigdy grid per sessionId; 4 obrazy = ładne 2×2.**
 7. **Deliver.** Report the session id, UI path (`/history` / `/sessions/<id>`),
    exported PNG dir, the preview-grid path (step 6), and a one-line summary (preset,
    model, quality, variants, cost). No JSON dumps.
