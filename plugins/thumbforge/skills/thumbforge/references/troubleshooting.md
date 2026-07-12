@@ -54,3 +54,15 @@ thinking models. If it recurs, report it — don't blindly retry, since each
 `eval`, `retry`, and `edit` are paid too but aren't wrapped by a core skill.
 Drive them only in verified repo/dev mode with the same triple lock +
 dry-run-first + per-call consent from `paid-call-protocol.md`.
+
+## Timeout / awaria providera (beta.35)
+
+- `generate` przekroczyło timeout pollingu, a sesja dalej "pending"? Serwer
+  generuje dalej — NIE odpalaj drugiego `generate` (nowa płatna sesja).
+  Wznów odbiór bez płatnego calla:
+  `thumbforge resume <sessionId> --out "<katalog>"`.
+- Sesja ma nieudane warianty (kafel FAILED / "OpenAI ma awarię")? Ponów
+  wyłącznie brakujący obraz (płatne, potrójny zamek, koszt per obraz):
+  `THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge retry-image --session <id> --index <n> --out "<katalog>" --confirm`
+  (najpierw dry-run bez `--confirm`). Nieudany wariant można też usunąć
+  z planu sesji w GUI, żeby sesja została z samymi udanymi obrazami.
