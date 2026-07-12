@@ -20,9 +20,9 @@ lock — local file + SQLite writes):
   into a preset's `[STYLE]` block) and a **text style** (the headline's look —
   colours, stroke, font, position, prompt fragment). Each gets its own id and
   shows up in `list-styles`.
-- **Fork-preset** = a **fork of a built-in archetype**: same slots, same
-  parameters, same locked blocks — you change the name, the default styles, and
-  the three editable blocks `[COMPOSITION]` / `[ELEMENTS]` / `[STYLE]`.
+- **Fork-preset** = a **fork of a built-in archetype**: same slot order,
+  parameters and locked blocks — you may explicitly drop selected slots, change
+  the name/default styles, and edit `[COMPOSITION]` / `[ELEMENTS]` / `[STYLE]`.
 
 A style is the LEGO brick; a Fork-preset is the model that snaps a background
 style + a text style + the frozen face/composition logic together. Build a brick
@@ -123,6 +123,27 @@ If `preset:create` prints a validation error list, the edit dropped a guardrail 
 fix the block, do not work around it. `[FACE LOCK]` / `[PRESERVE]` /
 `[EXPRESSION]` are frozen (byte-equal to the base) and have no `--*-file` flag.
 
+## Workflow — mix blocks from existing presets
+
+Copy a compatible editable block directly, without temporary files:
+
+```bash
+thumbforge preset:create --from collab-duo --name "Duo Icon Holders v2" \
+  --composition-from <preset-z-docelowym-układem> \
+  --drop-slot <zbędny-slot>
+
+thumbforge preset:edit <custom-id> --elements-from icon-holder-grid
+```
+
+The three symmetric flags are `--composition-from`, `--elements-from` and
+`--style-from`; each accepts a built-in or custom preset id and works in both
+`preset:create` and `preset:edit`. Do not combine `--composition-file` with
+`--composition-from` (same for elements/style) — choose exactly one source.
+The copied block still passes through the original validator. A mix with missing
+base slot tokens, changed token order, or lost safe-zone phrases must fail; pick
+a compatible source or explicitly remove the relevant inherited slot with
+`--drop-slot`, never bypass the validator.
+
 ## Workflow — edit / delete a preset
 
 ```bash
@@ -132,7 +153,7 @@ pnpm cli preset:preview <custom-id> --from "/ABS/path/to/cover.png"  # repo/dev-
 pnpm cli preset:delete <custom-id>   # repo/dev-only soft-delete; old sessions still resolve on retry
 ```
 
-`preset:edit` takes the same style/block flags as `preset:create` (patch
+`preset:edit` takes the same style/block/drop/source flags as `preset:create` (patch
 semantics, minus `--from`); `preset:preview` swaps the visible grid cover from a
 local PNG/JPEG/WebP; only custom ids are editable — fork a built-in first.
 
@@ -168,9 +189,9 @@ visible content matches the slot, not merely ids that sound right.
 
 ## Load-bearing rules
 
-- **Slots + `spec.parameters` are frozen 1:1** to the base (the refPaths /
-  host-guest order; see the project `CLAUDE.md` §1). You cannot add, remove, or
-  reorder slots.
+- **Slot survivor order + `spec.parameters` are frozen** to the base (the
+  refPaths / host-guest order; see the project `CLAUDE.md` §1). You may remove a
+  slot only through repeatable `--drop-slot`; you cannot add or reorder slots.
 - **Refs are bound at generation time** (`generate --set-slot`), never baked into
   `preset:create`. A Fork-preset stores a template, not specific images.
 - **Choose validation refs visually.** If the fork needs a face/icon/screen in the
