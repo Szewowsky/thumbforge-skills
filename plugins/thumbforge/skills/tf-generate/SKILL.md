@@ -80,6 +80,18 @@ provider key; do not inspect or source secret/config files. Full rules:
    `generate` — to daje N sesji `0/1` w historii, N consentów i N szans na
    fail w połowie. Confirm real values with `thumbforge generate --help` and
    `thumbforge inventory`. State the choices to the user; don't over-ask.
+   **Duo gate:** gdy wybrany preset ma `face_ref` + `guest_face_ref`, zatrzymaj
+   budowę komendy i zapytaj: „Kto ma być po lewej, kto po prawej? Kto ma być
+   wyższy/główny?”. Dopiero po odpowiedzi przypisz osoby pozycyjnie przez
+   powtarzalne `--set-slot`; nie polegaj na kategorii primary/secondary:
+   ```bash
+   --set-slot face_ref=/references/<kategoria>/<osoba-lewa>.png \
+   --set-slot guest_face_ref=/references/<kategoria>/<osoba-prawa>.png
+   ```
+   `face_ref` jest pierwszym refem i stoi po LEWEJ, `guest_face_ref` jest drugim
+   i stoi po PRAWEJ. Preferencję wzrostu/głównej osoby zapisz jako krótkie,
+   jawne ograniczenie kompozycji w `--topic` (np. „LEFT person visibly taller
+   than RIGHT person”), a potem potwierdź jego obecność w resolved prompt dry-runu.
 3. **Estimate cost (free).**
    ```bash
    thumbforge cost-estimate --count <variants> --model gpt-image-2 --quality <q>
@@ -140,6 +152,7 @@ provider key; do not inspect or source secret/config files. Full rules:
 | `--text-color <hex>` | headline color `#RRGGBB` (default `#FFFFFF`) |
 | `--glow-color <hex>` | brand glow / rim-light color `#RRGGBB` — tints background, rim light & accents (e.g. teal `#14B8A6`); hex only, non-hex dropped |
 | `--background-style <id>` | background style id from `thumbforge list-styles --type background` (built-in + custom); replaces the preset's default background sentence |
+| `--set-slot <name=value>` | jawne wiązanie slotu; powtarzaj dla `face_ref` i `guest_face_ref`, aby ustawić lewą/prawą osobę niezależnie od kategorii refa |
 | `--refs <p1,p2>` | comma-separated reference paths (order matters — see below) |
 | `--provider openai\|google` | provider (default openai) |
 | `--model <id>` | model (`list-models`; default gpt-image-2) |
@@ -157,6 +170,10 @@ provider key; do not inspect or source secret/config files. Full rules:
   resolver clusters refs by role and preserves order within the character bucket,
   so don't interleave other character refs between them and don't pass the guest
   as `character-primary` — either way the model swaps host and guest.
+- **Duo świadomie nadpisuje role.** Gdy user poda strony, przekaż oba refy przez
+  `--set-slot face_ref=<LEWA> --set-slot guest_face_ref=<PRAWA>`. Sloty, nie
+  etykiety primary/secondary, wyznaczają wtedy `refPaths[0]` i `refPaths[1]`;
+  nie zmieniaj kolejności presetowych slotów ani globalnej listy `--refs`.
 - **Visual ref choice.** `list-refs` is discovery, not eyesight. Run
   `refs:contact-sheet` or inspect ambiguous `_thumb.png` previews before selecting
   refs, especially face slots where a named person might be a torso/hoodie crop
