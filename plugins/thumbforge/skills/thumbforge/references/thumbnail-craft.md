@@ -111,6 +111,12 @@ The image should promise something worth a click. Reliable patterns:
   resolved.
 - **Before / after** — a visible contrast that implies a payoff.
 
+**Control question before locking any concept (the curiosity gap):** does the
+image leave exactly one question open that only the video answers? If the
+thumbnail already says everything, there is no reason to click — rework the
+concept, not the styling. The gap is a property of the concept, not a phrase to
+inject into the prompt.
+
 ## 7. References & series continuity
 
 The preset declares slots; `--refs` fills them. Typical mapping:
