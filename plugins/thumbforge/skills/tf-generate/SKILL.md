@@ -43,6 +43,7 @@ provider key; do not inspect or source secret/config files. Full rules:
    ```bash
    thumbforge list-presets                              # archetype (built-in + custom)
    thumbforge list-styles                               # text/background/recipe ids
+   thumbforge generate --help                           # built-in expression brick ids (--expression)
    thumbforge list-refs --category character-primary    # the host's face
    thumbforge list-refs --category character-secondary  # guest/persona (collab-duo / host-plus-persona)
    thumbforge list-refs --category icon
@@ -69,7 +70,14 @@ provider key; do not inspect or source secret/config files. Full rules:
    no important element in the timestamp corner, and no clutter beyond the Rule of
    3 unless the preset explicitly needs it. Pick `--text-style` (and any background
    / recipe direction) from the `list-styles` output of step 1, not from memory —
-   that is how this account's custom styles get used. Sensible defaults: provider
+   that is how this account's custom styles get used.
+   **Ekspresja (mina/poza):** default = the preset's own mina (GUI „Domyślna") —
+   omit `--expression` unless the user asks for a mood. Override with a built-in
+   brick id from `generate --help` (e.g. `skeptical`, `thinking-hand-on-chin`) or
+   a `custom-expression-*` id you created/saw this session. A brick = face
+   fragment (mina) + optional pose fragment (poza); the pose applies only on
+   presets that opt in (`allowsExpressionPose`) — elsewhere only the mina lands.
+   Sensible defaults: provider
    `openai`, model `gpt-image-2`, quality `low` for a test / `high` for a final.
    **ILE OBRAZÓW — mapowanie liczby (load-bearing):** >1 koncept/wariant ⇒ ZAWSZE jedna batch-sesja, nigdy pętla runów.
    User chce N kandydatów
@@ -152,6 +160,7 @@ provider key; do not inspect or source secret/config files. Full rules:
 | `--text-color <hex>` | headline color `#RRGGBB` (default `#FFFFFF`) |
 | `--glow-color <hex>` | brand glow / rim-light color `#RRGGBB` — tints background, rim light & accents (e.g. teal `#14B8A6`); hex only, non-hex dropped |
 | `--background-style <id>` | background style id from `thumbforge list-styles --type background` (built-in + custom); replaces the preset's default background sentence |
+| `--expression <id>` | expression brick: mina + opcjonalna poza (built-in ids w `generate --help`, custom `custom-expression-*`); nadpisuje default presetu; w `--concepts-file` = pole `expression` per koncept |
 | `--set-slot <name=value>` | jawne wiązanie slotu; powtarzaj dla `face_ref` i `guest_face_ref`, aby ustawić lewą/prawą osobę niezależnie od kategorii refa |
 | `--refs <p1,p2>` | comma-separated reference paths (order matters — see below) |
 | `--provider openai\|google` | provider (default openai) |
@@ -180,6 +189,11 @@ provider key; do not inspect or source secret/config files. Full rules:
   rather than a usable face.
 - **NO_TEXT_GUARD.** If the user wants text on the thumbnail, pass `--visible-text`.
   An empty visible text triggers a guard in the resolver — that's intended.
+- **Unknown `--expression` ids are silently dropped** (same trap as unknown
+  presets) — the run falls back to the preset default with no error. There is no
+  `list-expressions`: built-in ids live in `generate --help`; the only sources of
+  custom ids are `expression:create` output (tf-preset) and reverse
+  `--save-expression` output (tf-reverse). Never guess an expression id.
 - **`--out`** must be absolute — it is an export copy, not a cost lock (ADR 0005).
   In the **dev CLI** it is optional: the CLI writes the canonical session files to
   `public/generations`, so history and previews work whether or not `--out` is
@@ -208,7 +222,7 @@ Komendy w tym skillu wołają **`thumbforge`** — cienki klient HTTP i domyśln
 powierzchnię. `pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym
 kontraktem po manifeście `package.json` z `name === "thumbforge"` w cwd.
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `resume`, `retry-image`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `resume`, `retry-image`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
 Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
 są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast

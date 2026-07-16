@@ -17,7 +17,7 @@ only for commands marked repo/dev-only and only after the shared manifest check.
 | `inventory` | no | no | one-shot overview: presets + styles + models + refs | `--help` |
 | `list-sessions` | no | no | past generation sessions | `--help` |
 | `cost-estimate` | no | no | estimate batch cost (no provider call; cost is preset-independent) | `--help` (`--count`, `--model`, `--quality`, `--provider`) |
-| `generate` | **yes** | opt (export) | generate thumbnails (single or batch) | `--help` (`--visible-text`, `--text-style`, `--text-color`, `--glow-color`, `--background-style`, `--concepts-file`) |
+| `generate` | **yes** | opt (export) | generate thumbnails (single or batch) | `--help` (`--visible-text`, `--text-style`, `--text-color`, `--glow-color`, `--background-style`, `--expression`, `--concepts-file`) |
 | `grid` | no | yes (`--out`) | session grid or Grid Runu | `--help` (`<sessionId>` / `--batch`) |
 | `reverse` | **yes** | no | analyze a competitor thumbnail → preset | `--help` (`--url`/`--file`, `--context`, `--apply`) |
 | `analyze-transcript` | **yes** | no | infer slot values from a scenario | `--help` (`--text`, `--preset`) |
@@ -37,6 +37,9 @@ only for commands marked repo/dev-only and only after the shared manifest check.
 | `style:create` | no | no | author a text/background style | `--help` (`--type`, `--from`, `--sentence`, …) |
 | `style:edit` | no | no | edit a custom style (full-input merge) | `--help` |
 | `style:delete` | no | no | soft-delete a custom style | `--help` |
+| `expression:create` | no | no | author a custom expression (mina/poza) | `--help` (`--label`, `--face-fragment`, `--pose-fragment`) |
+| `expression:edit` | no | no | edit a custom expression | `--help` |
+| `expression:delete` | no | no | soft-delete a custom expression | `--help` |
 
 Notes:
 - Stale names that DON'T exist: `list`, `cost`. Use `list-presets`/`list-models`/
@@ -82,7 +85,15 @@ Notes:
   `topic` may be per concept; the top-level `--topic` remains a fallback.
 - **Discovery:** before proposing, list the dimension you're about to pick — or run
   `inventory` for all of them at once. See `discovery-contract.md`.
-- **Custom presets/styles (free):** `preset:*` / `style:*` are file/SQLite CRUD —
+- **Expressions (mina/poza):** `generate --expression <id>` overrides the
+  preset's default expression for one run (per-concept `expression` in a
+  `--concepts-file`). Built-in brick ids are printed in `generate --help`; custom
+  ids (`custom-expression-*`) come only from `expression:create` / reverse
+  `--save-expression` output — there is no `list-expressions`, and an unknown id
+  is silently dropped (preset default applies). A brick's pose fragment lands
+  only on presets that opt into poses.
+- **Custom presets/styles/expressions (free):** `preset:*` / `style:*` /
+  `expression:*` are file/SQLite CRUD —
   no model call, no `--out`, no paid lock. A custom preset is a FORK of a built-in
   (name + default styles + the editable `[COMPOSITION]`/`[ELEMENTS]`/`[STYLE]`
   blocks; slots + locks frozen). Edit a block by starting from `preset:show <id>

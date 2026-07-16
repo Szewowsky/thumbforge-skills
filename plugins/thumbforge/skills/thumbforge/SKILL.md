@@ -119,6 +119,9 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 | `style:create` | no | author a text/background style → **tf-preset** |
 | `style:edit` | no | edit a custom style → **tf-preset** |
 | `style:delete` | no | soft-delete a custom style → **tf-preset** |
+| `expression:create` | no | author a custom expression (mina/poza) → **tf-preset** |
+| `expression:edit` | no | edit a custom expression → **tf-preset** |
+| `expression:delete` | no | soft-delete a custom expression → **tf-preset** |
 
 ## Routing
 
@@ -127,9 +130,9 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 - Turn a video scenario/transcript into concepts → **`/tf-scenario`**.
 - Brainstorm original thumbnail concepts / Swobodny prompt → **`/tf-brainstorm`**.
 - List or add reference images — face, icons, inspirations → **`/tf-assets`** (free).
-- Author or edit a custom preset (fork an archetype, edit a block) or a custom
-  text/background style → **`/tf-preset`** (free). Also where a reverse-template
-  preset gets refined before generation.
+- Author or edit a custom preset (fork an archetype, edit a block), a custom
+  text/background style, or a custom expression (mina/poza) → **`/tf-preset`**
+  (free). Also where a reverse-template preset gets refined before generation.
 - Editing an already-generated image by instruction (`edit`) → **`/tf-edit`**.
 - Re-running a past session as-is (`retry`) or a golden-set `eval` — these are
   paid but out of the core task-skill set. Handle them only in verified repo/dev
@@ -164,7 +167,7 @@ Komendy w tym skillu wołają domyślnie **`thumbforge`** — cienki klient HTTP
 `pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym kontraktem po
 manifeście `package.json` z `name === "thumbforge"` w cwd.
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
 Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
 są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast

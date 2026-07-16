@@ -1,18 +1,17 @@
 ---
 name: tf-preset
 description: >-
-  Author and edit custom thumbnail presets and styles with the thumbforge CLI —
-  the headless fork builder. Use when building, forking, or tweaking a reusable
-  template or style rather than rendering images —
-  "/tf-preset", "stwórz preset", "sforkuj archetyp", "zmień tło lub styl tekstu".
-  Free CRUD.
+  Author custom thumbnail presets, styles and expressions (mina/poza) with the
+  thumbforge CLI — the headless fork builder. Use when building or tweaking a
+  reusable template, style or expression, not rendering images — "/tf-preset",
+  "stwórz preset", "sforkuj archetyp", "dodaj własną minę". Free CRUD.
 argument-hint: "[create|edit|show a preset or style] [--from <base>] [--block <name>]"
 allowed-tools: Bash, Read
 ---
 
 # tf-preset
 
-Two kinds of object, both **free** to author (no model call, no key, no paid
+Three kinds of object, all **free** to author (no model call, no key, no paid
 lock — local file + SQLite writes):
 
 - **Custom style** = a small, standalone, reusable brick. Two types: a
@@ -20,6 +19,9 @@ lock — local file + SQLite writes):
   into a preset's `[STYLE]` block) and a **text style** (the headline's look —
   colours, stroke, font, position, prompt fragment). Each gets its own id and
   shows up in `list-styles`.
+- **Custom expression** = a mina/poza brick (the GUI's „+ Własna mina"): a
+  required face fragment plus an optional pose fragment. Picked at generation
+  time via `tf-generate --expression <id>` on ANY preset.
 - **Fork-preset** = a **fork of a built-in archetype**: same slot order,
   parameters and locked blocks — you may explicitly drop selected slots, change
   the name/default styles, and edit `[COMPOSITION]` / `[ELEMENTS]` / `[STYLE]`.
@@ -85,6 +87,26 @@ Edit or remove later: `thumbforge style:edit <custom-id> …` (full-input merge 
 re-validate) / `thumbforge style:delete <custom-id>` (soft-delete). After creating
 a style, run `thumbforge list-styles` and copy its exact id — you will wire it into
 the fork by id next.
+
+## Workflow — author an expression (mina/poza)
+
+```bash
+thumbforge expression:create --label "Zdziwiony: dłonie uniesione" \
+  --face-fragment "surprised wide eyes, eyebrows raised, mouth slightly open" \
+  --pose-fragment "both hands raised palms-up at chest height"
+```
+
+`--face-fragment` (mina) is required; `--pose-fragment` (poza) is optional and
+applies only on presets that opt into poses. The command prints the new
+`custom-expression-<id>` — **copy it immediately: no command lists expressions
+later** (`generate --help` shows built-ins only). Edit/remove:
+`thumbforge expression:edit <id> …` / `thumbforge expression:delete <id>`
+(soft-delete). The validator bans the clickbait moods `shocked` / `amazed` /
+`jaw-dropped` in both fragments — pick a concrete facial description instead.
+An expression is generation-time input (`tf-generate --expression <id>`), not a
+preset field: a fork inherits `defaultExpression` from its base, and the only
+CLI path that binds a new one as a preset default is `tf-reverse --apply
+--save-expression`.
 
 ## Workflow — fork a preset (PRIMARY path: style-level, no block edits)
 
@@ -232,7 +254,7 @@ Komendy w tym skillu wołają domyślnie **`thumbforge`** — cienki klient HTTP
 `pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym kontraktem po
 manifeście `package.json` z `name === "thumbforge"` w cwd.
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
 Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
 są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast
