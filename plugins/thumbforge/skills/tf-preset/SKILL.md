@@ -58,6 +58,7 @@ Discover the dimension before you pick it (see
 ```bash
 thumbforge list-presets               # built-in archetypes + this account's customs
 thumbforge list-styles                # background / text / recipe styles (built-in + custom)
+thumbforge list-expressions           # built-in + custom mina/poza ids
 pnpm cli preset:slots hero-pointing   # repo/dev-only: slot detail; thin fallback is preset:show
 thumbforge preset:show hero-pointing  # the 6 spec blocks: EDITABLE vs FROZEN, with bodies
 ```
@@ -98,15 +99,15 @@ thumbforge expression:create --label "Zdziwiony: dłonie uniesione" \
 
 `--face-fragment` (mina) is required; `--pose-fragment` (poza) is optional and
 applies only on presets that opt into poses. The command prints the new
-`custom-expression-<id>` — **copy it immediately: no command lists expressions
-later** (`generate --help` shows built-ins only). Edit/remove:
+`custom-expression-<id>`. Potwierdź zapis i odkrywaj pełny katalog później przez
+`thumbforge list-expressions`. Edit/remove:
 `thumbforge expression:edit <id> …` / `thumbforge expression:delete <id>`
 (soft-delete). The validator bans the clickbait moods `shocked` / `amazed` /
 `jaw-dropped` in both fragments — pick a concrete facial description instead.
-An expression is generation-time input (`tf-generate --expression <id>`), not a
-preset field: a fork inherits `defaultExpression` from its base, and the only
-CLI path that binds a new one as a preset default is `tf-reverse --apply
---save-expression`.
+An expression może być generation-time input (`tf-generate --expression <id>`)
+albo defaultem forka. `preset:create` i `preset:edit` przyjmują
+`--default-expression <id|none>`; `none` czyści zapis i przywraca dziedziczenie
+z presetu bazowego. Id musi pochodzić z `list-expressions`.
 
 ## Workflow — fork a preset (PRIMARY path: style-level, no block edits)
 
@@ -115,7 +116,8 @@ Most forks only change the name + default styles. Safe, covers most needs:
 ```bash
 thumbforge preset:create --from screen-show --name "SaaS Screen Roast" \
   --background-style <bg-style-id> --text-style <text-style-id> \
-  --text-color "#FFFFFF" --glow-color "#0AC6AA"
+  --text-color "#FFFFFF" --glow-color "#0AC6AA" \
+  --default-expression <expression-id>
 ```
 
 **The validator does NOT check that a style id exists** — it will happily store a
@@ -170,7 +172,7 @@ a compatible source or explicitly remove the relevant inherited slot with
 
 ```bash
 thumbforge preset:edit <custom-id> --name "Nowa nazwa" --text-color "#0AC6AA" \
-  --glow-color "#0AC6AA"
+  --glow-color "#0AC6AA" --default-expression <id|none>
 pnpm cli preset:preview <custom-id> --from "/ABS/path/to/cover.png"  # repo/dev-only
 pnpm cli preset:delete <custom-id>   # repo/dev-only soft-delete; old sessions still resolve on retry
 ```
@@ -254,7 +256,7 @@ Komendy w tym skillu wołają domyślnie **`thumbforge`** — cienki klient HTTP
 `pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym kontraktem po
 manifeście `package.json` z `name === "thumbforge"` w cwd.
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
 Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
 są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast

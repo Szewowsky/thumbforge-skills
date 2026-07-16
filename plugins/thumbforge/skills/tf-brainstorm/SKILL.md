@@ -21,6 +21,7 @@ with dry-run-first, explicit consent, and the triple lock.
 - Generating directly from an existing preset → `tf-generate`.
 - Cloning a competitor's thumbnail → `tf-reverse`.
 - Concepts from a transcript → `tf-scenario`.
+- Comparing title candidates before choosing a thumbnail direction → `tf-titles`.
 - Editing reusable presets/styles → `tf-preset`.
 - Listing or adding reference images → `tf-assets`.
 
@@ -53,10 +54,21 @@ never re-run a `--confirm` command without fresh approval.
    `list-refs` is an index, not visual inspection. If several refs could fit,
    inspect the relevant `_thumb.png` previews. In repo/dev only, a contact sheet
    can help: `pnpm cli refs:contact-sheet --category <category> --out <dir>`.
-2. **Brainstorm 2-3 concepts in chat.** Keep each concept short: layout, visible
-   headline, refs to use, emotional hook, and the main risk. Do not run
-   generation here.
-3. **Choose one concept and compose the Swobodny prompt.** `--custom-prompt`
+   Gdy temat lub kierunek wymienia markę/logo, sprawdzenie kategorii `icon` jest
+   bramką: istniejący ref trzeba podpiąć; brak refa trzeba jawnie zgłosić userowi
+   przed użyciem słownego opisu marki.
+2. **Diverge before composing.** Before building any prompt, present at least
+   **3 named directions** with genuinely different archetypes, moods and
+   compositions. Include at least one direction outside the preset catalog that
+   would use a Swobodny `--custom-prompt`. Give each direction a one-sentence
+   topic-specific rationale plus its layout, visible headline, refs, emotional
+   hook and main risk. Każdy kierunek ma jeden headline; dodatkowa linia jest
+   dozwolona wyłącznie wtedy, gdy wybrany styl tekstu definiuje ją jako część
+   jednego układu (np. badge lub sandwich). Do not build a prompt yet.
+3. **Explore the chosen direction with the user.** Let the user select, combine
+   or reject directions. Resolve the chosen direction's key composition and
+   message choices before descending into prompt wording.
+4. **Compose the Swobodny prompt.** `--custom-prompt`
    bypasses the preset resolver, so any normally injected safety must be present
    manually:
    - If a face or identity ref is used, include a literal `FACE_LOCK` block that
@@ -67,7 +79,7 @@ never re-run a `--confirm` command without fresh approval.
      nothing clips.
    - Keep the prompt specific enough to render: composition, subject, expression,
      background, lighting, text, and what to avoid.
-4. **Dry-run the handoff (free).** `generate` always needs a `--preset` carrier — even in
+5. **Dry-run the handoff (free).** `generate` always needs a `--preset` carrier — even in
    Swobodny prompt mode the server requires a non-empty preset id to enter generation. The
    carrier's *prompt* is fully replaced by `--custom-prompt`, but the carrier still drives slot
    auto-bind and ref ordering — so pick an archetype matching the concept's subject count (e.g.
@@ -80,7 +92,7 @@ never re-run a `--confirm` command without fresh approval.
      --out "$HOME/Downloads/<temat-slug>"
    ```
    Show the resolved plan and cost estimate, then wait for explicit consent.
-5. **Paid run only after consent.**
+6. **Paid run only after consent.**
    ```bash
    THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge generate --preset hero-chest-up --topic "<topic>" \
      --custom-prompt "<freeform prompt>" \
@@ -89,11 +101,11 @@ never re-run a `--confirm` command without fresh approval.
      --out "$HOME/Downloads/<temat-slug>" \
      --confirm
    ```
-6. **Grid for 2+ images (free).**
+7. **Grid for 2+ images (free).**
    ```bash
    thumbforge grid <sessionId> --out "$HOME/Downloads/<temat-slug>/grid.png"
    ```
-7. **Optional — turn a winning concept into a reusable template.** A Swobodny
+8. **Optional — turn a winning concept into a reusable template.** A Swobodny
    prompt is one-shot; the resolver does not save it as a preset. If the brainstormed
    thumbnail works and the user wants to reuse the layout, hand off to **/tf-reverse
    `--file <the generated PNG>`** — it analyzes the *rendered* image into a custom
@@ -131,7 +143,7 @@ Komendy w tym skillu wołają domyślnie **`thumbforge`** — cienki klient HTTP
 `pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym kontraktem po
 manifeście `package.json` z `name === "thumbforge"` w cwd.
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
 Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
 są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast

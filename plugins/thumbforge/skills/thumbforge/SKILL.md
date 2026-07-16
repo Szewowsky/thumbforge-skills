@@ -37,7 +37,7 @@ any example in a skill.
 
 ## Paid-call protocol (triple lock)
 
-Paid commands (`generate`, `reverse`, `eval`, `retry`, `analyze-transcript`,
+Paid commands (`generate`, `reverse`, `eval`, `retry`, `analyze-transcript`, `analyze-titles`,
 `edit`) are dry-run by default. To actually spend money you need **all three**:
 env `THUMBFORGE_ALLOW_PAID_CALLS=1` + flag `--confirm` + the dry-run-default being
 overridden. The discipline that keeps this safe:
@@ -65,7 +65,8 @@ exist — discover them. Two rules, full detail in `references/discovery-contrac
 
 1. **Discover before you choose.** Before picking a resource on the user's behalf,
    list that dimension first: archetype → `thumbforge list-presets`; text/background/
-   recipe style → `thumbforge list-styles`; refs → `thumbforge list-refs`; model →
+   recipe style → `thumbforge list-styles`; expression → `thumbforge list-expressions`;
+   refs → `thumbforge list-refs`; model →
    `thumbforge inventory` for all four at once. Every id
    you pass must have appeared in a list this session (built-in **and** the
    account's custom). Skip a dimension only when the user named it explicitly. The
@@ -95,6 +96,7 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 | `list-models` | no | image models + pricing |
 | `list-presets` | no | built-in + custom presets |
 | `list-styles` | no | text / background / recipe styles (built-in + custom) |
+| `list-expressions` | no | built-in + custom mina/poza bricks and preset defaults |
 | `list-refs` | no | reference images on disk (`--category`) |
 | `inventory` | no | one-shot overview: presets + styles + models + refs |
 | `list-sessions` | no | past generation sessions |
@@ -103,6 +105,7 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 | `generate` | **yes** | generate thumbnails → **tf-generate** |
 | `reverse` | **yes** | clone a competitor thumbnail → **tf-reverse** |
 | `analyze-transcript` | **yes** | infer slots from a scenario → **tf-scenario** |
+| `analyze-titles` | **yes** | propose thumbnail concepts from title candidates → **tf-titles** |
 | `eval` | **yes** | golden-set eval (out of core scope) |
 | `retry` | **yes** | re-run a session (out of core scope) |
 | `edit` | **yes** | instruction-edit an image → **tf-edit** |
@@ -128,6 +131,7 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 - Generate thumbnails from a topic/preset → **`/tf-generate`**.
 - Clone/adapt a competitor thumbnail (URL or image) → **`/tf-reverse`**.
 - Turn a video scenario/transcript into concepts → **`/tf-scenario`**.
+- Compare 1–3 title candidates and turn the winner into concepts → **`/tf-titles`**.
 - Brainstorm original thumbnail concepts / Swobodny prompt → **`/tf-brainstorm`**.
 - List or add reference images — face, icons, inspirations → **`/tf-assets`** (free).
 - Author or edit a custom preset (fork an archetype, edit a block), a custom
@@ -167,7 +171,7 @@ Komendy w tym skillu wołają domyślnie **`thumbforge`** — cienki klient HTTP
 `pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym kontraktem po
 manifeście `package.json` z `name === "thumbforge"` w cwd.
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
 Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
 są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast

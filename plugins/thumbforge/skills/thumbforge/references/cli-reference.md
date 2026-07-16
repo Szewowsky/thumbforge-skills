@@ -13,6 +13,7 @@ only for commands marked repo/dev-only and only after the shared manifest check.
 | `list-models` | no | no | repo/dev-only image models + pricing (thin: `inventory`) | `--help` |
 | `list-presets` | no | no | built-in + custom presets | `--help` |
 | `list-styles` | no | no | text / background / recipe styles (built-in + custom) | `--help` (`--type text\|background\|recipe`) |
+| `list-expressions` | no | no | built-in + custom expression bricks and preset defaults | `--help` |
 | `list-refs` | no | no | reference images on disk | `--help` (`--category`) |
 | `inventory` | no | no | one-shot overview: presets + styles + models + refs | `--help` |
 | `list-sessions` | no | no | past generation sessions | `--help` |
@@ -21,6 +22,7 @@ only for commands marked repo/dev-only and only after the shared manifest check.
 | `grid` | no | yes (`--out`) | session grid or Grid Runu | `--help` (`<sessionId>` / `--batch`) |
 | `reverse` | **yes** | no | analyze a competitor thumbnail → preset | `--help` (`--url`/`--file`, `--context`, `--apply`) |
 | `analyze-transcript` | **yes** | no | infer slot values from a scenario | `--help` (`--text`, `--preset`) |
+| `analyze-titles` | **yes** | no | turn 1-3 title candidates into thumbnail concepts | `--help` (`--title`, `--titles-file`, `--context`) |
 | `eval` | **yes** | yes (real run) | golden-set eval | `--help` |
 | `retry` | **yes** | yes (real run) | re-run a session | `--help` (`--session`) |
 | `edit` | **yes** | yes (real run) | instruction-edit an image | `--help` (`--session`, `--image`) |
@@ -30,8 +32,8 @@ only for commands marked repo/dev-only and only after the shared manifest check.
 | `refs:contact-sheet` | no | yes (`--out`) | labeled visual sheet for reference selection | `--help` (`--category`, `--out`) |
 | `preset:slots` | no | no | a preset's slots (built-in or custom) | `--help` |
 | `preset:show` | no | no | a preset's 6 spec blocks; `--block` emits one raw block | `--help` (`--block`) |
-| `preset:create` | no | no | fork a built-in/custom into a custom preset | `--help` (`--from`, `--name`, `--*-style`, `--glow-color`, `--*-file`) |
-| `preset:edit` | no | no | edit a custom preset (name / styles / blocks) | `--help` (`--name`, `--*-style`, `--glow-color`, `--*-file`) |
+| `preset:create` | no | no | fork a built-in/custom into a custom preset | `--help` (`--from`, `--name`, `--*-style`, `--default-expression`, `--glow-color`, `--*-file`) |
+| `preset:edit` | no | no | edit a custom preset (name / styles / blocks) | `--help` (`--name`, `--*-style`, `--default-expression`, `--glow-color`, `--*-file`) |
 | `preset:preview` | no | no | replace a custom preset grid cover | `--help` (`--from`) |
 | `preset:delete` | no | no | soft-delete a custom preset | `--help` |
 | `style:create` | no | no | author a text/background style | `--help` (`--type`, `--from`, `--sentence`, …) |
@@ -44,7 +46,7 @@ only for commands marked repo/dev-only and only after the shared manifest check.
 Notes:
 - Stale names that DON'T exist: `list`, `cost`. Use `list-presets`/`list-models`/
   `list-refs`/`list-sessions` and `cost-estimate`.
-- Paid commands (`generate`, `reverse`, `analyze-transcript`, `eval`, `retry`,
+- Paid commands (`generate`, `reverse`, `analyze-transcript`, `analyze-titles`, `eval`, `retry`,
   `edit`) need the triple lock — see `paid-call-protocol.md`.
 - `--out` is **optional** for `generate` only in the verified **dev CLI** (export policy, ADR
   0005): omit it and the images still land in `public/generations`; pass it to
@@ -85,13 +87,12 @@ Notes:
   `topic` may be per concept; the top-level `--topic` remains a fallback.
 - **Discovery:** before proposing, list the dimension you're about to pick — or run
   `inventory` for all of them at once. See `discovery-contract.md`.
-- **Expressions (mina/poza):** `generate --expression <id>` overrides the
+- **Expressions (mina/poza):** `list-expressions` shows built-in and custom ids,
+  labels, pose markers and preset defaults. `generate --expression <id>` overrides the
   preset's default expression for one run (per-concept `expression` in a
-  `--concepts-file`). Built-in brick ids are printed in `generate --help`; custom
-  ids (`custom-expression-*`) come only from `expression:create` / reverse
-  `--save-expression` output — there is no `list-expressions`, and an unknown id
-  is silently dropped (preset default applies). A brick's pose fragment lands
-  only on presets that opt into poses.
+  `--concepts-file`). Unknown ids fail before a paid call. A brick's pose fragment
+  lands only on presets that opt into poses. Custom preset defaults use
+  `preset:create|edit --default-expression <id|none>`.
 - **Custom presets/styles/expressions (free):** `preset:*` / `style:*` /
   `expression:*` are file/SQLite CRUD —
   no model call, no `--out`, no paid lock. A custom preset is a FORK of a built-in

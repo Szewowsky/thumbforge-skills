@@ -56,6 +56,10 @@ Adding a 4th/5th element reads as clutter. When in doubt, remove.
 The thumbnail headline is a *complement* to the title, not a repeat of it — they
 together form one promise (see §8). Make it instantly legible:
 
+- **One headline.** Additional text lines are allowed only when the selected text
+  style defines them as one headline structure (for example sandwich or badge),
+  never as a second competing message.
+
 - **Heavy bold sans** (Impact / Bebas / Anton / Montserrat Black). Thin fonts smear
   at the ~320px feed size.
 - **White letters + thick black outline (4–8px)** or a strong drop shadow. Never
@@ -110,6 +114,11 @@ The image should promise something worth a click. Reliable patterns:
 ## 7. References & series continuity
 
 The preset declares slots; `--refs` fills them. Typical mapping:
+
+**Brand-ref gate:** before naming a real brand or logo in a prompt, run
+`thumbforge list-refs --category icon`. If the matching icon exists, bind that
+reference; if it does not, tell the user before falling back to a verbal brand
+description. A generated approximation is not a brand asset.
 
 - **face / character** → the host's face (category `character-primary`)
 - **icon** → a brand logo or app icon (category `icon`)

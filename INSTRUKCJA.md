@@ -53,7 +53,7 @@ albo `/tf-generate`. Claude:
 Gotowe miniatury lądują na dysku.
 
 **Nie masz pomysłu na układ?** Napisz „pokminmy miniaturę o [temat]" albo `/tf-brainstorm` —
-Claude zaproponuje 2-3 oryginalne koncepty (za darmo), złoży z wybranego gotowy prompt
+Claude zaproponuje co najmniej 3 rozbieżne kierunki (za darmo), złoży z wybranego gotowy prompt
 (z zachowaniem Twojej twarzy i bezpiecznego pola na tekst) i — dopiero po Twojej zgodzie —
 wygeneruje miniaturę.
 
@@ -65,6 +65,7 @@ wygeneruje miniaturę.
 | `/tf-generate` | miniatura z tematu |
 | `/tf-reverse` | skopiuj/zaadaptuj cudzą miniaturę (z linku/obrazka) |
 | `/tf-scenario` | miniatury ze scenariusza/transkryptu filmu |
+| `/tf-titles` | porównaj 1–3 tytuły i przygotuj koncepty miniatur |
 | `/tf-brainstorm` | wymyśl oryginalny koncept od zera (swobodny prompt) |
 | `/tf-edit` | popraw już wygenerowaną miniaturę instrukcją tekstową |
 | `/tf-preset` | własne szablony i style (za darmo) |

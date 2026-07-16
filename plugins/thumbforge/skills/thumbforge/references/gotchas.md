@@ -69,6 +69,9 @@ Latin, CJK. Mitigation:
 
 ## Icons / logos
 
+- **Discover before naming a brand:** run `thumbforge list-refs --category icon`.
+  Use the matching icon ref when present; when absent, say so before using a
+  verbal description.
 - An icon grid of **real brands needs real logo references** (category `icon`).
   Without them the model invents wrong, off-brand logos.
 - If you want **generic / suggested** icons (e.g. "many tools" without naming any),
@@ -87,6 +90,9 @@ Estimate before you spend: `thumbforge cost-estimate` is free.
 
 ## Text styles
 
+- **One headline, one message.** Extra lines are valid only when the chosen text
+  style defines them as one structure (such as sandwich or badge); never add a
+  second free-standing headline.
 - Five built-in text styles: `heavy-bold`, `sandwich`, `chunky-3d`,
   `sandwich-with-badge`, `count-headline`. `list-styles` is the live list.
 - `count-headline` is the OG `icon-holder-grid` layout — a giant accent numeral
