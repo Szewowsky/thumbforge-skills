@@ -80,7 +80,7 @@ Skrypt re-kopiuje 9 skilli, weryfikuje cross-ref `../thumbforge/references/`
 i pilnuje, żeby paczka zawierała dokładnie te skille, co lista w skrypcie
 (osierocony katalog = błąd).
 
-**Po każdym syncu bumpnij `version` w `plugins/thumbforge/.claude-plugin/plugin.json.`**
+**Po każdym syncu bumpnij `version` w `plugins/thumbforge/.claude-plugin/plugin.json`.**
 Claude Code cache'uje plugin per wersja: bez bumpu `plugin update` nie podmieni
 niczego u osób, które mają paczkę już zainstalowaną, i zmiany po cichu nie dotrą
 do nikogo. Potem commit + push.
