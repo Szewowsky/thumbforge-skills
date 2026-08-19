@@ -66,6 +66,7 @@ wygeneruje miniaturę.
 | `/tf-reverse` | skopiuj/zaadaptuj cudzą miniaturę (z linku/obrazka) |
 | `/tf-scenario` | miniatury ze scenariusza/transkryptu filmu |
 | `/tf-titles` | porównaj 1–3 tytuły i przygotuj koncepty miniatur |
+| `/tf-brand` | wyprowadź lub zaimportuj design system kanału/serii |
 | `/tf-brainstorm` | wymyśl oryginalny koncept od zera (swobodny prompt) |
 | `/tf-edit` | popraw już wygenerowaną miniaturę instrukcją tekstową |
 | `/tf-preset` | własne szablony i style (za darmo) |
@@ -78,24 +79,15 @@ claude plugin update thumbforge@thumbforge-skills
 ```
 …i restart Claude Code.
 
-### Co nowego (wersja skilli 0.1.16, razem z beta.50)
+### Co nowego (wersja skilli 0.1.17, razem z beta.51)
+- **Nowy `/tf-brand`** - analizuje 2-12 miniatur i zapisuje design system w profilu;
+  import gotowego `design.md` jest bezpłatny.
 - **Nowy `/tf-titles`** - wrzuć 1-3 kandydatów na tytuł, dostajesz porównanie i gotowe
   koncepty miniatur pod ten, który wygrywa.
 - **Miny i pozy** - sterujesz wyrazem twarzy i postawą; własne też możesz zapisać.
 - **`/tf-generate` robi serię naraz** i składa grid porównawczy, zamiast jednej miniatury.
 - **Bramka logo** - gdy temat wymienia markę, skill nie pozwoli wygenerować miniatury
   bez podpiętej referencji z logo.
-
-### Co nowego (wersja skilli 0.1.10, razem z beta.23)
-- **`/tf-edit` używa teraz `thumbforge edit`** — dry-run, negative-lock i płatny
-  edit idą przez cienki klient do uruchomionej apki; realny edit wymaga też
-  `--guide <annotation-doc.json>` i `--out <absDir>`.
-
-### Co nowego (wersja skilli 0.1.9, razem z beta.23)
-- **Nowy `/tf-edit`** — poprawianie gotowej miniatury instrukcją z czatu
-  (np. „zmień minę", „przyciemnij tło"). Płatne dopiero po Twojej zgodzie.
-- **Krótsze, czytelniejsze opisy skilli** — lepiej się uruchamiają, gdy masz
-  wiele skilli naraz (wcześniej długie opisy potrafiły „gubić" skill).
 
 ## Coś nie działa?
 - **„Nie znaleziono serwera"** przy komendzie → apka nie jest uruchomiona. Odpal ją z Aplikacji.

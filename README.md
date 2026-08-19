@@ -30,7 +30,7 @@ W Claude Code:
 
 (Do lokalnego testu przed publikacją: `/plugin marketplace add /ścieżka/do/thumbforge-skills`.)
 
-## Co dostajesz (9 skilli)
+## Co dostajesz (10 skilli)
 
 | Skill | Po co | Płatne? |
 |-------|-------|---------|
@@ -39,6 +39,7 @@ W Claude Code:
 | `tf-reverse` | Sklonuj/zaadaptuj cudzą miniaturę (URL/obraz) | tak |
 | `tf-scenario` | Koncepty miniatur ze scenariusza/transkryptu | tak (sama generacja) |
 | `tf-titles` | Porównaj 1–3 tytuły i przygotuj koncepty miniatur | tak (po Twojej zgodzie) |
+| `tf-brand` | Wyprowadź lub zaimportuj design system kanału/serii | analiza tak, import nie |
 | `tf-brainstorm` | Wymyśl oryginalny koncept od zera (Swobodny prompt) | tak (po Twojej zgodzie) |
 | `tf-edit` | Popraw gotową miniaturę instrukcją tekstową | tak (po Twojej zgodzie) |
 | `tf-preset` | Autoring presetów i stylów (fork archetypu) | nie (pliki/SQLite) |
@@ -54,8 +55,10 @@ Kilka komend deweloperskich (`refs:contact-sheet`, `refs:rethumb`, `preset:previ
 fail-fast. Skille są tego świadome i kierują Cię na thin-owe odpowiedniki
 (`thumbforge inventory` zamiast `list-models` itd.).
 
-## Co nowego w 0.1.16
+## Co nowego w 0.1.17
 
+- **Nowy `/tf-brand`** - analizuje 2-12 miniatur i zapisuje powtarzalny design
+  system w wybranym profilu; gotowy `design.md` zaimportujesz bezpłatnie.
 - **Nowy `/tf-titles`** - wrzuć 1-3 kandydatów na tytuł, dostajesz porównanie
   i gotowe koncepty miniatur pod ten, który wygrywa.
 - **Miny i pozy** - sterujesz wyrazem twarzy i postawą, możesz zapisać własne.
@@ -76,7 +79,7 @@ opakowanie do dystrybucji. Po zmianie skilli w repo odśwież je tutaj:
 ./sync.sh /inna/ścieżka/thumbforge
 ```
 
-Skrypt re-kopiuje 9 skilli, weryfikuje cross-ref `../thumbforge/references/`
+Skrypt re-kopiuje 10 skilli, weryfikuje cross-ref `../thumbforge/references/`
 i pilnuje, żeby paczka zawierała dokładnie te skille, co lista w skrypcie
 (osierocony katalog = błąd).
 
@@ -84,7 +87,3 @@ i pilnuje, żeby paczka zawierała dokładnie te skille, co lista w skrypcie
 Claude Code cache'uje plugin per wersja: bez bumpu `plugin update` nie podmieni
 niczego u osób, które mają paczkę już zainstalowaną, i zmiany po cichu nie dotrą
 do nikogo. Potem commit + push.
-
-`tf-brand` jest świadomie poza paczką: `brand:analyze` i `brand:import` nie mają
-endpointu HTTP, więc cienki klient ich nie zna i skill padłby u kupującego.
-Wejdzie po wystawieniu tych komend w cienkim kliencie.
