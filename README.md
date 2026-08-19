@@ -54,11 +54,17 @@ Kilka komend deweloperskich (`refs:contact-sheet`, `refs:rethumb`, `preset:previ
 fail-fast. Skille są tego świadome i kierują Cię na thin-owe odpowiedniki
 (`thumbforge inventory` zamiast `list-models` itd.).
 
-## Co nowego w 0.1.10
+## Co nowego w 0.1.16
 
-- `/tf-edit` korzysta z `thumbforge edit` w cienkim kliencie: dry-run i
-  negative-lock są darmowe, a realny edit idzie do uruchomionej apki i wymaga
-  `--guide <annotation-doc.json>` + `--out <absDir>` + zgody na paid call.
+- **Nowy `/tf-titles`** - wrzuć 1-3 kandydatów na tytuł, dostajesz porównanie
+  i gotowe koncepty miniatur pod ten, który wygrywa.
+- **Miny i pozy** - sterujesz wyrazem twarzy i postawą, możesz zapisać własne.
+- **`/tf-generate` robi serię w jednym przebiegu** i składa grid porównawczy,
+  zamiast jednej miniatury na raz.
+- **Skille startują bez repozytorium** - bootstrap idzie przez cienki klient
+  zaszyty w apce.
+- **Bramka logo/ikon** - gdy temat wymienia markę, skill nie pozwoli wygenerować
+  miniatury bez podpięcia referencji z logo (albo jawnie to zgłosi).
 
 ## Utrzymanie (dla autora)
 
@@ -70,5 +76,15 @@ opakowanie do dystrybucji. Po zmianie skilli w repo odśwież je tutaj:
 ./sync.sh /inna/ścieżka/thumbforge
 ```
 
-Skrypt re-kopiuje 9 skilli i weryfikuje, że cross-ref `../thumbforge/references/`
-się rozwiązuje. Potem commit + push.
+Skrypt re-kopiuje 9 skilli, weryfikuje cross-ref `../thumbforge/references/`
+i pilnuje, żeby paczka zawierała dokładnie te skille, co lista w skrypcie
+(osierocony katalog = błąd).
+
+**Po każdym syncu bumpnij `version` w `plugins/thumbforge/.claude-plugin/plugin.json.`**
+Claude Code cache'uje plugin per wersja: bez bumpu `plugin update` nie podmieni
+niczego u osób, które mają paczkę już zainstalowaną, i zmiany po cichu nie dotrą
+do nikogo. Potem commit + push.
+
+`tf-brand` jest świadomie poza paczką: `brand:analyze` i `brand:import` nie mają
+endpointu HTTP, więc cienki klient ich nie zna i skill padłby u kupującego.
+Wejdzie po wystawieniu tych komend w cienkim kliencie.

@@ -78,6 +78,14 @@ claude plugin update thumbforge@thumbforge-skills
 ```
 …i restart Claude Code.
 
+### Co nowego (wersja skilli 0.1.16, razem z beta.50)
+- **Nowy `/tf-titles`** - wrzuć 1-3 kandydatów na tytuł, dostajesz porównanie i gotowe
+  koncepty miniatur pod ten, który wygrywa.
+- **Miny i pozy** - sterujesz wyrazem twarzy i postawą; własne też możesz zapisać.
+- **`/tf-generate` robi serię naraz** i składa grid porównawczy, zamiast jednej miniatury.
+- **Bramka logo** - gdy temat wymienia markę, skill nie pozwoli wygenerować miniatury
+  bez podpiętej referencji z logo.
+
 ### Co nowego (wersja skilli 0.1.10, razem z beta.23)
 - **`/tf-edit` używa teraz `thumbforge edit`** — dry-run, negative-lock i płatny
   edit idą przez cienki klient do uruchomionej apki; realny edit wymaga też
