@@ -69,6 +69,14 @@ provider key; do not inspect or source secret/config files. Full rules:
    przeczytaj+zastosuj `../thumbforge/references/thumbnail-craft.md` +
    `../thumbforge/references/gotchas.md`; if you cannot name the layout/text
    choice those docs imply, stay in discovery.
+   **Profil i dziedziczenie:** bez `--profile` cienki klient używa aktywnego
+   profilu aplikacji; gdy user wskazał id, przekaż je jawnie przez `--profile`.
+   Powiedz przed planem: `Dziedziczę z profilu <id lub aktywny>: design system,
+   scalar overrides oraz lekcje`. Po dry-runie nazwij konkretne cue widoczne w
+   resolved prompt: paletę/typografię/tło/reguły oraz lekcje. Nadpisania jednego
+   runu rób flagami `--text-style`, `--text-color`, `--background-style` i
+   `--glow-color`; inny profil wybieraj przez `--profile`, nie przez zmianę
+   zapisanych ustawień.
 2. **Pick defaults.** Choose a preset that fits the topic (see
    `../thumbforge/references/presets-catalog.md`) and explain the design reason in
    craft terms: text-left/face-right or justified exception, one clear headline,
@@ -85,8 +93,11 @@ provider key; do not inspect or source secret/config files. Full rules:
    a `custom-expression-*` id you created/saw this session. A brick = face
    fragment (mina) + optional pose fragment (poza); the pose applies only on
    presets that opt in (`allowsExpressionPose`) — elsewhere only the mina lands.
-   Sensible defaults: provider
-   `openai`, model `gpt-image-2`, quality `low` for a test / `high` for a final.
+   Sensible defaults: provider `openai`, model `gpt-image-2`.
+   **Quality gate:** zanim wycenisz albo zbudujesz dry-run, zapytaj:
+   „Jaka jakość? a) medium - testy/porównania (rekomendowane), b) low -
+   odradzane, bo wynik jest niemiarodajny, c) high - finał”. Rekomenduj `a` i
+   przekaż jawny wybór przez `--quality`; CLI nie wybiera jakości po cichu.
    **ILE OBRAZÓW — mapowanie liczby (load-bearing):** >1 koncept/wariant ⇒ ZAWSZE jedna batch-sesja, nigdy pętla runów.
    User chce N kandydatów
    JEDNEGO konceptu („zrób 4 miniatury", „batch 4 sztuk") ⇒ `--variants N` w
@@ -116,8 +127,12 @@ provider key; do not inspect or source secret/config files. Full rules:
    prompt + plan:
    ```bash
    thumbforge generate --preset <id> --topic "<topic>" \
-     [--visible-text "<headline>"] [--refs <p1,p2>] [--variants N] --quality <q>
+     [--profile <id>] [--visible-text "<headline>"] [--refs <p1,p2>] [--variants N] --quality <q>
    ```
+   **Wierność dry-runu:** resolved prompt i wycena pochodzą z procesu aplikacji.
+   Paid run zachowuje argumenty ostatniego planu bajt w bajt i dodaje tylko
+   inline env oraz `--confirm`; zmiana profilu, refów lub override wymaga nowego
+   dry-runu i zgody.
    The dry-run also prints a **pre-flight checklist** (key / secret / `--out`) —
    resolve any `⚠` before asking for consent. Show the user the plan + the cost
    estimate, then **wait for explicit consent**.
@@ -125,7 +140,7 @@ provider key; do not inspect or source secret/config files. Full rules:
    ```bash
    THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge generate \
     --preset <id> --topic "<topic>" \
-    [--visible-text "<headline>"] [--refs <p1,p2>] [--variants N] \
+    [--profile <id>] [--visible-text "<headline>"] [--refs <p1,p2>] [--variants N] \
      --quality <q> \
      --out "$HOME/Downloads/<temat-slug>" \
      --confirm
@@ -173,7 +188,8 @@ provider key; do not inspect or source secret/config files. Full rules:
 | `--refs <p1,p2>` | comma-separated reference paths (order matters — see below) |
 | `--provider openai\|google` | provider (default openai) |
 | `--model <id>` | model (`list-models`; default gpt-image-2) |
-| `--quality <tier>` | quality tier (low test / high final) |
+| `--quality <tier>` | świadomy wybór: medium testy/porównania, low niemiarodajne, high finał |
+| `--profile <id>` | jawny profil marki; bez flagi thin używa aktywnego profilu aplikacji |
 | `--variants <n>` | images per preset (default 1) |
 | `--concepts-file <abs.json>` | batch mode: one logical Run with per-concept preset/text/refs/glow/quantity; >4 images split into ≤4-image sessions |
 | `--out <absDir>` | required thin-client export dir; optional only in verified repo/dev mode |

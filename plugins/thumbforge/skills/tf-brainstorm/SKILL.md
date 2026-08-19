@@ -57,6 +57,12 @@ never re-run a `--confirm` command without fresh approval.
    Gdy temat lub kierunek wymienia markę/logo, sprawdzenie kategorii `icon` jest
    bramką: istniejący ref trzeba podpiąć; brak refa trzeba jawnie zgłosić userowi
    przed użyciem słownego opisu marki.
+   **Profil i dziedziczenie:** ustal aktywny profil widoczny w aplikacji; w
+   zweryfikowanym repo/dev potwierdź go przez `pnpm cli profile:current`. Powiedz:
+   `Dziedziczę z profilu <id lub aktywny>: design system, scalar overrides oraz
+   lekcje`. Ponieważ `--custom-prompt` omija resolver, przepisz wybrane cue marki
+   (paleta, typografia, tło i reguły prompt) jawnie do promptu. Jeśli user chce
+   wyjątek, nazwij go i zakoduj w custom prompt; nie zmieniaj trwałego profilu.
 2. **Diverge before composing.** Before building any prompt, present at least
    **3 named directions** with genuinely different archetypes, moods and
    compositions. Include at least one direction outside the preset catalog that
@@ -68,6 +74,9 @@ never re-run a `--confirm` command without fresh approval.
 3. **Explore the chosen direction with the user.** Let the user select, combine
    or reject directions. Resolve the chosen direction's key composition and
    message choices before descending into prompt wording.
+   Następnie zapytaj: „Jaka jakość? a) medium - testy/porównania
+   (rekomendowane), b) low - odradzane, bo wynik jest niemiarodajny, c) high -
+   finał”. Rekomenduj `a` i zachowaj wybrane `<q>` w dry-runie oraz paid runie.
 4. **Compose the Swobodny prompt.** `--custom-prompt`
    bypasses the preset resolver, so any normally injected safety must be present
    manually:
@@ -88,7 +97,7 @@ never re-run a `--confirm` command without fresh approval.
    thumbforge generate --preset hero-chest-up --topic "<topic>" \
      --custom-prompt "<freeform prompt>" \
      --refs <face,icon,...> \
-     --provider openai --model gpt-image-2 --quality low \
+     [--profile <id>] --provider openai --model gpt-image-2 --quality <q> \
      --out "$HOME/Downloads/<temat-slug>"
    ```
    Show the resolved plan and cost estimate, then wait for explicit consent.
@@ -97,7 +106,7 @@ never re-run a `--confirm` command without fresh approval.
    THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge generate --preset hero-chest-up --topic "<topic>" \
      --custom-prompt "<freeform prompt>" \
      --refs <face,icon,...> \
-     --provider openai --model gpt-image-2 --quality high \
+     [--profile <id>] --provider openai --model gpt-image-2 --quality <q> \
      --out "$HOME/Downloads/<temat-slug>" \
      --confirm
    ```
@@ -129,8 +138,8 @@ Use Swobodny prompt only when no preset captures the idea.
   generate with an empty preset id ("Podaj --preset"). The carrier's prompt is overridden by
   `--custom-prompt`; choose it by subject count (single-subject archetype, or `collab-duo` for
   two).
-- `medium` quality is blocked. Use `low` for dry-run/test framing and `high`
-  for the final paid render.
+- Jakość jest świadomym wyborem: medium do testów/porównań, low odradzane jako
+  niemiarodajne, high na finał. CLI bez `--quality` nie wybiera po cichu.
 - More than one concept or variant means one batch/session/grid, never repeated
   paid loops.
 - Do not copy an exact competitor thumbnail. If the user wants to adapt a source
