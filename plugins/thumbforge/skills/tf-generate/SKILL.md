@@ -6,7 +6,7 @@ description: >-
   "/tf-generate", "zrób miniaturę o…", "wygeneruj thumbnail", or gives a topic
   plus optional reference images and wants candidates.
 argument-hint: "[topic] [--preset <id>] [--refs <paths>] [--variants N]"
-allowed-tools: Bash
+allowed-tools: Bash, Read
 ---
 
 # tf-generate

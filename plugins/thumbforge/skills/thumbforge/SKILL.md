@@ -6,7 +6,7 @@ description: >-
   or a bootstrap check before a thumbnail task — generating, cloning, editing,
   or planning thumbnails. Routes to a task skill (see Routing).
 argument-hint: "[what you want to do with thumbforge]"
-allowed-tools: Bash
+allowed-tools: Bash, Read
 ---
 
 # thumbforge (umbrella)

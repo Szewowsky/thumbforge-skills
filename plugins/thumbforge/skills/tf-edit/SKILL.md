@@ -6,7 +6,7 @@ description: >-
   "/tf-edit", "popraw tę miniaturę", "zmień minę", "przyciemnij tło", or similar.
   Instruction-only in v1: no mask or region painting.
 argument-hint: "--session <id> --image <imageId> --instruction <text>"
-allowed-tools: Bash
+allowed-tools: Bash, Read
 ---
 
 # tf-edit

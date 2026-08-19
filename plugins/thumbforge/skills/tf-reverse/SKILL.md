@@ -6,7 +6,7 @@ description: >-
   template — "/tf-reverse", "sklonuj ten thumbnail", "zrób preset z tego filmu",
   usually with a YouTube URL or image. Saved as a reusable preset.
 argument-hint: "<youtube-url-or-image> [--context <my topic>]"
-allowed-tools: Bash
+allowed-tools: Bash, Read
 ---
 
 # tf-reverse
