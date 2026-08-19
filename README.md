@@ -55,8 +55,10 @@ Kilka komend deweloperskich (`refs:contact-sheet`, `refs:rethumb`, `preset:previ
 fail-fast. Skille są tego świadome i kierują Cię na thin-owe odpowiedniki
 (`thumbforge inventory` zamiast `list-models` itd.).
 
-## Co nowego w 0.1.17
+## Co nowego w 0.1.18
 
+- **Router zna `/tf-brand`** - wejście przez `/thumbforge` prowadzi teraz do
+  analizy lub importu design systemu.
 - **Nowy `/tf-brand`** - analizuje 2-12 miniatur i zapisuje powtarzalny design
   system w wybranym profilu; gotowy `design.md` zaimportujesz bezpłatnie.
 - **Nowy `/tf-titles`** - wrzuć 1-3 kandydatów na tytuł, dostajesz porównanie

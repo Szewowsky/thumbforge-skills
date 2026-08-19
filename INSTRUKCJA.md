@@ -79,7 +79,9 @@ claude plugin update thumbforge@thumbforge-skills
 ```
 …i restart Claude Code.
 
-### Co nowego (wersja skilli 0.1.17, razem z beta.51)
+### Co nowego (wersja skilli 0.1.18, razem z beta.51)
+- **Router zna `/tf-brand`** - wejście przez `/thumbforge` prowadzi do analizy
+  lub importu design systemu.
 - **Nowy `/tf-brand`** - analizuje 2-12 miniatur i zapisuje design system w profilu;
   import gotowego `design.md` jest bezpłatny.
 - **Nowy `/tf-titles`** - wrzuć 1-3 kandydatów na tytuł, dostajesz porównanie i gotowe

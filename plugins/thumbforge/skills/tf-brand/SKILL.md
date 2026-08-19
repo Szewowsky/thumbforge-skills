@@ -21,11 +21,10 @@ wcześniej przygotowanego `design.md` jest bezpłatny.
 - Kopiowanie źródeł do biblioteki referencji.
 - Generowanie miniatur po analizie.
 
-## Step 0 - Bootstrap
+## Step 0 - Bootstrap thin-first
 
-Najpierw uruchom bezpłatne `thumbforge --help` oraz `thumbforge inventory`.
-Jeśli launcher nie odpowiada, poproś o uruchomienie aplikacji z Findera/tray.
-Ten handshake kończy bootstrap - skill działa w dowolnym katalogu bez repozytorium.
+Uruchom `thumbforge --help` (bezpłatne). Jeśli zawiedzie: „Uruchom aplikację Thumbforge; CLI instaluje się samo, a w razie potrzeby użyj tray -> Zainstaluj CLI.”
+Następnie zastosuj wspólny [kontrakt Bootstrap thin-first](../thumbforge/SKILL.md#step-0--bootstrap-thin-first); przed handshake nie czytaj plików repo ani nie zgaduj ścieżki maszyny.
 
 ## Discovery
 
@@ -185,3 +184,15 @@ marker machine-readable, blok `json`, wersję 1 lub 2, kolory `#RRGGBB`, dozwolo
 typografii i tła oraz reguły bez placeholderów. W v2 reguła ma `text` i
 `kind=prompt|note`. Popraw plik i ponów wyłącznie
 bezpłatny `brand:import`; błąd importu nie uzasadnia nowej płatnej analizy.
+
+## Cienki klient (tester) i tryb dev
+
+Komendy w tym skillu wołają domyślnie **`thumbforge`** - cienki klient HTTP.
+`pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym kontraktem po
+manifeście `package.json` z `name === "thumbforge"` w cwd.
+
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `profile:list`, `profile:current`, `brand:analyze`, `brand:import`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
+Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
+Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
+są **repo/dev-only** (`pnpm cli <komenda>`) - cienki klient zwraca fail-fast
+„dostępne tylko w trybie repo (dev)”.

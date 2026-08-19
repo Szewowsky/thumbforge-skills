@@ -106,6 +106,9 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 | `reverse` | **yes** | clone a competitor thumbnail → **tf-reverse** |
 | `analyze-transcript` | **yes** | infer slots from a scenario → **tf-scenario** |
 | `analyze-titles` | **yes** | propose thumbnail concepts from title candidates → **tf-titles** |
+| `brand:analyze` | **yes** | derive a profile design system from thumbnails → **tf-brand** |
+| `brand:import` | no | import a reviewed design.md into a profile → **tf-brand** |
+| `profile:list` / `profile:current` | no | discover the target profile → **tf-brand** |
 | `eval` | **yes** | golden-set eval (out of core scope) |
 | `retry` | **yes** | re-run a session (out of core scope) |
 | `edit` | **yes** | instruction-edit an image → **tf-edit** |
@@ -132,6 +135,7 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 - Clone/adapt a competitor thumbnail (URL or image) → **`/tf-reverse`**.
 - Turn a video scenario/transcript into concepts → **`/tf-scenario`**.
 - Compare 1–3 title candidates and turn the winner into concepts → **`/tf-titles`**.
+- Derive or import a channel/series design system → **`/tf-brand`**.
 - Brainstorm original thumbnail concepts / Swobodny prompt → **`/tf-brainstorm`**.
 - List or add reference images — face, icons, inspirations → **`/tf-assets`** (free).
 - Author or edit a custom preset (fork an archetype, edit a block), a custom
