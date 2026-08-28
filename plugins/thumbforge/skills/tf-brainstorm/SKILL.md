@@ -131,6 +131,11 @@ section `Zdecydowałem za ciebie:` listing every decision you took over.
 4. **Compose the Swobodny prompt.** `--custom-prompt`
    bypasses the preset resolver, so any normally injected safety must be present
    manually:
+   - Choose the `<carrier>` archetype by subject count, then run
+     `thumbforge lesson:list <carrier> --profile <aktywny>`. Wybierz maksymalnie 5
+     lekcji najtrafniejszych dla konceptu i przepisz je verbatim do custom
+     promptu. This manual step is required because `--custom-prompt`
+     bypasses the resolver, just as it requires manual brand cues.
    - If a face or identity ref is used, include a literal `FACE_LOCK` block that
      says the first reference image is the identity source, preserve exact
      photographic identity, and keep the full head inside the frame.
@@ -165,7 +170,24 @@ section `Zdecydowałem za ciebie:` listing every decision you took over.
    ```bash
    thumbforge grid <sessionId> --out "$HOME/Downloads/<temat-slug>/grid.png"
    ```
-8. **Optional — turn a winning concept into a reusable template.** A Swobodny
+8. **Werdykt i poprawka.** Pokaż mapowanie grida z kroku Diverge i zbierz
+   feedback per obraz/numer; niejednoznaczne wskazanie wyjaśnij. Sklasyfikuj
+   każdą uwagę jako jednorazową, która trafia tylko do promptu regeneracji, albo
+   powtarzalną, która jest kandydatem na lekcję.
+
+   Przed regeneracją powiedz wprost, że świeża generacja nie zachowa układu
+   piksel w piksel. Zwycięzców nie dotykaj. Dla każdego wskazanego konceptu
+   przepisz pełny prompt według feedbacku i regeneruj tylko ten koncept, przez
+   nowy dry-run i zgodę z kroków 5-6.
+
+   Przed każdym zapisem lekcji ponownie uruchom
+   `thumbforge lesson:list <carrier> --profile <aktywny>`. Duplikat pomiń, a
+   sprzeczność przedstaw jako propozycję
+   `thumbforge lesson:edit <id> --text "<jedna linia>"`. Nową powtarzalną lekcję
+   zapisuj w jednej linii dopiero po potwierdzeniu usera:
+   `thumbforge lesson:add <carrier> --profile <aktywny> --text "<jedna linia>"`.
+   Na końcu pokaż gridy porównawcze i poproś o finalny wybór.
+9. **Optional — turn a winning concept into a reusable template.** A Swobodny
    prompt is one-shot; the resolver does not save it as a preset. If the brainstormed
    thumbnail works and the user wants to reuse the layout, hand off to **/tf-reverse
    `--file <the generated PNG>`** — it analyzes the *rendered* image into a custom
@@ -204,7 +226,7 @@ Komendy w tym skillu wołają domyślnie **`thumbforge`** — cienki klient HTTP
 `pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym kontraktem po
 manifeście `package.json` z `name === "thumbforge"` w cwd.
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `lesson:list`, `lesson:add`, `lesson:edit`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
 Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
 są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast
