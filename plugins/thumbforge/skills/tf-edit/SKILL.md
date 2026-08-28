@@ -5,6 +5,7 @@ description: >-
   user points at an existing session/image and asks to fix it with text —
   "/tf-edit", "popraw tę miniaturę", "zmień minę", "przyciemnij tło", or similar.
   Instruction-only in v1: no mask or region painting.
+disable-model-invocation: true
 argument-hint: "--session <id> --image <imageId> --instruction <text>"
 allowed-tools: Bash, Read
 ---
@@ -14,8 +15,10 @@ allowed-tools: Bash, Read
 Instruction-only correction of an existing image. In product terms this is the
 thumbforge edit flow. On the packaged app it runs through `thumbforge edit`
 (thin client → running app → new version in app userData); in repo/dev,
-the local launcher reaches the same edit command. The user triggers; you
-operate. The flow is always: resolve target → craft identity-safe instruction →
+the local launcher reaches the same edit command. Tylko jawne `/tf-edit` usera
+uruchamia ten flow; agent z własnej inicjatywy regeneruje obraz ze świeżym
+promptem przepisanym według feedbacku. Po wywołaniu usera flow jest zawsze:
+resolve target → craft identity-safe instruction →
 dry-run with cost → get consent → paid edit → inspect result → optionally
 iterate or set final in the UI.
 

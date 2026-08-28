@@ -178,7 +178,9 @@ section `Zdecydowałem za ciebie:` listing every decision you took over.
    Przed regeneracją powiedz wprost, że świeża generacja nie zachowa układu
    piksel w piksel. Zwycięzców nie dotykaj. Dla każdego wskazanego konceptu
    przepisz pełny prompt według feedbacku i regeneruj tylko ten koncept, przez
-   nowy dry-run i zgodę z kroków 5-6.
+   nowy dry-run i zgodę z kroków 5-6. To domyślna ścieżka poprawek: nie sugeruj
+   ani nie uruchamiaj edycji regionów lub instruction-edit z własnej inicjatywy.
+   Edycja istniejącego obrazu zaczyna się tylko od jawnego `/tf-edit` usera.
 
    Przed każdym zapisem lekcji ponownie uruchom
    `thumbforge lesson:list <carrier> --profile <aktywny>`. Duplikat pomiń, a
@@ -216,6 +218,8 @@ Use Swobodny prompt only when no preset captures the idea.
 - Grupuj do 4 konceptów lub wariantów w jednym batchu/sesji/gridzie zamiast
   powtarzać pojedyncze płatne runy. Większy zestaw dziel zgodnie z bramkami z
   kroku Diverge.
+- Routing poprawek prowadzi do świeżej regeneracji z przepisanym promptem;
+  `/tf-edit` pozostaje wyłącznie flow wywoływanym jawnie przez usera.
 - Do not copy an exact competitor thumbnail. If the user wants to adapt a source
   thumbnail, route to **/tf-reverse** first; use this only for original concepts.
 - No extra machinery here: this skill is prose plus the shared guardrail docs.
