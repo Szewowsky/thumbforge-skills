@@ -98,14 +98,30 @@ section `Zdecydowałem za ciebie:` listing every decision you took over.
    lekcje`. Ponieważ `--custom-prompt` omija resolver, przepisz wybrane cue marki
    (paleta, typografia, tło i reguły prompt) jawnie do promptu. Jeśli user chce
    wyjątek, nazwij go i zakoduj w custom prompt; nie zmieniaj trwałego profilu.
-2. **Diverge before composing.** Before building any prompt, present at least
-   **3 named directions** with genuinely different archetypes, moods and
-   compositions. Include at least one direction outside the preset catalog that
-   would use a Swobodny `--custom-prompt`. Give each direction a one-sentence
-   topic-specific rationale plus its layout, visible headline, refs, emotional
-   hook and main risk. Każdy kierunek ma jeden headline; dodatkowa linia jest
-   dozwolona wyłącznie wtedy, gdy wybrany styl tekstu definiuje ją jako część
-   jednego układu (np. badge lub sandwich). Do not build a prompt yet.
+2. **Diverge w rundach (Diverge before composing).** Before building any prompt,
+   present at least
+   **3 named directions** in a numbered round: 3-5 proposals by default, or
+   5-10 on request. Each has a distinct archetype, mood and composition. Give each a
+   one-sentence
+   topic-specific rationale, układ, headline, refy, hook, ryzyko oraz osobną
+   linię `➡️ Typ/rekomendacja: <opinia skilla>`. Co najmniej jedna wychodzi
+   outside the preset catalog i używa Swobodnego
+   `--custom-prompt`. Przed pokazaniem odfiltruj kierunki sprzeczne z wybranym w
+   intake miksem napisów oraz ogólnością: cały film albo jeden mechanizm.
+
+   Zbieraj werdykt per numer. Pewniaki odkładaj bez zmian, a następną rundą
+   uzupełniaj tylko brakujące sloty, aż finalny zestaw będzie kompletny. Numery
+   konceptów są stałe: nie używaj ich ponownie ani nie zmieniaj między rundami.
+   Przy gridzie nazwij grid, pokaż mapowanie `<grid> v<n> -> koncept <numer>` i
+   zachowaj je w kolejnych porównaniach. Niejednoznaczny werdykt wymaga pytania,
+   nie zgadywania.
+
+   Jeden płatny run obejmuje maksymalnie 4 koncepty. Większy zestaw podziel na
+   osobne batche, każdy z własnym dry-runem i osobną zgodą kosztową. Gdy odpala
+   się bramka transferu lokalnych assetów do providera, poproś o drugą, osobną
+   zgodę na transfer. Każdy kierunek ma jeden headline; dodatkowa linia jest
+   dozwolona tylko jako część jednego układu tekstowego, np. badge lub sandwich.
+   Nie buduj jeszcze promptu.
 3. **Explore the chosen direction with the user.** Let the user select, combine
    or reject directions. Resolve the chosen direction's key composition and
    message choices before descending into prompt wording.
@@ -175,8 +191,9 @@ Use Swobodny prompt only when no preset captures the idea.
   two).
 - Jakość jest świadomym wyborem: medium do testów/porównań, low odradzane jako
   niemiarodajne, high na finał. CLI bez `--quality` nie wybiera po cichu.
-- More than one concept or variant means one batch/session/grid, never repeated
-  paid loops.
+- Grupuj do 4 konceptów lub wariantów w jednym batchu/sesji/gridzie zamiast
+  powtarzać pojedyncze płatne runy. Większy zestaw dziel zgodnie z bramkami z
+  kroku Diverge.
 - Do not copy an exact competitor thumbnail. If the user wants to adapt a source
   thumbnail, route to **/tf-reverse** first; use this only for original concepts.
 - No extra machinery here: this skill is prose plus the shared guardrail docs.
