@@ -24,6 +24,8 @@ paid stage with its own consent.
 ## Not for
 
 - A plain topic with no scenario → `tf-generate`.
+- Extracting the content of a YouTube URL or local media file → suggest
+  `/tf-transcript`; never invoke it automatically.
 - Cloning a competitor's thumbnail → `tf-reverse`.
 
 ## Step 0 — Bootstrap thin-first
@@ -40,9 +42,10 @@ files. Full rules: `../thumbforge/references/paid-call-protocol.md`.
 
 ### 1. Read the scenario (free)
 
-If the user pasted the text, use it. If they pointed at a file, `Read` it — the full
-text, no truncation. A bare video URL is not an input (that's `tf-reverse`, or fetch
-the transcript first).
+If the user pasted the text, use it. If they pointed at a text file, `Read` it — the
+full text, no truncation. A video URL or media file is not scenario text. Route by
+intent: content/scenario of the film → suggest `/tf-transcript`; visual appearance of
+an existing thumbnail → `/tf-reverse`. Never invoke `/tf-transcript` automatically.
 
 ### 2. Discover this account's inventory (free — BEFORE you propose)
 

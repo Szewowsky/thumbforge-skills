@@ -21,6 +21,8 @@ with dry-run-first, explicit consent, and the triple lock.
 - Generating directly from an existing preset → `tf-generate`.
 - Cloning a competitor's thumbnail → `tf-reverse`.
 - Concepts from a transcript → `tf-scenario`.
+- A YouTube URL or local media path supplied instead of text → suggest
+  `/tf-transcript`; never invoke it automatically.
 - Comparing title candidates before choosing a thumbnail direction → `tf-titles`.
 - Editing reusable presets/styles → `tf-preset`.
 - Listing or adding reference images → `tf-assets`.

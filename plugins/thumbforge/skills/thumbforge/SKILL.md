@@ -133,6 +133,8 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 
 - Generate thumbnails from a topic/preset → **`/tf-generate`**.
 - Clone/adapt a competitor thumbnail (URL or image) → **`/tf-reverse`**.
+- Turn one of the user's YouTube videos or local media files into a transcript →
+  suggest **`/tf-transcript`**; it is user-invoked, so never start it automatically.
 - Turn a video scenario/transcript into concepts → **`/tf-scenario`**.
 - Compare 1–3 title candidates and turn the winner into concepts → **`/tf-titles`**.
 - Derive or import a channel/series design system → **`/tf-brand`**.
