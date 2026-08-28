@@ -43,6 +43,39 @@ Triple lock for the later real run: env `THUMBFORGE_ALLOW_PAID_CALLS=1`
 (inline, never `export`) + `--confirm` + dry-run-first. Consent is per-call:
 never re-run a `--confirm` command without fresh approval.
 
+## Step 0.5 — Intake (interview)
+
+Silently list what the user's message already settled, then ask ONLY about the
+gaps — one question per turn, formatted as `❓ **question**` followed by
+`➡️ Rekomenduję: <your concrete recommendation>`. A user who supplied a full
+brief sees zero questions. Never re-ask anything already answered.
+
+Question order (skip any that is settled):
+
+1. **Tytuł filmu?** Two candidate titles are welcome — comment on which title
+   plays best with which thumbnail type (a strong emotional title pairs with a
+   thumbnail that does not repeat its words).
+2. **Masz transkrypt/scenariusz albo link do filmu?** Script text in hand →
+   suggest `/tf-scenario`. A YouTube URL or local media file → suggest
+   `/tf-transcript`. Suggestion + stop; never invoke either automatically.
+3. **Masz wstępny pomysł/kierunek, czy mam pokminić od zera?** A vague seed
+   ("coś z wykresem") is round-one input, not a commitment.
+4. **Wzorujesz się na czymś?** A competitor thumbnail to clone → `/tf-reverse`
+   + stop. A loose visual inspiration (an image to look at) stays here: borrow
+   its grammar (scale, gaze direction, one hero object), never its exact layout
+   or copy; do not persist it as a reference without need.
+5. **Jakie assety gramy?** Show the real `list-refs` inventory (faces, icons)
+   instead of asking in the void; ask whether the user has a screenshot/logo to
+   add — route the upload through `/tf-assets` (free) and come back.
+6. **Miniatury z napisami, bez, czy mix w batchu?** (e.g. 2x with text + 2x
+   without — a common winning split).
+7. **Emocja/mina + ogólność:** should the thumbnail sell the WHOLE film or one
+   specific mechanism from it? This one answer saves a full proposal round.
+
+At any question the user may say "nie wiem — zdecyduj ty": decide yourself
+(everything except spending consent), note it, and before the dry-run print a
+section `Zdecydowałem za ciebie:` listing every decision you took over.
+
 ## Workflow
 
 1. **Discover live inputs (free).** Before selecting refs or style cues, discover
