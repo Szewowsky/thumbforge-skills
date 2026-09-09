@@ -21,6 +21,8 @@ only for commands marked repo/dev-only and only after the shared manifest check.
 | `generate` | **yes** | opt (export) | generate thumbnails (single or batch) | `--help` (`--visible-text`, `--text-style`, `--text-color`, `--glow-color`, `--background-style`, `--expression`, `--concepts-file`) |
 | `grid` | no | yes (`--out`) | session grid or Grid Runu | `--help` (`<sessionId>` / `--batch`) |
 | `reverse` | **yes** | no | analyze a competitor thumbnail → preset | `--help` (`--url`/`--file`, `--context`, `--apply`) |
+| `reverse:contract` | no | no | print the analysis contract for a conversation model | `--context` |
+| `reverse:import <file>` | no | no | validate a JSON analysis and save selected parts (preset / background / text / expression) | `--help` (`--save-preset [name]`, `--hidden`, `--save-background`, `--save-text`, `--save-expression [name]`) |
 | `analyze-transcript` | **yes** | no | infer slot values from a scenario | `--help` (`--text`, `--preset`) |
 | `analyze-titles` | **yes** | no | turn 1-3 title candidates into thumbnail concepts | `--help` (`--title`, `--titles-file`, `--context`) |
 | `eval` | **yes** | yes (real run) | golden-set eval | `--help` |

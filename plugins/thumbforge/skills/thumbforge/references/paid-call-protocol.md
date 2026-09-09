@@ -55,6 +55,11 @@ THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge generate \
   --confirm
 ```
 
+For optional GPT Image 2.5 Sunburst use the registry id and one of
+`low|medium|high|xhigh|max|auto`; `auto` is an orientational max-output
+estimate, not a guaranteed cost ceiling. Preserve a model/quality already
+chosen by the user in the dry-run.
+
 The thin client requires an absolute `--out` export directory. In verified
 repo/dev mode only, `--out` is optional because canonical files land in the dev
 generations root.

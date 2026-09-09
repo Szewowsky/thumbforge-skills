@@ -93,11 +93,17 @@ provider key; do not inspect or source secret/config files. Full rules:
    a `custom-expression-*` id you created/saw this session. A brick = face
    fragment (mina) + optional pose fragment (poza); the pose applies only on
    presets that opt in (`allowsExpressionPose`) — elsewhere only the mina lands.
-   Sensible defaults: provider `openai`, model `gpt-image-2`.
-   **Quality gate:** zanim wycenisz albo zbudujesz dry-run, zapytaj:
-   „Jaka jakość? a) medium - testy/porównania (rekomendowane), b) low -
-   odradzane, bo wynik jest niemiarodajny, c) high - finał”. Rekomenduj `a` i
-   przekaż jawny wybór przez `--quality`; CLI nie wybiera jakości po cichu.
+   Sensible defaults: provider `openai`, model `gpt-image-2`. Sunburst is an optional
+   explicit model choice: `gpt-image-2.5-sunburst` supports `low`, `medium`, `high`,
+   `xhigh`, `max`, and `auto`; existing defaults stay unchanged.
+   **Quality gate:** jeśli user podał już model i jakość, zachowaj je bez ponownego
+   pytania. W innym przypadku zanim wycenisz albo zbudujesz dry-run, zapytaj o jakość zgodną
+   z katalogiem wybranego modelu. Dla GPT Image 2.5 dostępne są `low`, `medium`,
+   `high`, `xhigh`, `max`, `auto`; `auto` ma wyłącznie orientacyjny max-output
+   estimate i nie jest gwarantowanym limitem. Rekomenduj jawny `--quality`;
+   CLI nie wybiera jakości po cichu.
+   Dla Image 2 zachowaj prezentację: `a) medium - testy/porównania (rekomendowane),
+   b) low - odradzane: niemiarodajne, c) high - finał`.
    **ILE OBRAZÓW — mapowanie liczby (load-bearing):** >1 koncept/wariant ⇒ ZAWSZE jedna batch-sesja, nigdy pętla runów.
    User chce N kandydatów
    JEDNEGO konceptu („zrób 4 miniatury", „batch 4 sztuk") ⇒ `--variants N` w
@@ -119,9 +125,21 @@ provider key; do not inspect or source secret/config files. Full rules:
    i stoi po PRAWEJ. Preferencję wzrostu/głównej osoby zapisz jako krótkie,
    jawne ograniczenie kompozycji w `--topic` (np. „LEFT person visibly taller
    than RIGHT person”), a potem potwierdź jego obecność w resolved prompt dry-runu.
+   **Tło: profil czy oryginał (presety z reverse):** a custom preset saved from
+   a competitor analysis (tf-reverse) carries the source background as its own
+   custom style, but at generation time the active profile's background (and
+   palette / typography) replaces it; unset profile properties keep the
+   source's. Default = profile; say so in the plan line. When the user wants
+   the ORIGINAL background for this run, read the preset's
+   `defaultBackgroundStyle` id from `thumbforge preset:show <presetId>` and pass
+   it explicitly with `--background-style <id>` - that choice is per run, kept
+   for retry, and never edits the saved preset. A `⚠` / `ostrzeżenie` line in
+   the dry-run plan about a STYLE sentence mixing background with an object
+   means the profile cannot replace that background: fix the preset with
+   `/tf-preset` (`preset:edit --style-file`) before paying.
 3. **Estimate cost (free).**
    ```bash
-   thumbforge cost-estimate --count <variants> --model gpt-image-2 --quality <q>
+   thumbforge cost-estimate --count <variants> --model <model> --quality <q>
    ```
 4. **Dry-run (free).** Run `generate` WITHOUT `--confirm` to surface the resolved
    prompt + plan:
@@ -182,13 +200,13 @@ provider key; do not inspect or source secret/config files. Full rules:
 | `--text-style <id>` | `<id>` from `thumbforge list-styles --type text` (built-in + custom); `none` keeps a text-less base |
 | `--text-color <hex>` | headline color `#RRGGBB` (default `#FFFFFF`) |
 | `--glow-color <hex>` | brand glow / rim-light color `#RRGGBB` — tints background, rim light & accents (e.g. teal `#14B8A6`); hex only, non-hex dropped |
-| `--background-style <id>` | background style id from `thumbforge list-styles --type background` (built-in + custom); replaces the preset's default background sentence |
+| `--background-style <id>` | background style id from `thumbforge list-styles --type background` (built-in + custom), or a reverse preset's own `defaultBackgroundStyle` from `preset:show` to force the source background for this run; replaces the preset's default background sentence and wins over the profile background |
 | `--expression <id>` | expression brick z `list-expressions`: mina + opcjonalna poza; nadpisuje default presetu; w `--concepts-file` = pole `expression` per koncept |
 | `--set-slot <name=value>` | jawne wiązanie slotu; powtarzaj dla `face_ref` i `guest_face_ref`, aby ustawić lewą/prawą osobę niezależnie od kategorii refa |
 | `--refs <p1,p2>` | comma-separated reference paths (order matters — see below) |
 | `--provider openai\|google` | provider (default openai) |
-| `--model <id>` | model (`list-models`; default gpt-image-2) |
-| `--quality <tier>` | świadomy wybór: medium testy/porównania, low niemiarodajne, high finał |
+| `--model <id>` | model (`inventory`; default gpt-image-2; Sunburst is `gpt-image-2.5-sunburst`) |
+| `--quality <tier>` | jakość z katalogu modelu; Sunburst: low / medium / high / xhigh / max / auto |
 | `--profile <id>` | jawny profil marki; bez flagi thin używa aktywnego profilu aplikacji |
 | `--variants <n>` | images per preset (default 1) |
 | `--concepts-file <abs.json>` | batch mode: one logical Run with per-concept preset/text/refs/glow/quantity; >4 images split into ≤4-image sessions |
@@ -244,7 +262,7 @@ Komendy w tym skillu wołają **`thumbforge`** — cienki klient HTTP i domyśln
 powierzchnię. `pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym
 kontraktem po manifeście `package.json` z `name === "thumbforge"` w cwd.
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `cost-estimate`, `edit`, `generate`, `resume`, `retry-image`, `reverse`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `cost-estimate`, `edit`, `generate`, `resume`, `retry-image`, `reverse`, `reverse:contract`, `reverse:import`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
 Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
 są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast

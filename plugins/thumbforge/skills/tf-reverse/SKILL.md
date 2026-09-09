@@ -1,19 +1,18 @@
 ---
 name: tf-reverse
 description: >-
-  Clone or adapt a competitor's YouTube thumbnail into the user's own style with
-  the thumbforge reverse analyzer. Use when reusing someone else's thumbnail
-  template — "/tf-reverse", "sklonuj ten thumbnail", "zrób preset z tego filmu",
-  usually with a YouTube URL or image. Saved as a reusable preset.
-argument-hint: "<youtube-url-or-image> [--context <my topic>]"
+  Clone or adapt a visible YouTube thumbnail or supplied URL with the conversation model and
+  free Thumbforge import. Use when users naturally ask to make a similar thumbnail,
+  clone a visible thumbnail, or save its background, title style or expression.
+argument-hint: "<youtube-url-or-image> [--context <my topic>] [tylko tło|napis|mina]"
 allowed-tools: Bash, Read
 ---
 
 # tf-reverse
 
-A competitor thumbnail (URL or image) → vision analysis → a reusable custom
-preset → optionally a generation on it. Via `thumbforge reverse`. The user triggers;
-you operate.
+A visible competitor thumbnail → conversation-model analysis → selected parts.
+This skill never calls the app analyzer. Its explicit paid counterpart is
+`/tf-reverse-auto`.
 
 ## Not for
 
@@ -33,101 +32,106 @@ rules: `../thumbforge/references/paid-call-protocol.md`.
 
 ## Workflow
 
-1. **Dry-run (free, no vision call).** Shows the plan without spending:
+1. **Analyze under the app's contract.** The pixels must be genuinely in your
+   context (attachment or image content). A URL or filename without pixels is a
+   fabrication, not an analysis: ask for the pixels, never fall back to paid.
+   This uses the conversation model and is not free of the user's chat budget;
+   logos are role-and-colour guidance, never pixel-perfect.
    ```bash
-   thumbforge reverse --url "<youtube-url>" --context "<your video's topic>"
+   thumbforge reverse:contract --context "<your video's topic>"
    ```
-   For a local image use `--file <path>` instead of `--url`. The dry-run prints
-   selected-model key warnings and the analyzer availability list (`✓` key OK,
-   `⚠` missing key, `⚠` free-tier risk) before any paid call. Default to
-   `claude-opus-4-8-thinking`; use `--model <id>` only when the user asks or the
-   availability list makes a better fallback obvious.
-2. **Discover analyzers + account inventory (free, optional but useful).**
+   That text is the exact prompt the app's analyzer receives - follow it
+   verbatim (anti-plagiarism rules, subjects, icon topology, background /
+   title / expression fields, JSON shape) and write ONE JSON object to a file,
+   e.g. `$HOME/Downloads/<slug>-analysis.json`. Keep the background out of
+   `preset_blocks.composition` and `preset_blocks.style`; it belongs to
+   `background_style_analysis`. The user's
+   topic goes in `--context`, never the source title (P0 below). The JSON is
+   transport for import only: never upload or add source pixels to references;
+   select face, icon and screen refs later for generation.
+2. **Validate (free, no model call).**
    ```bash
-   thumbforge inventory
+   thumbforge reverse:import "$HOME/Downloads/<slug>-analysis.json" --source "chat" --model "<your model name>"
    ```
-   Inventory repeats analyzer availability next to presets/styles/models/refs, so
-   you can propose a concrete analyzer without guessing which keys decrypt.
-3. **Paid analysis — ONE invocation (only after consent).** `--apply` saves the
-   analyzed template as a custom preset in the same call and prints the matching
-   `generate` command / `presetId`. There is no separate "apply later" step — pass
-   the source, context, and `--apply` together:
+   Without `--save-*` flags nothing is written: the output names the base
+   scaffold, the preset name, which parts are present (tło / napis /
+   ekspresja) and `⚠` warnings (a STYLE or COMPOSITION sentence that mixes
+   background with an object - the brand cannot replace that background; fix
+   the JSON and re-import before any paid render). A rejected JSON prints the exact reason
+   (missing brief/prompt, a part without a proposal, a placeholder token); fix
+   and re-run - the app never saves half of it.
+3. **Staged questions - only the unresolved ones.** Ask at most what the
+   user's words left open, one short round:
+   - **Parts:** whole composition as a preset, or only tło / napis / mina? A
+     plain order ("zapisz tylko tło", "zrób z tego preset") answers this - do
+     not ask again.
+   - **Brand vs source:** by default the profile's palette and background replace
+     the source's at generation time; typography remains `inherit` from the
+     analyzed treatment unless the profile has an explicit typography direction.
+     Ask only when the user hints at wanting the
+     original background ("z tym fioletowym tłem") - the answer becomes an
+     explicit `--background-style <id>` in tf-generate, not a change to the
+     saved preset.
+   - **Name:** preset name / expression name when the user cares; otherwise the
+     analyzer's name stands.
+   Everything the user already decided is a settled question.
+4. **Review, then save (free).** Print the parts summary from validation back in
+   one line each (tło: sentence, napis: typography + colour, mina: face
+   fragment) and save exactly the selected ones - any subset, all-or-nothing:
    ```bash
-   THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge reverse \
-     --url "<youtube-url>" \
-     --context "<your video's topic>" \
-     --model claude-opus-4-8-thinking \
-     --apply \
-     --save-expression "<nazwa miny>" \
-     --confirm
+   thumbforge reverse:import "$HOME/Downloads/<slug>-analysis.json" \
+     --save-preset "<name>" --save-background --save-text --save-expression "<mina>"
    ```
-   **`--save-expression [name]` (beta.28, free add-on to the same paid call):**
-   when the source thumbnail has a clear facial expression/pose, the analyzer
-   returns an *expression proposal* (mina + optional poza). With the flag, the
-   proposal is saved as a reusable **custom expression** and becomes the cloned
-   preset's `defaultExpression`. Name collisions get a numeric suffix
-   (`"Mina" → "Mina 2"`), so re-runs don't create duplicates. If the user's ask
-   mentions the source's expression/pose ("ta mina", "ta poza") — propose the
-   flag in the SAME call; a second analysis later costs money. Without the flag
-   the CLI prints the detected proposal plus a ready free `expression:create`
-   command, so nothing is lost. A proposal that violates the channel's banned
-   moods is rejected with a note and the preset falls back to the nearest
-   built-in expression — that is expected, not an error.
-4. **Deliver.** Report the new `presetId` + a one-line summary (template, icons
-   adapted). No JSON dump.
-5. **Optional chain → refine or generate.** The `presetId` from `reverse --apply`
-   is a custom preset (a Reverse-preset). Two follow-ups:
-   - **Refine it first (free) → `/tf-preset`** with `preset:edit <presetId>` —
-     rename, swap the text/background style, or tweak an editable block (start from
-     `preset:show <presetId> --block <name>`). No spend.
-   - **Reuse the saved expression elsewhere:** an expression saved with
-     `--save-expression` is an ordinary custom expression — any later
-     generation on ANY preset can pick it via `--expression <id>` (tf-generate)
-     or the UI picker. Presets that own a load-bearing gesture degrade it to
-     the face-half automatically.
-   - **Generate on it (paid) → `/tf-generate`** with `--preset <presetId>` (the
-     preset id comes from this `reverse --apply` run, so that dimension is already
-     chosen). The discovery gate still applies to the OTHER dimensions of the
-     generate stage — `list-refs` for the face/icons that fill the new preset's
-     slots, plus visual `_thumb.png` inspection when several refs could fit;
-     `list-styles` if overriding text/background (see
-     `../thumbforge/references/discovery-contract.md`). That is a **separate paid
-     stage** — its own dry-run and its own consent. One approval here does not
-     authorize the generation. That stage **auto-composes a preview grid** of the
-     variants and opens it (tf-generate step 6), so the clone → your-variants →
-     side-by-side-grid loop is already covered there — no separate grid step here.
+   `--save-background` / `--save-text` create reusable styles visible in the
+   pickers; `--save-preset` keeps the preset's own copies; `--save-preset
+   --hidden` stores a draft usable for generation that never appears in the
+   library. A JSON that carries only a part (just `background_style_analysis`)
+   saves that part; asking it for a preset reports why there is no composition.
+5. **Deliver.** Report the saved ids (`presetId`, style ids, expression id) +
+   a one-line summary (scaffold, icons adapted, parts saved). No JSON dump.
+6. **Optional chain → refine or generate.** Refine the preset first (free) with
+   `/tf-preset` (`preset:show <presetId>`, `preset:edit <presetId>` - also the
+   place to fix a `⚠` STYLE sentence with `--style-file`). Generate on it
+   (paid) with `/tf-generate --preset <presetId>`: a **separate paid stage**
+   with its own dry-run and consent, its own ref discovery (`list-refs` +
+   `_thumb.png` inspection) and its own background choice (profile by
+   default, `--background-style <id>` for the source's). A saved expression is
+   an ordinary custom expression usable on ANY preset via `--expression <id>`.
 
-## Flags (confirm with `thumbforge reverse --help`)
+## Flags (confirm with `thumbforge reverse --help` / `reverse:import --help`)
 
 | Flag | Use |
 |---|---|
-| `--url <url>` | source thumbnail / video URL |
-| `--file <path>` | local source image (instead of `--url`) |
-| `--context <text>` | **topic of the user's (your) video** — see P0 below |
-| `--model <id>` | analyzer override (default `claude-opus-4-8-thinking`; dry-run shows availability) |
-| `--apply` | save the analyzed template as a custom preset (do it in the paid call) |
-| `--save-expression [name]` | save the detected expression/pose as a reusable custom expression bound as the preset's default (beta.28; name optional — deterministic + dedup suffix) |
-| `--confirm` | spend money (also needs the env) |
+| `reverse:contract --context <text>` | the analysis contract for Path B (free) |
+| `reverse:import <file>` | validate a JSON analysis; with `--save-preset [name]` / `--hidden` / `--save-background` / `--save-text` / `--save-expression [name]` save those parts (free, atomic); `--source` / `--model` record provenance |
 
-`reverse` has no `--out` — it produces a preset, not an image.
+`reverse` and `reverse:import` have no `--out` - they produce presets and
+styles, not images.
 
 ## Load-bearing rules
 
-- **P0 — `--context` is the user's topic, never the source title.** The point is to
+- **P0 - `--context` is the user's topic, never the source title.** The point is to
   reuse the competitor's *layout* for *the user's* subject. Passing the source's
   title makes a clone of their video, not an adaptation of yours.
-- **Free-tier wall.** `gemini-2.5-flash` is cheaper but the Google key is
-  free-tier (~20 req/min → 429). Dry-run/inventory mark it with `⚠` even when
-  the key decrypts. The default Anthropic analyzer has no wall — prefer it unless
-  the user asks for Flash.
-- **Key preflight before spend.** If dry-run says `⚠ brak klucza` or
-  `THUMBFORGE_SECRET`, fix that before asking for paid consent. Missing key and
-  wrong secret are distinct failures; don't collapse them into "add a key".
-- The analyzer + resolver own the template/icon logic; don't hand-edit prompts.
+- **One contract.** Follow `reverse:contract` verbatim; the import validates it
+  exactly like the app validates its own analyzer. Hand-written
+  rules that drift from the contract are the failure mode - print the contract,
+  do not recall it from memory.
+- **Warnings are the correction path.** A `⚠` from `reverse:import`, the
+  preset save or the generate plan means a STYLE or COMPOSITION sentence still
+  mixes the background with an object; the sentence is kept for the objects and
+  the brand cannot replace that background. Fix the JSON (Path B) before a paid
+  render; for a saved STYLE sentence use `preset:edit --style-file`.
+- After import, obtain the actual resolved prompt with the free dry-run:
+  `thumbforge generate --preset <presetId> --topic "<topic>" --refs <paths> --quality <chosen-quality> --plan-out <abs.json>`.
+  Read `concepts[0].resolvedPrompt` from that JSON, retaining its `refPaths`
+  order and the chosen profile, style, expression, visible text and quality.
+  Copy it into `--custom-prompt` only after preserving FACE_LOCK, safe-zone and
+  composition; a raw custom prompt replaces the resolver entirely.
 - **A clone still has to be a good thumbnail.** Sanity-check the adapted template
   against `../thumbforge/references/thumbnail-craft.md` (text-left/face-right,
   legible headline) and `../thumbforge/references/gotchas.md` (no text in the
-  timestamp corner, non-ASCII text risk) — copying a competitor's layout doesn't
+  timestamp corner, non-ASCII text risk) - copying a competitor's layout doesn't
   exempt it from the universal rules.
 - **Reverse presets still need real refs.** When generating from the saved preset,
   inspect candidate reference thumbnails before choosing faces/icons/screens. Do
@@ -135,13 +139,10 @@ rules: `../thumbforge/references/paid-call-protocol.md`.
 
 ## Errors
 
-See `../thumbforge/references/troubleshooting.md`. `429` → quota/free-tier wall,
-switch to the default analyzer or wait for quota. A truncated/`no valid JSON`
-analysis is a known reasoning-model failure mode fixed by raising the shared
-reasoning/output token budget (`max_tokens` for Anthropic, `max_output_tokens` +
-`reasoning` for OpenAI); if it recurs, report the echoed `status`,
-`incomplete_details.reason`, and `response head` rather than retrying blindly
-(each retry is paid).
+See `../thumbforge/references/troubleshooting.md`. `reverse:import` errors are
+validation, not spend: read the reason, fix the JSON, re-run. `--json-out` and
+the app analyzer belong to `/tf-reverse-auto`; its saved JSON avoids a second
+analysis when parts are saved later: no second analysis.
 
 ## Cienki klient (tester) i tryb dev
 
@@ -149,8 +150,12 @@ Komendy w tym skillu wołają domyślnie **`thumbforge`** — cienki klient HTTP
 `pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym kontraktem po
 manifeście `package.json` z `name === "thumbforge"` w cwd.
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `reverse:contract`, `reverse:import`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
 Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
 są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast
-„dostępne tylko w trybie repo (dev)".
+„dostępne tylko w trybie repo (dev)”.
+
+Przy świeżym teście dev, gdy discovery wskazuje stary sidecar, orchestrator podaje
+`THUMBFORGE_SERVER_URL=http://localhost:3000` przed komendą `thumbforge`; nie
+przechodź wtedy na `pnpm cli`.

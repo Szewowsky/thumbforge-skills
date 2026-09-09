@@ -78,6 +78,11 @@ exist — discover them. Two rules, full detail in `references/discovery-contrac
    the Run into review-sized sessions of ≤4 images; never loop single `generate`
    calls yourself (that spawns unrelated duplicate-looking sessions).
 
+Image models and quality tiers come from `thumbforge inventory`. Optional OpenAI
+`gpt-image-2.5-sunburst` supports `low`, `medium`, `high`, `xhigh`, `max`, and
+`auto`; `auto` is an orientational max-output estimate, not a guaranteed cost
+ceiling. Existing model defaults remain unchanged.
+
 ## UX Rules
 
 1. Reply in Polish (full diacritics ą/ć/ę/ł/ń/ó/ś/ź/ż), no emoji. Technical args
@@ -103,7 +108,8 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 | `cost-estimate` | no | estimate batch cost (no provider call) |
 | `grid <sessionId>` / `grid --batch <batchId>` | no | compose a session grid or whole Grid Runu → **tf-generate** |
 | `generate` | **yes** | generate thumbnails → **tf-generate** |
-| `reverse` | **yes** | clone a competitor thumbnail → **tf-reverse** |
+| `reverse` | **yes** | app analyzer, explicit only → **tf-reverse-auto** |
+| `reverse:contract` / `reverse:import <file>` | no | analysis contract for a conversation model + free import / selective save of its JSON → **tf-reverse** |
 | `analyze-transcript` | **yes** | infer slots from a scenario → **tf-scenario** |
 | `analyze-titles` | **yes** | propose thumbnail concepts from title candidates → **tf-titles** |
 | `brand:analyze` | **yes** | derive a profile design system from thumbnails → **tf-brand** |
@@ -132,7 +138,7 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 ## Routing
 
 - Generate thumbnails from a topic/preset → **`/tf-generate`**.
-- Clone/adapt a competitor thumbnail (URL or image) → **`/tf-reverse`**.
+- Clone/adapt a visible competitor thumbnail → **`/tf-reverse`**. Explicitly request the app analyzer → **`/tf-reverse-auto`**.
 - Turn one of the user's YouTube videos or local media files into a transcript →
   suggest **`/tf-transcript`**; it is user-invoked, so never start it automatically.
 - Turn a video scenario/transcript into concepts → **`/tf-scenario`**.
@@ -177,7 +183,7 @@ Komendy w tym skillu wołają domyślnie **`thumbforge`** — cienki klient HTTP
 `pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym kontraktem po
 manifeście `package.json` z `name === "thumbforge"` w cwd.
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `profile:list`, `profile:current`, `brand:analyze`, `brand:import`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `profile:list`, `profile:current`, `brand:analyze`, `brand:import`, `cost-estimate`, `edit`, `generate`, `reverse`, `reverse:contract`, `reverse:import`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
 Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
 są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast

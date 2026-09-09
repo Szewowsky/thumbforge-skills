@@ -1,91 +1,70 @@
-# Thumbforge — skille Claude Code (marketplace)
+# Thumbforge - skille 0.1.26 do beta54
 
-Pakiet skilli do sterowania **Thumbforge** (generator miniatur YouTube) z poziomu
-czatu Claude Code. Skille operują **cienkim klientem CLI** zaszytym w apce — nie
-potrzebujesz kopii repozytorium.
+Ta gałąź `beta54-preview` zawiera aktualne skille do Thumbforge **beta54 lub nowszego**.
+To osobny kanał instalacji. Nie zmienia zwykłego marketplace z gałęzi `main` ani
+feedu aktualizacji aplikacji. Repozytorium i ta gałąź są publiczne; to nie prywatny link.
 
-## Wymaganie wstępne (zrób to PIERWSZE)
+**Najpierw zainstaluj aplikację beta54 otrzymaną od Roberta.** Sama paczka skilli nie
+aktualizuje aplikacji. Starszy CLI może nie mieć `reverse:contract` i `reverse:import`,
+a starsza aplikacja nie udostępnia Sunburst. Nie kieruj brakujących komend do innego
+providera ani płatnego fallbacku.
 
-Skille wołają komendę `thumbforge`. Żeby ją mieć:
+## Przygotowanie aplikacji
 
-1. Zainstaluj apkę **Thumbforge** z `.dmg` (przeciągnij do `Applications`) i uruchom ją.
-2. Wpisz swoje klucze API (OpenAI / Google) w **Ustawieniach** apki — klucze zostają
-   na Twoim dysku (BYOK).
-3. Z menu **tray** (ikona „tf" na pasku) wybierz **„Zainstaluj CLI"** — to podłoży
-   komendę `thumbforge` w terminalu.
-4. Sprawdź: `thumbforge --help` powinno coś wypisać. Apka musi **działać w tle**
-   (tray) podczas używania skilli — CLI gada z nią po lokalnym HTTP (handshake
-   `port`+`token` w `userData`).
+1. Zainstaluj i uruchom Thumbforge. Aplikacja musi działać podczas korzystania ze skilli.
+2. Sprawdź `thumbforge --help`. Jeśli CLI nie jest dostępne, użyj menu tray aplikacji
+   i akcji „Zainstaluj CLI”.
+3. Klucze providerów ustaw w aplikacji. Nie przekazuj ich do czatu ani tej paczki.
 
-Bez tego skille zgłoszą, że nie znajdują serwera.
+## Claude Code
 
-## Instalacja skilli
+Jeśli masz starszy plugin `thumbforge@thumbforge-skills`, wyłącz go w `/plugin` ->
+Installed w używanym projekcie, aby nie ładować jednocześnie dwóch wersji Thumbforge.
+Następnie uruchom w Claude Code:
 
-W Claude Code:
-
-```
-/plugin marketplace add Szewowsky/thumbforge-skills
-/plugin install thumbforge@thumbforge-skills
-```
-
-(Do lokalnego testu przed publikacją: `/plugin marketplace add /ścieżka/do/thumbforge-skills`.)
-
-## Co dostajesz (10 skilli)
-
-| Skill | Po co | Płatne? |
-|-------|-------|---------|
-| `thumbforge` | Router + wspólny protokół płatnych callów + katalog komend | — |
-| `tf-generate` | Miniatury z tematu + presetu | tak (po Twojej zgodzie) |
-| `tf-reverse` | Sklonuj/zaadaptuj cudzą miniaturę (URL/obraz) | tak |
-| `tf-scenario` | Koncepty miniatur ze scenariusza/transkryptu | tak (sama generacja) |
-| `tf-titles` | Porównaj 1–3 tytuły i przygotuj koncepty miniatur | tak (po Twojej zgodzie) |
-| `tf-brand` | Wyprowadź lub zaimportuj design system kanału/serii | analiza tak, import nie |
-| `tf-brainstorm` | Wymyśl oryginalny koncept od zera (Swobodny prompt) | tak (po Twojej zgodzie) |
-| `tf-edit` | Popraw gotową miniaturę instrukcją tekstową | tak (po Twojej zgodzie) |
-| `tf-preset` | Autoring presetów i stylów (fork archetypu) | nie (pliki/SQLite) |
-| `tf-assets` | Przeglądaj i dodawaj referencje (twarz, ikony, inspiracje) | nie |
-
-**Protokół płatny:** skille zawsze robią dry-run i pokazują plan + koszt, a płatny
-call odpalają **dopiero po Twojej jawnej zgodzie** dla każdego wywołania.
-
-## Znana chropowatość bety
-
-Kilka komend deweloperskich (`refs:contact-sheet`, `refs:rethumb`, `preset:preview`,
-`list-models`) jest **repo/dev-only** — cienki klient zwraca dla nich czytelny
-fail-fast. Skille są tego świadome i kierują Cię na thin-owe odpowiedniki
-(`thumbforge inventory` zamiast `list-models` itd.).
-
-## Co nowego w 0.1.18
-
-- **Router zna `/tf-brand`** - wejście przez `/thumbforge` prowadzi teraz do
-  analizy lub importu design systemu.
-- **Nowy `/tf-brand`** - analizuje 2-12 miniatur i zapisuje powtarzalny design
-  system w wybranym profilu; gotowy `design.md` zaimportujesz bezpłatnie.
-- **Nowy `/tf-titles`** - wrzuć 1-3 kandydatów na tytuł, dostajesz porównanie
-  i gotowe koncepty miniatur pod ten, który wygrywa.
-- **Miny i pozy** - sterujesz wyrazem twarzy i postawą, możesz zapisać własne.
-- **`/tf-generate` robi serię w jednym przebiegu** i składa grid porównawczy,
-  zamiast jednej miniatury na raz.
-- **Skille startują bez repozytorium** - bootstrap idzie przez cienki klient
-  zaszyty w apce.
-- **Bramka logo/ikon** - gdy temat wymienia markę, skill nie pozwoli wygenerować
-  miniatury bez podpięcia referencji z logo (albo jawnie to zgłosi).
-
-## Utrzymanie (dla autora)
-
-Źródło prawdy skilli to `.claude/skills/` w repo `thumbforge`. Ten marketplace to
-opakowanie do dystrybucji. Po zmianie skilli w repo odśwież je tutaj:
-
-```
-./sync.sh                       # domyślnie z /Users/robert/Windsurf Projekty/thumbforge
-./sync.sh /inna/ścieżka/thumbforge
+```text
+/plugin marketplace add Szewowsky/thumbforge-skills@beta54-preview
+/plugin install thumbforge@thumbforge-beta54-preview
+/reload-plugins
 ```
 
-Skrypt re-kopiuje 10 skilli, weryfikuje cross-ref `../thumbforge/references/`
-i pilnuje, żeby paczka zawierała dokładnie te skille, co lista w skrypcie
-(osierocony katalog = błąd).
+Jeżeli Twoja wersja nie ma `/reload-plugins`, uruchom nową sesję.
+W `/plugin` sprawdź wersję **0.1.26** i źródło **thumbforge-beta54-preview**.
+Przykładowe wejście: `/thumbforge:tf-generate`.
 
-**Po każdym syncu bumpnij `version` w `plugins/thumbforge/.claude-plugin/plugin.json`.**
-Claude Code cache'uje plugin per wersja: bez bumpu `plugin update` nie podmieni
-niczego u osób, które mają paczkę już zainstalowaną, i zmiany po cichu nie dotrą
-do nikogo. Potem commit + push.
+Aktualizacja tego kanału w terminalu:
+
+```bash
+claude plugin marketplace update thumbforge-beta54-preview
+claude plugin update thumbforge@thumbforge-beta54-preview
+```
+
+Claude Code może aktualizować pluginy automatycznie, jeśli włączysz tę opcję dla
+marketplace. Marketplace dodany z `@beta54-preview` śledzi tę gałąź, nie `main`.
+
+## Codex
+
+Pobierz [ZIP tej gałęzi](https://github.com/Szewowsky/thumbforge-skills/archive/refs/heads/beta54-preview.zip)
+i rozpakuj go. Skopiuj wszystkie 11 folderów z `plugins/thumbforge/skills/` do
+`.agents/skills/` w swoim projekcie. Zachowaj ich nazwy i zawartość podfolderów
+`thumbforge/references`, ponieważ skille odwołują się do nich wzajemnie.
+Zastąp wcześniejsze wersje tych samych skilli; pozostałe skille zostaw nietknięte.
+Uruchom nową sesję Codexa. Możesz wywołać `$thumbforge` albo `$tf-generate`.
+
+Jeśli poprzednia instalacja używa symlinków, zaktualizuj ich cele na nową paczkę
+zamiast zostawiać odsyłacze do starego cache. Nie zamieniaj symlinków w przypadkowe
+częściowe kopie i nie mieszaj wersji poszczególnych skilli.
+
+## Co jest w paczce
+
+11 skilli: `thumbforge`, `tf-generate`, `tf-reverse`, `tf-reverse-auto`, `tf-scenario`,
+`tf-titles`, `tf-brand`, `tf-brainstorm`, `tf-edit`, `tf-preset`, `tf-assets`.
+
+- Generowanie i edycja miniatur, katalog modeli i jakości, plan kosztów przed wywołaniem.
+- Reverse analizowany w rozmowie oraz osobny jawny analyzer aplikacji.
+- Praca z presetami, stylami, minami, referencjami i profilami marki.
+
+Generacja nadal wymaga świadomej zgody na płatne wywołanie. Analiza w rozmowie
+wykorzystuje plan/budżet CC lub Codexa; nie jest obietnicą braku kosztu rozmowy.
+
+Zmiany z prywatnych wersji beta53.1 i beta54: [CHANGELOG.md](CHANGELOG.md).

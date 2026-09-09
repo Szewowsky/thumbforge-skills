@@ -125,9 +125,10 @@ section `Zdecydowałem za ciebie:` listing every decision you took over.
 3. **Explore the chosen direction with the user.** Let the user select, combine
    or reject directions. Resolve the chosen direction's key composition and
    message choices before descending into prompt wording.
-   Następnie zapytaj: „Jaka jakość? a) medium - testy/porównania
-   (rekomendowane), b) low - odradzane, bo wynik jest niemiarodajny, c) high -
-   finał”. Rekomenduj `a` i zachowaj wybrane `<q>` w dry-runie oraz paid runie.
+   Jeśli użytkownik nie podał już modelu i jakości, zapytaj o jakość zgodną z
+   katalogiem wybranego modelu. Dla `gpt-image-2.5-sunburst` są to `low`,
+   `medium`, `high`, `xhigh`, `max`, `auto`; zachowaj wybrane `<q>` w dry-runie
+   oraz paid runie, a `auto` opisuj jako orientacyjny max outputu bez gwarancji.
 4. **Compose the Swobodny prompt.** `--custom-prompt`
    bypasses the preset resolver, so any normally injected safety must be present
    manually:
@@ -153,7 +154,7 @@ section `Zdecydowałem za ciebie:` listing every decision you took over.
    thumbforge generate --preset hero-chest-up --topic "<topic>" \
      --custom-prompt "<freeform prompt>" \
      --refs <face,icon,...> \
-     [--profile <id>] --provider openai --model gpt-image-2 --quality <q> \
+     [--profile <id>] --provider openai --model <model> --quality <q> \
      --out "$HOME/Downloads/<temat-slug>"
    ```
    Show the resolved plan and cost estimate, then wait for explicit consent.
@@ -162,7 +163,7 @@ section `Zdecydowałem za ciebie:` listing every decision you took over.
    THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge generate --preset hero-chest-up --topic "<topic>" \
      --custom-prompt "<freeform prompt>" \
      --refs <face,icon,...> \
-     [--profile <id>] --provider openai --model gpt-image-2 --quality <q> \
+     [--profile <id>] --provider openai --model <model> --quality <q> \
      --out "$HOME/Downloads/<temat-slug>" \
      --confirm
    ```
@@ -194,8 +195,9 @@ section `Zdecydowałem za ciebie:` listing every decision you took over.
    thumbnail works and the user wants to reuse the layout, hand off to **/tf-reverse
    `--file <the generated PNG>`** — it analyzes the *rendered* image into a custom
    preset (Reverse-preset). That is the route to "my own template": brainstorm →
-   generate → reverse → reusable preset. Note it is a separate **paid** vision call;
-   only suggest it once the concept is proven.
+   generate → reverse → reusable preset. `tf-reverse` uses the conversation model
+   plus free JSON import, never adds the rendered source to the reference library,
+   and chooses generation refs only in the later generation stage.
 
 ## Existing template vs original concept
 
@@ -213,8 +215,9 @@ Use Swobodny prompt only when no preset captures the idea.
   generate with an empty preset id ("Podaj --preset"). The carrier's prompt is overridden by
   `--custom-prompt`; choose it by subject count (single-subject archetype, or `collab-duo` for
   two).
-- Jakość jest świadomym wyborem: medium do testów/porównań, low odradzane jako
-  niemiarodajne, high na finał. CLI bez `--quality` nie wybiera po cichu.
+- Jakość jest świadomym wyborem z katalogu modelu. Dla Image 2.5 `auto` jest
+  orientacyjnym max outputu bez gwarantowanego pułapu; jeśli user podał model i
+  jakość, zachowaj je bez ponownego pytania. CLI bez `--quality` nie wybiera po cichu.
 - Grupuj do 4 konceptów lub wariantów w jednym batchu/sesji/gridzie zamiast
   powtarzać pojedyncze płatne runy. Większy zestaw dziel zgodnie z bramkami z
   kroku Diverge.

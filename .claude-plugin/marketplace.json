@@ -1,14 +1,14 @@
 {
-  "name": "thumbforge-skills",
+  "name": "thumbforge-beta54-preview",
   "owner": {
     "name": "Robert Szewczyk"
   },
-  "description": "Thumbforge — skille Claude Code do generowania, klonowania i autoringu miniatur YouTube przez headless CLI thumbforge.",
+  "description": "Paczka skilli Thumbforge 0.1.26 do beta54 - świadomie instalowany kanał preview.",
   "plugins": [
     {
       "name": "thumbforge",
       "source": "./plugins/thumbforge",
-      "description": "Pakiet 10 skilli sterujących cienkim klientem CLI thumbforge: router thumbforge + tf-generate, tf-reverse, tf-scenario, tf-titles, tf-brand, tf-brainstorm, tf-edit, tf-preset, tf-assets. Wymaga zainstalowanej apki Thumbforge (.dmg) z CLI podłączonym z menu tray; apka musi działać w tle."
+      "description": "11 skilli dla Thumbforge beta54 lub nowszego. Nowy reverse i GPT Image 2.5 Sunburst. Wymaga działającej aplikacji z aktualnym CLI."
     }
   ]
 }

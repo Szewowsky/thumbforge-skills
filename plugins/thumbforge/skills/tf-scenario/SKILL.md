@@ -100,9 +100,11 @@ own wording/voice — ask if unsure; don't impose a house style.
 This is its own paid stage. Either hand the chosen concepts to **/tf-generate**, or
 run them here under the triple lock. Cost-smart shape:
 
-- **Round 1:** the ~4 concepts at `--quality medium` to compare directions (cheap,
-  but text/face legible).
-- **Final:** the chosen winner at `--quality high`.
+- **Round 1:** the ~4 concepts at a quality chosen from the selected model's
+  registry entry (usually `medium` for comparison).
+- **Final:** the chosen winner at a quality chosen from that same entry; Sunburst
+  additionally offers `xhigh`, `max`, and `auto` (`auto` is orientational, not a
+  guaranteed cost ceiling). If the user already supplied model/quality, preserve it.
 
 **Batch-first.** The four concepts differ in preset/text/refs, so generate them as
 ONE logical Run with `--concepts-file` — not a loop of single `generate` calls.
@@ -114,7 +116,7 @@ per `../thumbforge/references/discovery-contract.md`, then:
 ```bash
 THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge generate \
   --topic "<shared topic>" --concepts-file /abs/path/concepts.json \
-  --provider openai --model gpt-image-2 --quality low \
+  --provider openai --model <model> --quality <q> \
   --out "$HOME/Downloads/<temat-slug>" \
   --confirm
 ```
