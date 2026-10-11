@@ -92,7 +92,9 @@ Present the concepts as a table so the user can pick/refine before any spend (th
 | # | preset | visible_text + text-style | refs | risk | est. cost |
 |---|--------|---------------------------|------|------|-----------|
 
-Use `thumbforge cost-estimate` (free) to fill the cost column. Respect the channel's
+Use `thumbforge cost-estimate` (free) to fill the cost column; `cost-estimate` nie
+czyta Ustawień, więc podaj `--model` modelu, którego użyje Run (model z Ustawień
+pokazuje darmowy dry-run). Respect the channel's
 own wording/voice — ask if unsure; don't impose a house style.
 
 ### 4. Generate concepts (PAID — separate stage, per-call consent)
@@ -100,9 +102,36 @@ own wording/voice — ask if unsure; don't impose a house style.
 This is its own paid stage. Either hand the chosen concepts to **/tf-generate**, or
 run them here under the triple lock. Cost-smart shape:
 
-- **Round 1:** the ~4 concepts at `--quality medium` to compare directions (cheap,
-  but text/face legible).
-- **Final:** the chosen winner at `--quality high`.
+- **Round 1:** the ~4 concepts at a quality chosen from the selected model's
+  registry entry (usually `medium` for comparison).
+- **Final:** the chosen winner at a quality chosen from that same `inventory`
+  catalog; the catalog shows client models and is not proof of account access.
+  Sunburst and Flare each additionally offer `xhigh`, `max`, and `auto` when
+  listed (`auto` is orientational, not a guaranteed cost ceiling). If the user
+  already supplied model/quality, preserve it and let the dry-run validate the
+  target before a paid call.
+
+**Model i jakość:** domyślnie model z Ustawień aplikacji. Bez `--model`
+i `--provider` cienki klient bierze go z Ustawień, a dry-run drukuje
+`model: <dostawca>/<model> (<jakość>, źródło: ustawienia aplikacji)`; dev CLI
+drukuje `plan: <dostawca>/<model> @ <jakość>`. Na prośbę usera (np. „na Nano
+Bananie”) weź inny model z katalogu `thumbforge inventory`, np.
+`--model gemini-nano-banana-2.1` bez `--provider`: dostawcę CLI bierze z katalogu,
+a dry-run pokazuje `źródło: flaga`. Jakość to jeden z tierów wybranego modelu
+w katalogu. Drabinka `gemini-nano-banana-2.1`:
+- `low` - 1K, myślenie minimal: najtańsze szybkie szkice.
+- `medium` - 1K, myślenie medium: domyślna jakość, ustawienie zalecane przez Google.
+- `high` - 1K, myślenie high: lepsze trzymanie się promptu.
+- `xhigh` - 2K, myślenie high: ostrzejszy obraz i RAW 2K.
+- `max` - 4K, myślenie high: RAW 4K, najdroższy tier.
+
+**Slug odcinka:** przed dry-runem zaproponuj 2-4 słowa z roboczego tytułu odcinka
+(ASCII, małe litery, myślniki, max 30 znaków, np. `codex-sdk`) i pokaż slug
+w podsumowaniu dry-runu przed płatnym wywołaniem, żeby user mógł go zmienić
+jednym słowem. Katalog to `$HOME/Downloads/<slug>`: każda komenda odkładająca PNG
+dostaje `--out "$HOME/Downloads/<slug>" --out-name <slug>`, a
+kolejne rundy odcinka używają tego samego sluga i katalogu (numeracja idzie
+dalej, bez podkatalogów rund).
 
 **Batch-first.** The four concepts differ in preset/text/refs, so generate them as
 ONE logical Run with `--concepts-file` — not a loop of single `generate` calls.
@@ -114,13 +143,16 @@ per `../thumbforge/references/discovery-contract.md`, then:
 ```bash
 THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge generate \
   --topic "<shared topic>" --concepts-file /abs/path/concepts.json \
-  --provider openai --model gpt-image-2 --quality low \
-  --out "$HOME/Downloads/<temat-slug>" \
+  [--model <model>] --quality <q> \
+  --out "$HOME/Downloads/<slug>" --out-name <slug> \
   --confirm
 ```
 
 The thin client requires the absolute `--out <absDir>` export directory; only
-verified repo/dev mode may omit it and use separate dev storage.
+verified repo/dev mode may omit it and use separate dev storage. `--model` podaj
+tylko przy modelu innym niż ten z Ustawień. Kopie lądują jako `<slug>-<n>.png`
+w kolejności konceptów, a CLI wypisuje przy każdym obrazie linię
+`<plik> -> koncept <k>, <preset>, wariant <w>, sesja <id>`: pokaż ją jako tabelę.
 
 `provider`/`model`/`quality`/`topic` are global (shared by the batch); per-concept
 `preset`/`visibleText`/`textStyle`/`glowColor`/`refs` live in the JSON. Dry-run first
@@ -134,19 +166,22 @@ ALWAYS compose a review grid of the finals and open it right after the run — t
 user expects one side-by-side preview of the variants every time:
 
 ```bash
-thumbforge grid <sessionId> --out "$HOME/Downloads/<temat-slug>/grid.png"
+thumbforge grid <sessionId> --out "$HOME/Downloads/<slug>" --out-name <slug>
 ```
 
-> **Recovery after a client-side timeout.** A 4-variant high-quality batch can
-> exceed the thin client's poll window — the CLI may print "sesja … nie zwróciła
-> obrazów w limicie czasu" while the app keeps generating. The finals are NOT
-> lost: recover with the printed `sessionId` via
-> `thumbforge grid <sessionId> --out <dir>` (free), or pull individual files with
-> `fetch-media /api/media/generations/<sessionId>/<file>.png --out <path>`.
+> **Recovery after a client-side timeout.** Batch 4 wariantów w wysokiej jakości
+> może przekroczyć okno pollingu cienkiego klienta: CLI drukuje „Sesja … nadal ma
+> status pending”, a aplikacja generuje dalej. Finały nie przepadają i nie
+> odpalasz drugiego płatnego calla: uruchom wydrukowane
+> `thumbforge resume <sessionId> --out "$HOME/Downloads/<slug>" --out-name <slug>`
+> (darmowe, kopie numerują dalej), złóż grid jak wyżej albo pobierz jeden plik
+> wydrukowaną linią
+> `thumbforge fetch-media /api/media/generations/<sessionId>/<plik>.png --out "<plik z podpowiedzi>" --no-overwrite`.
 
 Use the `sessionId` printed by the paid run. `grid` is **free** (no model call)
-and writes one PNG from the server's final images. Skip the grid only for a
-**single** image. Surface the grid path when you deliver the session id + finals.
+and writes one PNG from the server's final images as `<slug>-grid-<n>.png` next
+to the copies. Skip the grid only for a **single** image. Surface the grid path
+when you deliver the session id + finals.
 
 ## Fallback — paid `analyze-transcript` (headless / transcript not in context)
 
@@ -204,7 +239,7 @@ Komendy w tym skillu wołają domyślnie **`thumbforge`** — cienki klient HTTP
 `pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym kontraktem po
 manifeście `package.json` z `name === "thumbforge"` w cwd.
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `resume`, `fetch-media`, `reverse`, `analyze-transcript`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
 Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
 są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast

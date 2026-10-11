@@ -20,7 +20,7 @@ NOT "run every `list-*` on every turn".
 | an archetype / preset | `thumbforge list-presets` | the user named `--preset <id>` |
 | a text / background / recipe style | `thumbforge list-styles [--type text\|background\|recipe]` | the user named the style |
 | which refs fill the slots | `thumbforge list-refs [--category <c>]`, then visually inspect candidates when the choice is ambiguous | the user gave explicit ref paths |
-| a model | `thumbforge inventory` | sticking to the documented default |
+| a model | `thumbforge inventory` | zostajesz przy modelu z Ustawień aplikacji (pokazuje go dry-run) |
 
 **Shortcut:** `thumbforge inventory` (free) prints all four dimensions at once
 (presets + styles + models + refs, built-in AND custom) — one call instead of
@@ -28,7 +28,15 @@ four. Prefer it when you're about to propose and want the whole account picture
 (e.g. tf-scenario's 4 diverse concepts). Use the individual `list-*` when you only
 need one dimension.
 
-A pure repo/dev-only `pnpm cli retry <session>` chooses nothing new → no discovery needed.
+Run `thumbforge inventory` to see the thin client's model catalog. Inventory
+alone does not prove account access or edit support in an older app.
+`thumbforge edit --help` documents flags accepted by the thin client, not
+whether the app supports them. The edit dry-run is the live
+capability check and refuses an older app before a positive plan or POST.
+Documentation recommendation: Sunburst for precise edits, Flare for fast daily
+iterations.
+
+A pure repo/dev-only `pnpm cli retry --session <id>` chooses nothing new → no discovery needed.
 
 **The static maps in `thumbnail-craft.md` (§5 archetype→preset) are DESIGN
 REASONING** — which composition suits which story. They are NOT the source of

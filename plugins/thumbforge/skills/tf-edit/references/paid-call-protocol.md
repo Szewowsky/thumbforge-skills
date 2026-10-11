@@ -22,6 +22,13 @@ thumbforge edit \
   --instruction "<instruction>"
 ```
 
+`thumbforge edit --help` discovers flags accepted by the thin client;
+`thumbforge inventory` shows the client model catalog. Inventory alone does not
+prove account access or edit support in an older app. The dry-run is the live
+capability check and refuses an older app
+before a positive plan or POST. Documentation recommendation: Sunburst for
+precise edits, Flare for fast daily iterations.
+
 Real run shape after explicit approval:
 
 ```bash
@@ -30,9 +37,13 @@ THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge edit \
   --image <imageId> \
   --instruction "<instruction>" \
   --guide <annotation-doc.json> \
-  --out "$HOME/Downloads/<edit-slug>" \
+  --out "$HOME/Downloads/<slug>" --out-name <slug> \
   --confirm
 ```
+
+`<slug>` to Slug odcinka z podsumowania dry-runu (ten sam, którego użyły
+generacje odcinka), więc kopia edycji ląduje obok nich jako kolejny
+`<slug>-<n>.png` i niczego nie nadpisuje.
 
 If the CLI cannot resolve the session, image, guide document, output directory,
 API key, or cost estimate, stop before asking for paid consent.

@@ -34,6 +34,14 @@ iterate or set final in the UI.
 Run `thumbforge --help` (free). If it fails: „Uruchom aplikację Thumbforge; CLI instaluje się samo, a w razie potrzeby użyj tray → Zainstaluj CLI.”
 Then follow the shared [Bootstrap thin-first contract](../thumbforge/SKILL.md#step-0--bootstrap-thin-first); do not inspect repo files or guess a machine path before the handshake.
 
+`thumbforge edit --help` is the thin client's flag contract. Run it to discover
+the flags this client accepts, then run `thumbforge inventory` to see the
+client model catalog. Inventory alone does
+not prove account access or edit support in an older app. The edit dry-run is
+the live capability check: it refuses an older app before showing a positive
+plan or sending a POST. Documentation recommendation: Sunburst for precise
+edits, Flare for fast daily iterations.
+
 Triple lock for the real run: env `THUMBFORGE_ALLOW_PAID_CALLS=1` (inline, never
 `export`) + `--confirm` + dry-run-first. Consent is per-call; never re-run a paid
 edit without fresh approval. The running app owns the configured provider key;
@@ -71,24 +79,43 @@ do not inspect or source secret/config files. Full rules:
      --session <sessionId> \
      --image <imageId> \
      --instruction "<instruction with FACE_LOCK + central 85% safe-zone guardrails>" \
+     [--provider <provider>] [--model <model>] [--quality <tier>] \
      [--refs <ref1,ref2>] \
      [--guide <annotation-doc.json>]
    ```
    Dry-run must print `edit plan`, `koszt`, and the
    `THUMBFORGE_ALLOW_PAID_CALLS=1` reminder.
+   The default target is the selected image's saved target, with the session as
+   the fallback for legacy NULL metadata. An override applies to this edit only;
+   the new version records it and the session remains unchanged.
+   **Model edycji:** bez `--model` edycja idzie zapisanym celem obrazu (model
+   i jakość źródła; wycofane ID przechodzą na następcę). Override tylko na prośbę
+   usera i tylko na cel, który przyjmie dry-run: model obrazu źródłowego albo
+   Sunburst lub Flare. Obraz z `gemini-nano-banana-2.1` edytujesz tym modelem,
+   z jakością z jego drabinki `low`..`max`; obrazu z OpenAI nie przełączysz na 2.1.
+   **Slug odcinka:** przed dry-runem zaproponuj 2-4 słowa z roboczego tytułu odcinka
+   (ASCII, małe litery, myślniki, max 30 znaków, np. `codex-sdk`) i pokaż slug
+   w podsumowaniu dry-runu przed płatnym wywołaniem, żeby user mógł go zmienić
+   jednym słowem. Katalog to `$HOME/Downloads/<slug>`: każda komenda odkładająca PNG
+   dostaje `--out "$HOME/Downloads/<slug>" --out-name <slug>`, a
+   kolejne rundy odcinka używają tego samego sluga i katalogu (numeracja idzie
+   dalej, bez podkatalogów rund). Edycja obrazu z odcinka bierze slug jego
+   generacji, więc kopia ląduje jako kolejny `<slug>-<n>.png`.
    If it cannot resolve the session or cost, stop and fix that before asking for
    consent.
 5. **Paid edit (only after consent).** The thin client uses the editor guide-ref
    instruction flow, so the real path needs an annotation-doc JSON (`--guide`)
-   plus an absolute output directory lock (`--out`). No binary mask is used here.
+   plus an absolute export directory (`--out`: polityka eksportu, nie zamek
+   kosztu, ADR 0005). No binary mask is used here.
    ```bash
    THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge edit \
      --session <sessionId> \
      --image <imageId> \
      --instruction "<final instruction>" \
+     [--provider <provider>] [--model <model>] [--quality <tier>] \
      [--refs <ref1,ref2>] \
      --guide <annotation-doc.json> \
-     --out "$HOME/Downloads/<edit-slug>" \
+     --out "$HOME/Downloads/<slug>" --out-name <slug> \
      --confirm
    ```
 6. **Verify and deliver.** Open the output/session in the UI. If the result

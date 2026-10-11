@@ -125,9 +125,25 @@ section `Zdecydowałem za ciebie:` listing every decision you took over.
 3. **Explore the chosen direction with the user.** Let the user select, combine
    or reject directions. Resolve the chosen direction's key composition and
    message choices before descending into prompt wording.
-   Następnie zapytaj: „Jaka jakość? a) medium - testy/porównania
-   (rekomendowane), b) low - odradzane, bo wynik jest niemiarodajny, c) high -
-   finał”. Rekomenduj `a` i zachowaj wybrane `<q>` w dry-runie oraz paid runie.
+   **Model i jakość:** domyślnie model z Ustawień aplikacji. Bez `--model`
+   i `--provider` cienki klient bierze go z Ustawień, a dry-run drukuje
+   `model: <dostawca>/<model> (<jakość>, źródło: ustawienia aplikacji)`; dev CLI
+   drukuje `plan: <dostawca>/<model> @ <jakość>`. Na prośbę usera (np. „na Nano
+   Bananie”) weź inny model z katalogu `thumbforge inventory`, np.
+   `--model gemini-nano-banana-2.1` bez `--provider`: dostawcę CLI bierze z katalogu,
+   a dry-run pokazuje `źródło: flaga`. Inventory to katalog modeli klienta, nie
+   dowód dostępu konta. Drabinka `gemini-nano-banana-2.1`:
+   - `low` - 1K, myślenie minimal: najtańsze szybkie szkice.
+   - `medium` - 1K, myślenie medium: domyślna jakość, ustawienie zalecane przez Google.
+   - `high` - 1K, myślenie high: lepsze trzymanie się promptu.
+   - `xhigh` - 2K, myślenie high: ostrzejszy obraz i RAW 2K.
+   - `max` - 4K, myślenie high: RAW 4K, najdroższy tier.
+   Jeśli użytkownik nie podał już modelu i jakości, zapytaj o jakość zgodną z
+   katalogiem wybranego modelu. Gdy katalog zwraca, zarówno
+   `gpt-image-2.5-sunburst`, jak i `gpt-image-2.5-flare` mają `low`, `medium`,
+   `high`, `xhigh`, `max`, `auto`; `auto` opisuj jako orientacyjny max outputu
+   bez gwarancji. Stara aplikacja może nie obsługiwać Flare, więc potwierdź to
+   dry-runem przed płatnym wywołaniem.
 4. **Compose the Swobodny prompt.** `--custom-prompt`
    bypasses the preset resolver, so any normally injected safety must be present
    manually:
@@ -149,12 +165,20 @@ section `Zdecydowałem za ciebie:` listing every decision you took over.
    carrier's *prompt* is fully replaced by `--custom-prompt`, but the carrier still drives slot
    auto-bind and ref ordering — so pick an archetype matching the concept's subject count (e.g.
    `hero-chest-up` for one person, `collab-duo` for two); refs come from `--refs`.
+   **Slug odcinka:** przed dry-runem zaproponuj 2-4 słowa z roboczego tytułu odcinka
+   (ASCII, małe litery, myślniki, max 30 znaków, np. `codex-sdk`) i pokaż slug
+   w podsumowaniu dry-runu przed płatnym wywołaniem, żeby user mógł go zmienić
+   jednym słowem. Katalog to `$HOME/Downloads/<slug>`: każda komenda odkładająca PNG
+   dostaje `--out "$HOME/Downloads/<slug>" --out-name <slug>`, a
+   kolejne rundy odcinka używają tego samego sluga i katalogu (numeracja idzie
+   dalej, bez podkatalogów rund).
+   `--model` podaj tylko przy modelu innym niż ten z Ustawień:
    ```bash
    thumbforge generate --preset hero-chest-up --topic "<topic>" \
      --custom-prompt "<freeform prompt>" \
      --refs <face,icon,...> \
-     [--profile <id>] --provider openai --model gpt-image-2 --quality <q> \
-     --out "$HOME/Downloads/<temat-slug>"
+     [--profile <id>] [--model <model>] --quality <q> \
+     --out "$HOME/Downloads/<slug>" --out-name <slug>
    ```
    Show the resolved plan and cost estimate, then wait for explicit consent.
 6. **Paid run only after consent.**
@@ -162,13 +186,15 @@ section `Zdecydowałem za ciebie:` listing every decision you took over.
    THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge generate --preset hero-chest-up --topic "<topic>" \
      --custom-prompt "<freeform prompt>" \
      --refs <face,icon,...> \
-     [--profile <id>] --provider openai --model gpt-image-2 --quality <q> \
-     --out "$HOME/Downloads/<temat-slug>" \
+     [--profile <id>] [--model <model>] --quality <q> \
+     --out "$HOME/Downloads/<slug>" --out-name <slug> \
      --confirm
    ```
-7. **Grid for 2+ images (free).**
+   Kopie lądują jako `<slug>-<n>.png`, a CLI wypisuje przy każdym obrazie linię
+   `<plik> -> koncept <k>, <preset>, wariant <w>, sesja <id>`.
+7. **Grid for 2+ images (free).** Grid rundy to `<slug>-grid-<n>.png` obok kopii.
    ```bash
-   thumbforge grid <sessionId> --out "$HOME/Downloads/<temat-slug>/grid.png"
+   thumbforge grid <sessionId> --out "$HOME/Downloads/<slug>" --out-name <slug>
    ```
 8. **Werdykt i poprawka.** Pokaż mapowanie grida z kroku Diverge i zbierz
    feedback per obraz/numer; niejednoznaczne wskazanie wyjaśnij. Sklasyfikuj
@@ -194,8 +220,9 @@ section `Zdecydowałem za ciebie:` listing every decision you took over.
    thumbnail works and the user wants to reuse the layout, hand off to **/tf-reverse
    `--file <the generated PNG>`** — it analyzes the *rendered* image into a custom
    preset (Reverse-preset). That is the route to "my own template": brainstorm →
-   generate → reverse → reusable preset. Note it is a separate **paid** vision call;
-   only suggest it once the concept is proven.
+   generate → reverse → reusable preset. `tf-reverse` uses the conversation model
+   plus free JSON import, never adds the rendered source to the reference library,
+   and chooses generation refs only in the later generation stage.
 
 ## Existing template vs original concept
 
@@ -213,8 +240,9 @@ Use Swobodny prompt only when no preset captures the idea.
   generate with an empty preset id ("Podaj --preset"). The carrier's prompt is overridden by
   `--custom-prompt`; choose it by subject count (single-subject archetype, or `collab-duo` for
   two).
-- Jakość jest świadomym wyborem: medium do testów/porównań, low odradzane jako
-  niemiarodajne, high na finał. CLI bez `--quality` nie wybiera po cichu.
+- Jakość jest świadomym wyborem z katalogu modelu. Dla Image 2.5 `auto` jest
+  orientacyjnym max outputu bez gwarantowanego pułapu; jeśli user podał model i
+  jakość, zachowaj je bez ponownego pytania. CLI bez `--quality` nie wybiera po cichu.
 - Grupuj do 4 konceptów lub wariantów w jednym batchu/sesji/gridzie zamiast
   powtarzać pojedyncze płatne runy. Większy zestaw dziel zgodnie z bramkami z
   kroku Diverge.

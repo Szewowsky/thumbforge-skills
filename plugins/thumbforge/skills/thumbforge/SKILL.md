@@ -35,6 +35,14 @@ The authoritative flag reference is always `thumbforge <command> --help`
 (generated from code, never drifts). Confirm flags there rather than trusting
 any example in a skill.
 
+Before naming a model or quality, run `thumbforge inventory` to see the thin
+client's model catalog. Inventory alone does
+not prove account access or edit support in an older app. For edit flags, run
+`thumbforge edit --help`: that output is the thin client's flag contract. The
+edit dry-run is the live capability check and refuses an older app before a
+positive plan or POST. Documentation recommendation: Sunburst for precise
+edits, Flare for fast daily iterations.
+
 ## Paid-call protocol (triple lock)
 
 Paid commands (`generate`, `reverse`, `eval`, `retry`, `analyze-transcript`, `analyze-titles`,
@@ -46,7 +54,7 @@ overridden. The discipline that keeps this safe:
    from the running app. Never inspect or source secret/config files. In verified
    repo/dev mode, the direct CLI owns its separate dev configuration.
 2. **Dry-run first.** Run the command WITHOUT `--confirm`, show the user the plan +
-   estimated cost (`cost-estimate` for generate), and wait.
+   estimated cost (`cost-estimate` for generate) + proponowany Slug odcinka, and wait.
 3. **Consent is per-call, not per-session.** Only after the user says yes in this
    turn, run the paid command. Never re-issue a `--confirm` command without fresh
    consent — not on retry, not after an error, not after Ctrl-C.
@@ -78,6 +86,49 @@ exist — discover them. Two rules, full detail in `references/discovery-contrac
    the Run into review-sized sessions of ≤4 images; never loop single `generate`
    calls yourself (that spawns unrelated duplicate-looking sessions).
 
+Image models and quality tiers come from `thumbforge inventory`, which shows the
+client model catalog. Inventory is not proof of account access or support in an
+older app. OpenAI `gpt-image-2.5-sunburst` and `gpt-image-2.5-flare` use `low`,
+`medium`, `high`, `xhigh`, `max`, and `auto` when the target accepts them; `auto`
+is an orientational max-output estimate, not a guaranteed cost ceiling.
+
+**Model i jakość:** domyślnie model z Ustawień aplikacji. Bez `--model`
+i `--provider` cienki klient bierze go z Ustawień, a dry-run drukuje
+`model: <dostawca>/<model> (<jakość>, źródło: ustawienia aplikacji)`; dev CLI
+drukuje `plan: <dostawca>/<model> @ <jakość>`. Na prośbę usera (np. „na Nano
+Bananie”) weź inny model z katalogu `thumbforge inventory`, np.
+`--model gemini-nano-banana-2.1` bez `--provider`: dostawcę CLI bierze z katalogu,
+a dry-run pokazuje `źródło: flaga`. Jakość to jeden z tierów wybranego modelu
+w katalogu. Drabinka `gemini-nano-banana-2.1`:
+- `low` - 1K, myślenie minimal: najtańsze szybkie szkice.
+- `medium` - 1K, myślenie medium: domyślna jakość, ustawienie zalecane przez Google.
+- `high` - 1K, myślenie high: lepsze trzymanie się promptu.
+- `xhigh` - 2K, myślenie high: ostrzejszy obraz i RAW 2K.
+- `max` - 4K, myślenie high: RAW 4K, najdroższy tier.
+
+## Slug odcinka i nazwy plików
+
+**Slug odcinka:** przed dry-runem zaproponuj 2-4 słowa z roboczego tytułu odcinka
+(ASCII, małe litery, myślniki, max 30 znaków, np. `codex-sdk`) i pokaż slug
+w podsumowaniu dry-runu przed płatnym wywołaniem, żeby user mógł go zmienić
+jednym słowem. Katalog to `$HOME/Downloads/<slug>`: każda komenda odkładająca PNG
+dostaje `--out "$HOME/Downloads/<slug>" --out-name <slug>`, a
+kolejne rundy odcinka używają tego samego sluga i katalogu (numeracja idzie
+dalej, bez podkatalogów rund).
+
+1. Komendy odkładające PNG: `generate`, `retry-image`, `edit`, `resume` i `grid`
+   w cienkim kliencie; w repo/dev `generate`, `retry`, `edit` i `grid`.
+2. Kopie lądują płasko jako `<slug>-1.png`, `<slug>-2.png`; kolejne wywołanie
+   numeruje od największego numeru w katalogu + 1 i nigdy nie nadpisuje pliku.
+   Grid rundy to `<slug>-grid-<n>.png` z osobnym licznikiem.
+3. CLI normalizuje slug (polskie znaki na ASCII, małe litery, myślniki, max 30
+   znaków); bez `--out-name` prefiks to 3 pierwsze słowa tematu. `--out-name` bez
+   `--out` daje jedno zdanie ostrzeżenia i żadnej kopii (`--out` to polityka
+   eksportu, nie zamek kosztu, ADR 0005).
+4. Płatne wywołanie wypisuje przy każdym obrazie linię
+   `<plik> -> koncept <k>, <preset>, wariant <w>, sesja <id>`: pokaż ją userowi
+   jako tabelę plik -> koncept, preset, wariant, sesja.
+
 ## UX Rules
 
 1. Reply in Polish (full diacritics ą/ć/ę/ł/ń/ó/ś/ź/ż), no emoji. Technical args
@@ -103,7 +154,11 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 | `cost-estimate` | no | estimate batch cost (no provider call) |
 | `grid <sessionId>` / `grid --batch <batchId>` | no | compose a session grid or whole Grid Runu → **tf-generate** |
 | `generate` | **yes** | generate thumbnails → **tf-generate** |
-| `reverse` | **yes** | clone a competitor thumbnail → **tf-reverse** |
+| `resume <sessionId>` | no | dokończ pobieranie sesji po timeoucie klienta (thin) |
+| `retry-image` | **yes** | ponów jeden nieudany wariant sesji (thin) |
+| `fetch-media <mediaPath>` | no | pobierz jeden plik mediów (thin; przy kopii `--no-overwrite`) |
+| `reverse` | **yes** | app analyzer, explicit only → **tf-reverse-auto** |
+| `reverse:contract` / `reverse:import <file>` | no | analysis contract for a conversation model + free import / selective save of its JSON → **tf-reverse** |
 | `analyze-transcript` | **yes** | infer slots from a scenario → **tf-scenario** |
 | `analyze-titles` | **yes** | propose thumbnail concepts from title candidates → **tf-titles** |
 | `brand:analyze` | **yes** | derive a profile design system from thumbnails → **tf-brand** |
@@ -132,7 +187,7 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 ## Routing
 
 - Generate thumbnails from a topic/preset → **`/tf-generate`**.
-- Clone/adapt a competitor thumbnail (URL or image) → **`/tf-reverse`**.
+- Clone/adapt a visible competitor thumbnail → **`/tf-reverse`**. Explicitly request the app analyzer → **`/tf-reverse-auto`**.
 - Turn one of the user's YouTube videos or local media files into a transcript →
   suggest **`/tf-transcript`**; it is user-invoked, so never start it automatically.
 - Turn a video scenario/transcript into concepts → **`/tf-scenario`**.
@@ -177,7 +232,7 @@ Komendy w tym skillu wołają domyślnie **`thumbforge`** — cienki klient HTTP
 `pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym kontraktem po
 manifeście `package.json` z `name === "thumbforge"` w cwd.
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `profile:list`, `profile:current`, `brand:analyze`, `brand:import`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `profile:list`, `profile:current`, `brand:analyze`, `brand:import`, `cost-estimate`, `edit`, `generate`, `resume`, `retry-image`, `fetch-media`, `reverse`, `reverse:contract`, `reverse:import`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
 Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
 są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast

@@ -93,11 +93,32 @@ provider key; do not inspect or source secret/config files. Full rules:
    a `custom-expression-*` id you created/saw this session. A brick = face
    fragment (mina) + optional pose fragment (poza); the pose applies only on
    presets that opt in (`allowsExpressionPose`) — elsewhere only the mina lands.
-   Sensible defaults: provider `openai`, model `gpt-image-2`.
-   **Quality gate:** zanim wycenisz albo zbudujesz dry-run, zapytaj:
-   „Jaka jakość? a) medium - testy/porównania (rekomendowane), b) low -
-   odradzane, bo wynik jest niemiarodajny, c) high - finał”. Rekomenduj `a` i
-   przekaż jawny wybór przez `--quality`; CLI nie wybiera jakości po cichu.
+   **Model i jakość:** domyślnie model z Ustawień aplikacji. Bez `--model`
+   i `--provider` cienki klient bierze go z Ustawień, a dry-run drukuje
+   `model: <dostawca>/<model> (<jakość>, źródło: ustawienia aplikacji)`; dev CLI
+   drukuje `plan: <dostawca>/<model> @ <jakość>`. Na prośbę usera (np. „na Nano
+   Bananie”) weź inny model z katalogu `thumbforge inventory`, np.
+   `--model gemini-nano-banana-2.1` bez `--provider`: dostawcę CLI bierze z katalogu,
+   a dry-run pokazuje `źródło: flaga`. Inventory to katalog modeli klienta, nie
+   dowód dostępu konta. Jakość to jeden z tierów wybranego modelu w katalogu.
+   Drabinka `gemini-nano-banana-2.1`:
+   - `low` - 1K, myślenie minimal: najtańsze szybkie szkice.
+   - `medium` - 1K, myślenie medium: domyślna jakość, ustawienie zalecane przez Google.
+   - `high` - 1K, myślenie high: lepsze trzymanie się promptu.
+   - `xhigh` - 2K, myślenie high: ostrzejszy obraz i RAW 2K.
+   - `max` - 4K, myślenie high: RAW 4K, najdroższy tier.
+   When the catalog lists them, `gpt-image-2.5-sunburst` and
+   `gpt-image-2.5-flare` are explicit choices with `low`, `medium`, `high`,
+   `xhigh`, `max`, and `auto`. A beta54 app may not list Flare, so do not
+   promise or pass it there.
+   **Quality gate:** jeśli user podał już model i jakość, zachowaj je bez ponownego
+   pytania. W innym przypadku zanim wycenisz albo zbudujesz dry-run, zapytaj o jakość zgodną
+   z katalogiem wybranego modelu. Dla GPT Image 2.5 dostępne są `low`, `medium`,
+   `high`, `xhigh`, `max`, `auto`; `auto` ma wyłącznie orientacyjny max-output
+   estimate i nie jest gwarantowanym limitem. Rekomenduj jawny `--quality`;
+   CLI nie wybiera jakości po cichu.
+   Dla Image 2 zachowaj prezentację: `a) medium - testy/porównania (rekomendowane),
+   b) low - odradzane: niemiarodajne, c) high - finał`.
    **ILE OBRAZÓW — mapowanie liczby (load-bearing):** >1 koncept/wariant ⇒ ZAWSZE jedna batch-sesja, nigdy pętla runów.
    User chce N kandydatów
    JEDNEGO konceptu („zrób 4 miniatury", „batch 4 sztuk") ⇒ `--variants N` w
@@ -119,15 +140,38 @@ provider key; do not inspect or source secret/config files. Full rules:
    i stoi po PRAWEJ. Preferencję wzrostu/głównej osoby zapisz jako krótkie,
    jawne ograniczenie kompozycji w `--topic` (np. „LEFT person visibly taller
    than RIGHT person”), a potem potwierdź jego obecność w resolved prompt dry-runu.
+   **Tło: profil czy oryginał (presety z reverse):** a custom preset saved from
+   a competitor analysis (tf-reverse) carries the source background as its own
+   custom style, but at generation time the active profile's background (and
+   palette / typography) replaces it; unset profile properties keep the
+   source's. Default = profile; say so in the plan line. When the user wants
+   the ORIGINAL background for this run, read the preset's
+   `defaultBackgroundStyle` id from `thumbforge preset:show <presetId>` and pass
+   it explicitly with `--background-style <id>` - that choice is per run, kept
+   for retry, and never edits the saved preset. A `⚠` / `ostrzeżenie` line in
+   the dry-run plan about a STYLE sentence mixing background with an object
+   means the profile cannot replace that background: fix the preset with
+   `/tf-preset` (`preset:edit --style-file`) before paying.
 3. **Estimate cost (free).**
    ```bash
-   thumbforge cost-estimate --count <variants> --model gpt-image-2 --quality <q>
+   thumbforge cost-estimate --count <variants> --model <model> --quality <q>
    ```
+   `cost-estimate` nie czyta Ustawień (bez `--model` liczy domyślny model
+   dostawcy): podaj `--model` modelu, którego użyje Run; model z Ustawień
+   pokazuje darmowy dry-run (krok 4).
 4. **Dry-run (free).** Run `generate` WITHOUT `--confirm` to surface the resolved
-   prompt + plan:
+   prompt + plan.
+   **Slug odcinka:** przed dry-runem zaproponuj 2-4 słowa z roboczego tytułu odcinka
+   (ASCII, małe litery, myślniki, max 30 znaków, np. `codex-sdk`) i pokaż slug
+   w podsumowaniu dry-runu przed płatnym wywołaniem, żeby user mógł go zmienić
+   jednym słowem. Katalog to `$HOME/Downloads/<slug>`: każda komenda odkładająca PNG
+   dostaje `--out "$HOME/Downloads/<slug>" --out-name <slug>`, a
+   kolejne rundy odcinka używają tego samego sluga i katalogu (numeracja idzie
+   dalej, bez podkatalogów rund).
    ```bash
    thumbforge generate --preset <id> --topic "<topic>" \
-     [--profile <id>] [--visible-text "<headline>"] [--refs <p1,p2>] [--variants N] --quality <q>
+     [--profile <id>] [--visible-text "<headline>"] [--refs <p1,p2>] [--variants N] --quality <q> \
+     --out "$HOME/Downloads/<slug>" --out-name <slug>
    ```
    **Wierność dry-runu:** resolved prompt i wycena pochodzą z procesu aplikacji.
    Paid run zachowuje argumenty ostatniego planu bajt w bajt i dodaje tylko
@@ -142,35 +186,41 @@ provider key; do not inspect or source secret/config files. Full rules:
     --preset <id> --topic "<topic>" \
     [--profile <id>] [--visible-text "<headline>"] [--refs <p1,p2>] [--variants N] \
      --quality <q> \
-     --out "$HOME/Downloads/<temat-slug>" \
+     --out "$HOME/Downloads/<slug>" --out-name <slug> \
      --confirm
    ```
    `--out` is an **export policy, not a lock** (ADR 0005): default it to an
-   absolute `$HOME/Downloads/<temat-slug>` so the user always knows where the PNGs
+   absolute `$HOME/Downloads/<slug>` so the user always knows where the PNGs
    are (override on request). The thin client requires `--out`; only verified
    repo/dev mode may omit it and rely on its separate dev storage. The cost lock
-   stays `--confirm` + `ALLOW=1`.
+   stays `--confirm` + `ALLOW=1`. Z `--out-name <slug>` kopie lądują płasko jako
+   `<slug>-1.png`, `<slug>-2.png`; następna runda numeruje od największego numeru
+   w katalogu + 1 i niczego nie nadpisuje. Przy każdym obrazie CLI wypisuje linię
+   `<plik> -> koncept <k>, <preset>, wariant <w>, sesja <id>`.
 6. **Preview grid (ALWAYS, for 2+ images).** After a successful paid run that
    produced **two or more** images, ALWAYS compose a review grid and open it — the
    user expects a single side-by-side preview every time, not just on request.
    For one session use its `sessionId`:
    ```bash
-   thumbforge grid <sessionId> --out "$HOME/Downloads/<temat-slug>/grid.png"
+   thumbforge grid <sessionId> --out "$HOME/Downloads/<slug>" --out-name <slug>
    ```
    Use the `sessionId` printed by the paid run. `grid` is **free** (no model call)
    and uses the server's final images for that session. Skip the grid only for a
-   **single** image (a 1-up grid is pointless). Surface the grid path
-   in the delivery alongside the individual finals.
+   **single** image (a 1-up grid is pointless). Grid rundy ląduje obok kopii jako
+   `<slug>-grid-<n>.png` z osobnym licznikiem, więc nowa runda nie nadpisuje
+   podglądu poprzedniej. Surface the grid path in the delivery alongside the
+   individual finals.
    A `--concepts-file` Run planning **more than 4 images** splits into several
    sessions (≤4 images each) and prints one `batchId`. Compose exactly one **Grid
    Runu** from all final images:
    ```bash
-   thumbforge grid --batch <batchId> --out "$HOME/Downloads/<temat-slug>/grid.png"
+   thumbforge grid --batch <batchId> --out "$HOME/Downloads/<slug>" --out-name <slug>
    ```
    **Grid Runu dla batcha >4 = jedno `grid --batch`, nigdy grid per sessionId; 4 obrazy = ładne 2×2.**
 7. **Deliver.** Report the session id, UI path (`/history` / `/sessions/<id>`),
    exported PNG dir, the preview-grid path (step 6), and a one-line summary (preset,
-   model, quality, variants, cost). No JSON dumps.
+   model, quality, variants, cost). Z linii mapy CLI pokaż tabelę plik -> koncept,
+   preset, wariant, sesja. No JSON dumps.
 
 ## Flags (confirm with `thumbforge generate --help`)
 
@@ -182,17 +232,18 @@ provider key; do not inspect or source secret/config files. Full rules:
 | `--text-style <id>` | `<id>` from `thumbforge list-styles --type text` (built-in + custom); `none` keeps a text-less base |
 | `--text-color <hex>` | headline color `#RRGGBB` (default `#FFFFFF`) |
 | `--glow-color <hex>` | brand glow / rim-light color `#RRGGBB` — tints background, rim light & accents (e.g. teal `#14B8A6`); hex only, non-hex dropped |
-| `--background-style <id>` | background style id from `thumbforge list-styles --type background` (built-in + custom); replaces the preset's default background sentence |
+| `--background-style <id>` | background style id from `thumbforge list-styles --type background` (built-in + custom), or a reverse preset's own `defaultBackgroundStyle` from `preset:show` to force the source background for this run; replaces the preset's default background sentence and wins over the profile background |
 | `--expression <id>` | expression brick z `list-expressions`: mina + opcjonalna poza; nadpisuje default presetu; w `--concepts-file` = pole `expression` per koncept |
 | `--set-slot <name=value>` | jawne wiązanie slotu; powtarzaj dla `face_ref` i `guest_face_ref`, aby ustawić lewą/prawą osobę niezależnie od kategorii refa |
 | `--refs <p1,p2>` | comma-separated reference paths (order matters — see below) |
-| `--provider openai\|google` | provider (default openai) |
-| `--model <id>` | model (`list-models`; default gpt-image-2) |
-| `--quality <tier>` | świadomy wybór: medium testy/porównania, low niemiarodajne, high finał |
+| `--provider openai\|google` | zwykle pomiń: `--model` wyznacza dostawcę z katalogu, a bez obu flag działa model z Ustawień |
+| `--model <id>` | model z katalogu `inventory` (np. `gemini-nano-banana-2.1`); domyślnie model z Ustawień aplikacji |
+| `--quality <tier>` | jakość z katalogu `inventory`; Sunburst/Flare: low / medium / high / xhigh / max / auto when listed; 2.1: low..max |
 | `--profile <id>` | jawny profil marki; bez flagi thin używa aktywnego profilu aplikacji |
 | `--variants <n>` | images per preset (default 1) |
 | `--concepts-file <abs.json>` | batch mode: one logical Run with per-concept preset/text/refs/glow/quantity; >4 images split into ≤4-image sessions |
-| `--out <absDir>` | required thin-client export dir; optional only in verified repo/dev mode |
+| `--out <absDir>` | required thin-client export dir (`$HOME/Downloads/<slug>`); optional only in verified repo/dev mode |
+| `--out-name <slug>` | Slug odcinka: kopie `<slug>-<n>.png`, numeracja ciągła między rundami; bez `--out` tylko ostrzeżenie i brak kopii |
 | `--confirm` | spend money (also needs the env) |
 
 ## Load-bearing rules
@@ -222,8 +273,8 @@ provider key; do not inspect or source secret/config files. Full rules:
   passed. In **thin-client mode** (the installed `thumbforge` launcher driving the
   running desktop app) `--out` is **REQUIRED** — the CLI can't write into the app's
   userData, so it needs an export dir or `generate` errors `--out <absDir> jest
-  wymagany`. Either way, default it to `$HOME/Downloads/<temat-slug>` for a tidy
-  hand-off so the run never fails on a missing `--out`.
+  wymagany`. Either way, default it to `$HOME/Downloads/<slug>` with
+  `--out-name <slug>` for a tidy hand-off so the run never fails on a missing `--out`.
 - **Batch mode — variants ≠ concepts.** N kandydatów JEDNEGO konceptu ⇒
   `--variants N` w jednym runie (jedna sesja, bez JSON-a). N RÓŻNYCH konceptów
   dla jednego filmu ⇒ `--concepts-file <abs.json>` (jeden logiczny Run, jeden
@@ -244,7 +295,7 @@ Komendy w tym skillu wołają **`thumbforge`** — cienki klient HTTP i domyśln
 powierzchnię. `pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym
 kontraktem po manifeście `package.json` z `name === "thumbforge"` w cwd.
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `cost-estimate`, `edit`, `generate`, `resume`, `retry-image`, `reverse`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `cost-estimate`, `edit`, `generate`, `resume`, `retry-image`, `reverse`, `reverse:contract`, `reverse:import`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
 Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
 są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast

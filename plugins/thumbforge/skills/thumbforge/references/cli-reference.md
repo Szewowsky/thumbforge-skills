@@ -18,14 +18,19 @@ only for commands marked repo/dev-only and only after the shared manifest check.
 | `inventory` | no | no | one-shot overview: presets + styles + models + refs | `--help` |
 | `list-sessions` | no | no | past generation sessions | `--help` |
 | `cost-estimate` | no | no | estimate batch cost (no provider call; cost is preset-independent) | `--help` (`--count`, `--model`, `--quality`, `--provider`) |
-| `generate` | **yes** | opt (export) | generate thumbnails (single or batch) | `--help` (`--visible-text`, `--text-style`, `--text-color`, `--glow-color`, `--background-style`, `--expression`, `--concepts-file`) |
-| `grid` | no | yes (`--out`) | session grid or Grid Runu | `--help` (`<sessionId>` / `--batch`) |
+| `generate` | **yes** | thin: yes; dev: opt (export) | generate thumbnails (single or batch) | `--help` (`--visible-text`, `--text-style`, `--text-color`, `--glow-color`, `--background-style`, `--expression`, `--concepts-file`, `--out-name`) |
+| `grid` | no | yes (`--out`) | session grid or Grid Runu | `--help` (`<sessionId>` / `--batch`, `--out-name`) |
+| `resume <sessionId>` | no | yes | thin: dokończ pobieranie sesji po timeoucie klienta | `--help` (`--out-name`) |
+| `retry-image` | **yes** | yes (real run) | thin: ponów jeden nieudany wariant sesji | `--help` (`--session`, `--index`, `--out-name`) |
+| `fetch-media <mediaPath>` | no | yes (file) | thin: pobierz jeden plik `/api/media` | `--help` (`--no-overwrite`) |
 | `reverse` | **yes** | no | analyze a competitor thumbnail → preset | `--help` (`--url`/`--file`, `--context`, `--apply`) |
+| `reverse:contract` | no | no | print the analysis contract for a conversation model | `--context` |
+| `reverse:import <file>` | no | no | validate a JSON analysis and save selected parts (preset / background / text / expression) | `--help` (`--save-preset [name]`, `--hidden`, `--save-background`, `--save-text`, `--save-expression [name]`) |
 | `analyze-transcript` | **yes** | no | infer slot values from a scenario | `--help` (`--text`, `--preset`) |
 | `analyze-titles` | **yes** | no | turn 1-3 title candidates into thumbnail concepts | `--help` (`--title`, `--titles-file`, `--context`) |
 | `eval` | **yes** | yes (real run) | golden-set eval | `--help` |
-| `retry` | **yes** | yes (real run) | re-run a session | `--help` (`--session`) |
-| `edit` | **yes** | yes (real run) | instruction-edit an image | `--help` (`--session`, `--image`) |
+| `retry` | **yes** | yes (real run) | repo/dev-only: re-run a session (obrazy do historii, do `--out` tylko kopie) | `--help` (`--session`, `--out-name`) |
+| `edit` | **yes** | yes (real run) | instruction-edit an image | `--help` (`--session`, `--image`, `--provider`, `--model`, `--quality`, `--out-name`) |
 | `config-set` | no | no | store an encrypted API key | `--help` (`--provider`, `--key`) |
 | `upload-ref` | no | no | add a reference image | `--help` (`--file`, `--category`, `--name`) |
 | `refs:rethumb` | no | no | rebuild reference `_thumb.png` previews | `--help` (`--category`) |
@@ -48,13 +53,27 @@ Notes:
   `list-refs`/`list-sessions` and `cost-estimate`.
 - Paid commands (`generate`, `reverse`, `analyze-transcript`, `analyze-titles`, `eval`, `retry`,
   `edit`) need the triple lock — see `paid-call-protocol.md`.
+- `edit` resolves the selected image's saved target, then the session for legacy NULL metadata;
+  `--provider`, `--model`, and `--quality` are one-edit overrides and persist on the new version.
+  `thumbforge edit --help` describes flags accepted by the thin client, while `thumbforge inventory`
+  shows the client model catalog. Inventory alone does not prove
+  account access or edit support in an older app. The edit dry-run is the live capability check and
+  refuses an older app before a positive plan or POST. Documentation recommendation: Sunburst for
+  precise edits, Flare for fast daily iterations.
 - `--out` is **optional** for `generate` only in the verified **dev CLI** (export policy, ADR
   0005): omit it and the images still land in `public/generations`; pass it to
   ALSO copy the finals there. In **thin-client mode** (installed launcher → running
   app) `--out` is **REQUIRED** for `generate` — the CLI can't reach the app's
   userData, so omitting it errors `--out <absDir> jest wymagany`. It also stays
-  **required** for the real run of `retry`, `edit`, and `eval`. `reverse` and
-  `analyze-transcript` have no `--out`.
+  **required** for `grid`, `resume`, the real run of `retry`, `retry-image`,
+  `edit`, and `eval`. `reverse` and `analyze-transcript` have no `--out`.
+- **Slug odcinka (`--out-name <slug>`):** każda komenda odkładająca PNG do `--out`
+  (`generate`, `retry`, `retry-image`, `edit`, `resume`, `grid`, tam gdzie dany CLI ją ma)
+  dostaje `--out "$HOME/Downloads/<slug>" --out-name <slug>`. Kopie lądują płasko jako
+  `<slug>-<n>.png`, od największego numeru w katalogu + 1, i nigdy nie nadpisują pliku;
+  grid do tego katalogu to `<slug>-grid-<n>.png`. Bez `--out-name` prefiks to 3 pierwsze
+  słowa tematu; `--out-name` bez `--out` daje jedno zdanie ostrzeżenia i żadnej kopii.
+  Kolejne rundy odcinka używają tego samego sluga i katalogu, bez podkatalogów rund.
 - `list-refs` prints `/references/<category>/<id>.png` paths — feed those to
   `--refs`.
 - `refs:rethumb` is free + local: it rebuilds display thumbnails only and never

@@ -31,10 +31,14 @@ Settings; do not print key values.
 
 ## `--out` and where images land
 
-The thin `generate` requires an absolute `--out <absDir>` export directory. In
-verified repo/dev mode only, it is optional because the direct CLI has separate
-dev storage. `retry` / `edit` / `eval` remain repo/dev-only and require an
-absolute `--out`. `reverse` and `analyze-transcript` take no `--out`.
+`--out` to polityka eksportu, nie zamek kosztu (ADR 0005): zamkiem jest
+`--confirm` z inline `THUMBFORGE_ALLOW_PAID_CALLS=1`. Podawaj go ze Slugiem
+odcinka jako `--out "$HOME/Downloads/<slug>" --out-name <slug>`. Cienki klient
+wymaga absolutnego `--out` przy `generate`, `resume`, `grid`, prawdziwym `edit`
+i `retry-image --confirm`; zweryfikowany repo/dev pomija go tylko przy
+`generate` (osobny dev storage), a prawdziwe `retry`, `edit` i `eval` też go
+wymagają. `--out-name` bez `--out` daje jedno zdanie ostrzeżenia i żadnej kopii.
+`reverse` and `analyze-transcript` take no `--out`.
 
 ## Missing / 404 reference path
 
@@ -51,18 +55,20 @@ thinking models. If it recurs, report it — don't blindly retry, since each
 
 ## Paid command outside the core skills
 
-`eval`, `retry`, and `edit` are paid too but aren't wrapped by a core skill.
-Drive them only in verified repo/dev mode with the same triple lock +
+`eval` and `retry` are paid too but aren't wrapped by a core skill (`edit` →
+tf-edit). Drive them only in verified repo/dev mode with the same triple lock +
 dry-run-first + per-call consent from `paid-call-protocol.md`.
 
 ## Timeout / awaria providera (beta.35)
 
 - `generate` przekroczyło timeout pollingu, a sesja dalej "pending"? Serwer
-  generuje dalej — NIE odpalaj drugiego `generate` (nowa płatna sesja).
-  Wznów odbiór bez płatnego calla:
-  `thumbforge resume <sessionId> --out "<katalog>"`.
+  generuje dalej - NIE odpalaj drugiego `generate` (nowa płatna sesja).
+  Wznów odbiór bez płatnego calla tym samym slugiem (kopie numerują dalej):
+  `thumbforge resume <sessionId> --out "$HOME/Downloads/<slug>" --out-name <slug>`.
 - Sesja ma nieudane warianty (kafel FAILED / "OpenAI ma awarię")? Ponów
   wyłącznie brakujący obraz (płatne, potrójny zamek, koszt per obraz):
-  `THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge retry-image --session <id> --index <n> --out "<katalog>" --confirm`
-  (najpierw dry-run bez `--confirm`). Nieudany wariant można też usunąć
-  z planu sesji w GUI, żeby sesja została z samymi udanymi obrazami.
+  `THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge retry-image --session <id> --index <n> --out "$HOME/Downloads/<slug>" --out-name <slug> --confirm`
+  (najpierw dry-run bez `--confirm`). Po timeoucie `retry-image` drukuje gotową
+  linię `thumbforge fetch-media ... --no-overwrite` z wolną nazwą `<slug>-<n>.png`.
+  Nieudany wariant można też usunąć z planu sesji w GUI, żeby sesja została
+  z samymi udanymi obrazami.

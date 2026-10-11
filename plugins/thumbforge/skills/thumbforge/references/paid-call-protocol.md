@@ -44,16 +44,41 @@ In both modes keep `THUMBFORGE_ALLOW_PAID_CALLS=1` inline and ephemeral.
 ## Shape: dry-run → confirm
 
 ```bash
-# 1) dry-run (free) — show the plan + cost, then WAIT
-thumbforge generate --preset hero-pointing --topic "..." --quality low --refs /references/character-primary/<id>.png
-thumbforge cost-estimate --count 1 --model gpt-image-2 --quality low
+# 1) dry-run (free) - show the plan + cost + Slug odcinka, then WAIT
+thumbforge generate --preset hero-pointing --topic "..." --quality low --refs /references/character-primary/<id>.png \
+  --out "$HOME/Downloads/<slug>" --out-name <slug>
+thumbforge cost-estimate --count 1 --model <model> --quality low
 
 # 2) only after the user approves in this turn:
 THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge generate \
   --preset hero-pointing --topic "..." --quality low \
   --refs /references/character-primary/<id>.png \
+  --out "$HOME/Downloads/<slug>" --out-name <slug> \
   --confirm
 ```
+
+`cost-estimate` nie czyta Ustawień, więc podaj model z linii dry-runu (cienki
+klient: `model: <dostawca>/<model> (<jakość>, źródło: ustawienia aplikacji)`,
+dev CLI: `plan: <dostawca>/<model> @ <jakość>`).
+
+Podsumowanie dry-runu, które pokazujesz przed prośbą o zgodę, podaje proponowany
+Slug odcinka (2-4 słowa z roboczego tytułu odcinka, np. `codex-sdk`) i katalog
+`$HOME/Downloads/<slug>`, żeby user mógł zmienić slug jednym słowem. Płatne
+wywołanie powtarza argumenty dry-runu i dodaje tylko inline env oraz `--confirm`.
+
+For optional GPT Image 2.5 Sunburst or Flare, use the registry id and one of
+`low|medium|high|xhigh|max|auto` only when `inventory` lists that model. `auto`
+is an orientational max-output estimate, not a guaranteed cost ceiling. Preserve
+a model/quality already chosen by the user in the dry-run. Bez `--model` CLI
+bierze model z Ustawień aplikacji (dry-run cienkiego klienta drukuje
+`źródło: ustawienia aplikacji`); na prośbę usera podaj inne ID z katalogu, np.
+`--model gemini-nano-banana-2.1` bez `--provider`, z jakością z tierów tego
+modelu (`low`..`max`). Inventory shows the client model catalog; it does not
+prove account access or edit support in an older app. For edit, use
+`thumbforge edit --help` for the thin client's flags, then let the dry-run
+perform the live capability
+check before a positive plan or POST. Documentation recommendation: Sunburst for
+precise edits, Flare for fast daily iterations.
 
 The thin client requires an absolute `--out` export directory. In verified
 repo/dev mode only, `--out` is optional because canonical files land in the dev
