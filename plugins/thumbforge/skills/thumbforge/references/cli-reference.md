@@ -16,12 +16,19 @@ only for commands marked repo/dev-only and only after the shared manifest check.
 | `list-expressions` | no | no | built-in + custom expression bricks and preset defaults | `--help` |
 | `list-refs` | no | no | reference images on disk | `--help` (`--category`) |
 | `inventory` | no | no | one-shot overview: presets + styles + models + refs | `--help` |
+| `spend` | no | no | spend breakdown by provider, model and operation | `--help` (`--since`) |
+| `doctor <sessionId>` | no | no | diagnose provider attempts, durations, ref formats and failed spend | `--help` |
+| `profile:list` | no | no | list channel and series profiles | `--help` |
+| `profile:current` | no | no | show the active profile | `--help` |
+| `brand:import <file>` | no | no | import a profile design.md | `--help` (`--profile`, `--overwrite`) |
+| `brand:analyze` | **yes** | no | derive a brand design from 2-12 thumbnails | `--help` (`--file`, `--image`, `--profile`, `--confirm`) |
 | `list-sessions` | no | no | past generation sessions | `--help` |
 | `cost-estimate` | no | no | estimate batch cost (no provider call; cost is preset-independent) | `--help` (`--count`, `--model`, `--quality`, `--provider`) |
 | `generate` | **yes** | thin: yes; dev: opt (export) | generate thumbnails (single or batch) | `--help` (`--visible-text`, `--text-style`, `--text-color`, `--glow-color`, `--background-style`, `--expression`, `--concepts-file`, `--out-name`) |
 | `grid` | no | yes (`--out`) | session grid or Grid Runu | `--help` (`<sessionId>` / `--batch`, `--out-name`) |
 | `resume <sessionId>` | no | yes | thin: dokończ pobieranie sesji po timeoucie klienta | `--help` (`--out-name`) |
 | `retry-image` | **yes** | yes (real run) | thin: ponów jeden nieudany wariant sesji | `--help` (`--session`, `--index`, `--out-name`) |
+| `cancel <sessionId>` | no | no | stop further provider calls for an active generation | `--help` |
 | `fetch-media <mediaPath>` | no | yes (file) | thin: pobierz jeden plik `/api/media` | `--help` (`--no-overwrite`) |
 | `reverse` | **yes** | no | analyze a competitor thumbnail → preset | `--help` (`--url`/`--file`, `--context`, `--apply`) |
 | `reverse:contract` | no | no | print the analysis contract for a conversation model | `--context` |
@@ -33,6 +40,9 @@ only for commands marked repo/dev-only and only after the shared manifest check.
 | `edit` | **yes** | yes (real run) | instruction-edit an image | `--help` (`--session`, `--image`, `--provider`, `--model`, `--quality`, `--out-name`) |
 | `config-set` | no | no | store an encrypted API key | `--help` (`--provider`, `--key`) |
 | `upload-ref` | no | no | add a reference image | `--help` (`--file`, `--category`, `--name`) |
+| `rename-ref <id>` | no | no | rename a reference display label (empty clears it) | `--help` (`--name`) |
+| `move-ref <id>` | no | no | move a reference to another category | `--help` (`--category`) |
+| `delete-ref <id>` | no | no | delete a reference image from the library | `--help` |
 | `refs:rethumb` | no | no | rebuild reference `_thumb.png` previews | `--help` (`--category`) |
 | `refs:contact-sheet` | no | yes (`--out`) | labeled visual sheet for reference selection | `--help` (`--category`, `--out`) |
 | `preset:slots` | no | no | a preset's slots (built-in or custom) | `--help` |
@@ -47,12 +57,17 @@ only for commands marked repo/dev-only and only after the shared manifest check.
 | `expression:create` | no | no | author a custom expression (mina/poza) | `--help` (`--label`, `--face-fragment`, `--pose-fragment`) |
 | `expression:edit` | no | no | edit a custom expression | `--help` |
 | `expression:delete` | no | no | soft-delete a custom expression | `--help` |
+| `lesson:list [presetId]` | no | no | list channel lessons | `--help` (`--profile`) |
+| `lesson:add <presetId>` | no | no | add a lesson to a preset | `--help` (`--text`, `--profile`) |
+| `lesson:edit <id>` | no | no | edit a lesson by stable id | `--help` (`--text`) |
+| `lesson:delete <id>` | no | no | hide a built-in lesson or delete a custom one | `--help` |
+| `lesson:restore-seeds` | no | no | restore all built-in lessons | `--help` |
 
 Notes:
 - Stale names that DON'T exist: `list`, `cost`. Use `list-presets`/`list-models`/
   `list-refs`/`list-sessions` and `cost-estimate`.
-- Paid commands (`generate`, `reverse`, `analyze-transcript`, `analyze-titles`, `eval`, `retry`,
-  `edit`) need the triple lock — see `paid-call-protocol.md`.
+- Paid commands (`generate`, `reverse`, `analyze-transcript`, `analyze-titles`, `brand:analyze`, `eval`, `retry`,
+  `edit`) need the triple lock - see `paid-call-protocol.md`.
 - `edit` resolves the selected image's saved target, then the session for legacy NULL metadata;
   `--provider`, `--model`, and `--quality` are one-edit overrides and persist on the new version.
   `thumbforge edit --help` describes flags accepted by the thin client, while `thumbforge inventory`
