@@ -239,6 +239,10 @@ provider key; do not inspect or source secret/config files. Full rules:
    `--title` to ten sam tytuł usera co w dry-runie. Bez tytułu pomiń flagę: makieta
    pokaże temat sesji jako tekst zastępczy, a CLI dopisze linię `uwaga: bez --title ...`;
    powiedz wtedy userowi jednym zdaniem, że w miejscu tytułu stoi temat.
+   Gdy user poda zdjęcie kanału (plik) albo link do swojego kanału, dodaj do tej linii
+   `--avatar "<plik albo link>"`: makieta pokaże je w kółku tylko w tym PNG, Profil
+   zostaje bez zmian. Pliku ani linku nigdy nie zgaduj; bez flagi CLI bierze avatar
+   z Profilu albo inicjał i podaje źródło w linii `avatar:`.
 8. **Deliver.** Report the session id, UI path (`/history` / `/sessions/<id>`),
    exported PNG dir, the preview-grid path (step 6), the feed-preview path (step 7),
    and a one-line summary (preset, model, quality, variants, cost). Z linii mapy CLI

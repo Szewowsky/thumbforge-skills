@@ -26,7 +26,7 @@ only for commands marked repo/dev-only and only after the shared manifest check.
 | `cost-estimate` | no | no | estimate batch cost (no provider call; cost is preset-independent) | `--help` (`--count`, `--model`, `--quality`, `--provider`) |
 | `generate` | **yes** | thin: yes; dev: opt (export) | generate thumbnails (single or batch) | `--help` (`--visible-text`, `--title`, `--text-style`, `--text-color`, `--glow-color`, `--background-style`, `--expression`, `--concepts-file`, `--out-name`) |
 | `grid` | no | yes (`--out`) | session grid or Grid Runu | `--help` (`<sessionId>` / `--batch`, `--out-name`) |
-| `preview <sessionId>` | no | yes (`--out`) | YouTube feed mockup PNG of a session image with a title (no model call) | `--help` (`--title`, `--channel`, `--duration`, `--theme dark\|light`, `--image`) |
+| `preview <sessionId>` | no | yes (`--out`) | YouTube feed mockup PNG of a session image with a title (no model call) | `--help` (`--title`, `--channel`, `--duration`, `--theme dark\|light`, `--image`, `--avatar <file\|url>`) |
 | `resume <sessionId>` | no | yes | thin: dokończ pobieranie sesji po timeoucie klienta | `--help` (`--out-name`) |
 | `retry-image` | **yes** | yes (real run) | thin: ponów jeden nieudany wariant sesji | `--help` (`--session`, `--index`, `--out-name`) |
 | `cancel <sessionId>` | no | no | stop further provider calls for an active generation | `--help` |
@@ -117,6 +117,12 @@ Notes:
   active Profile's channel; `--duration` and `--theme dark|light` style the mockup.
   `--out` is a `.png` file or a directory that gets `feed-preview-<theme>.png`,
   replaced by the next preview there.
+  `--avatar <file|url>` puts the channel photo into this one PNG and never changes
+  the Profile: an `http(s)://` value is a channel link (the server reads the
+  page's public `og:image`), anything else a local PNG/JPG/WebP file up to 10 MB.
+  Pass only a file or link the user gave; never guess a channel URL. Without it
+  the mockup uses the active Profile's channel avatar, else the initial; the CLI
+  prints the source as `avatar: override|profile|initial`.
 - **Caption guard (`generate --title "<user's title>"`):** the title feeds only the
   caption guard and never reaches the prompt, session, spend or file names. The
   dry-run warns when the headline repeats the title, has a line over 5 words or
