@@ -24,8 +24,9 @@ only for commands marked repo/dev-only and only after the shared manifest check.
 | `brand:analyze` | **yes** | no | derive a brand design from 2-12 thumbnails | `--help` (`--file`, `--image`, `--profile`, `--confirm`) |
 | `list-sessions` | no | no | past generation sessions | `--help` |
 | `cost-estimate` | no | no | estimate batch cost (no provider call; cost is preset-independent) | `--help` (`--count`, `--model`, `--quality`, `--provider`) |
-| `generate` | **yes** | thin: yes; dev: opt (export) | generate thumbnails (single or batch) | `--help` (`--visible-text`, `--text-style`, `--text-color`, `--glow-color`, `--background-style`, `--expression`, `--concepts-file`, `--out-name`) |
+| `generate` | **yes** | thin: yes; dev: opt (export) | generate thumbnails (single or batch) | `--help` (`--visible-text`, `--title`, `--text-style`, `--text-color`, `--glow-color`, `--background-style`, `--expression`, `--concepts-file`, `--out-name`) |
 | `grid` | no | yes (`--out`) | session grid or Grid Runu | `--help` (`<sessionId>` / `--batch`, `--out-name`) |
+| `preview <sessionId>` | no | yes (`--out`) | YouTube feed mockup PNG of a session image with a title (no model call) | `--help` (`--title`, `--channel`, `--duration`, `--theme dark\|light`, `--image`) |
 | `resume <sessionId>` | no | yes | thin: dokończ pobieranie sesji po timeoucie klienta | `--help` (`--out-name`) |
 | `retry-image` | **yes** | yes (real run) | thin: ponów jeden nieudany wariant sesji | `--help` (`--session`, `--index`, `--out-name`) |
 | `cancel <sessionId>` | no | no | stop further provider calls for an active generation | `--help` |
@@ -80,7 +81,7 @@ Notes:
   ALSO copy the finals there. In **thin-client mode** (installed launcher → running
   app) `--out` is **REQUIRED** for `generate` — the CLI can't reach the app's
   userData, so omitting it errors `--out <absDir> jest wymagany`. It also stays
-  **required** for `grid`, `resume`, the real run of `retry`, `retry-image`,
+  **required** for `grid`, `preview`, `resume`, the real run of `retry`, `retry-image`,
   `edit`, and `eval`. `reverse` and `analyze-transcript` have no `--out`.
 - **Slug odcinka (`--out-name <slug>`):** każda komenda odkładająca PNG do `--out`
   (`generate`, `retry`, `retry-image`, `edit`, `resume`, `grid`, tam gdzie dany CLI ją ma)
@@ -108,6 +109,20 @@ Notes:
 - `grid` is free and server-composed (no provider): use `<sessionId>` for one
   session or `--batch <batchId>` for the whole Run. Arbitrary `--images` is a
   repo/dev-only legacy surface.
+- `preview <sessionId>` is free and server-rendered (no model call, no spend): a
+  YouTube feed mockup PNG of the session's first final image (`--image <id>` picks
+  another image of that session), title cut at about 60 characters. `--title`
+  takes only the user's title; without it the mockup shows the session topic as
+  placeholder text and the CLI adds an `uwaga:` line. `--channel` defaults to the
+  active Profile's channel; `--duration` and `--theme dark|light` style the mockup.
+  `--out` is a `.png` file or a directory that gets `feed-preview-<theme>.png`,
+  replaced by the next preview there.
+- **Caption guard (`generate --title "<user's title>"`):** the title feeds only the
+  caption guard and never reaches the prompt, session, spend or file names. The
+  dry-run warns when the headline repeats the title, has a line over 5 words or
+  20 characters, or has Polish diacritics at quality `low`: thin client
+  `ostrzeżenie: Napis ...` lines in the plan, dev CLI `⚠ Napis ...` under
+  `checklist:`. Warnings never block; without `--title` the repeat check is silent.
 - **Styles:** `list-styles` shows built-in + this account's custom text/background/
   recipe styles. `generate` has `--text-style`, `--text-color`, `--glow-color`, and
   `--background-style` (single-concept); for **batch** set the same per-concept in

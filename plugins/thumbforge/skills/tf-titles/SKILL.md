@@ -37,6 +37,8 @@ secret/config files, and never repeat a confirmed call without fresh consent.
    Use repeated `--title`; when the user points to a JSON array or one-title-per-line
    file, use `--titles-file <absolute-path>`. Ask only for genuinely missing
    context; do not invent a fourth candidate.
+   Every candidate is the user's own title: with only a topic in hand, ask for
+   their titles.
 2. **Run the free dry-run.** Keep the chosen model stable between dry-run and the
    real call.
    ```bash
@@ -65,8 +67,11 @@ secret/config files, and never repeat a confirmed call without fresh consent.
    analyzer output. Ask the user which proposal to continue with.
 6. **Handoff only after the user chooses.** If the proposal is ready, save its
    returned `szkic concepts-file` as an absolute JSON path and hand it to
-   `tf-generate`; start with a free `thumbforge generate --concepts-file <path>`
-   dry-run. If the user wants broader visual exploration, hand the selected title,
+   `tf-generate`; start with a free
+   `thumbforge generate --concepts-file <path> --title "<tytuł użytkownika>"` dry-run,
+   where the title is the chosen proposal's recommended title (the user's candidate,
+   verbatim); `tf-generate` passes the same title to `preview` after the paid run.
+   If the user wants broader visual exploration, hand the selected title,
    context and proposal rationale to `tf-brainstorm`. Do not generate or brainstorm
    all proposals automatically.
 
