@@ -153,6 +153,7 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 | `list-sessions` | no | past generation sessions |
 | `cost-estimate` | no | estimate batch cost (no provider call) |
 | `grid <sessionId>` / `grid --batch <batchId>` | no | compose a session grid or whole Grid Runu → **tf-generate** |
+| `preview <sessionId>` | no | YouTube feed mockup PNG with the user's title → **tf-generate** |
 | `generate` | **yes** | generate thumbnails → **tf-generate** |
 | `resume <sessionId>` | no | dokończ pobieranie sesji po timeoucie klienta (thin) |
 | `retry-image` | **yes** | ponów jeden nieudany wariant sesji (thin) |
@@ -232,7 +233,7 @@ Komendy w tym skillu wołają domyślnie **`thumbforge`** — cienki klient HTTP
 `pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym kontraktem po
 manifeście `package.json` z `name === "thumbforge"` w cwd.
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `spend`, `doctor`, `profile:list`, `profile:current`, `brand:analyze`, `brand:import`, `cost-estimate`, `edit`, `generate`, `resume`, `retry-image`, `cancel`, `fetch-media`, `reverse`, `reverse:contract`, `reverse:import`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `lesson:list`, `lesson:add`, `lesson:edit`, `lesson:delete`, `lesson:restore-seeds`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `spend`, `doctor`, `profile:list`, `profile:current`, `brand:analyze`, `brand:import`, `cost-estimate`, `edit`, `generate`, `resume`, `retry-image`, `cancel`, `fetch-media`, `reverse`, `reverse:contract`, `reverse:import`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `lesson:list`, `lesson:add`, `lesson:edit`, `lesson:delete`, `lesson:restore-seeds`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`, `preview`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
 Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
 są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast

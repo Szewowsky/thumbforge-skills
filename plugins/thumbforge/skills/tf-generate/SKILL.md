@@ -13,7 +13,8 @@ allowed-tools: Bash, Read
 
 Topic + preset + references → 1..N thumbnails, via `thumbforge generate`. The user
 triggers; you operate. The flow is always: discover inputs → pick defaults →
-estimate cost → dry-run → get consent → paid run → preview grid → deliver paths.
+estimate cost → dry-run → get consent → paid run → preview grid → feed preview →
+deliver paths.
 
 ## Not for
 
@@ -168,23 +169,33 @@ provider key; do not inspect or source secret/config files. Full rules:
    dostaje `--out "$HOME/Downloads/<slug>" --out-name <slug>`, a
    kolejne rundy odcinka używają tego samego sluga i katalogu (numeracja idzie
    dalej, bez podkatalogów rund).
+   **Tytuł filmu tylko od usera:** `--title` dostaje tytuł, który user napisał albo
+   wybrał w `tf-titles` spośród swoich tytułów. Bez takiego tytułu pomiń flagę
+   i pracuj na samym temacie.
    ```bash
    thumbforge generate --preset <id> --topic "<topic>" \
-     [--profile <id>] [--visible-text "<headline>"] [--refs <p1,p2>] [--variants N] --quality <q> \
+     [--profile <id>] [--visible-text "<headline>"] [--title "<tytuł użytkownika>"] \
+     [--refs <p1,p2>] [--variants N] --quality <q> \
      --out "$HOME/Downloads/<slug>" --out-name <slug>
    ```
    **Wierność dry-runu:** resolved prompt i wycena pochodzą z procesu aplikacji.
    Paid run zachowuje argumenty ostatniego planu bajt w bajt i dodaje tylko
    inline env oraz `--confirm`; zmiana profilu, refów lub override wymaga nowego
    dry-runu i zgody.
-   The dry-run also prints a **pre-flight checklist** (key / secret / `--out`) —
-   resolve any `⚠` before asking for consent. Show the user the plan + the cost
-   estimate, then **wait for explicit consent**.
+   The dry-run also prints a **pre-flight checklist** (key / secret / `--out`) -
+   resolve those `⚠` before asking for consent.
+   **Strażnik napisu:** dry-run ocenia napis i drukuje ostrzeżenia zaczynające się
+   od „Napis”: cienki klient jako linie `ostrzeżenie: Napis ...` w planie, dev CLI
+   jako `⚠ Napis ...` w sekcji `checklist:`. Powtórzenie tytułu sprawdza tylko
+   z `--title`. Pokaż te ostrzeżenia userowi przed prośbą o zgodę; to podpowiedź,
+   nie blokada: user poprawia napis albo zostawia go bez zmian.
+   Show the user the plan + the cost estimate, then **wait for explicit consent**.
 5. **Paid run (only after consent).** The secret auto-loads — just run:
    ```bash
    THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge generate \
     --preset <id> --topic "<topic>" \
-    [--profile <id>] [--visible-text "<headline>"] [--refs <p1,p2>] [--variants N] \
+    [--profile <id>] [--visible-text "<headline>"] [--title "<tytuł użytkownika>"] \
+    [--refs <p1,p2>] [--variants N] \
      --quality <q> \
      --out "$HOME/Downloads/<slug>" --out-name <slug> \
      --confirm
@@ -217,10 +228,21 @@ provider key; do not inspect or source secret/config files. Full rules:
    thumbforge grid --batch <batchId> --out "$HOME/Downloads/<slug>" --out-name <slug>
    ```
    **Grid Runu dla batcha >4 = jedno `grid --batch`, nigdy grid per sessionId; 4 obrazy = ładne 2×2.**
-7. **Deliver.** Report the session id, UI path (`/history` / `/sessions/<id>`),
-   exported PNG dir, the preview-grid path (step 6), and a one-line summary (preset,
-   model, quality, variants, cost). Z linii mapy CLI pokaż tabelę plik -> koncept,
-   preset, wariant, sesja. No JSON dumps.
+7. **Podgląd w feedzie (ALWAYS, free).** Po każdym udanym płatnym runie zrób makietę
+   feedu YouTube z pierwszym finalnym obrazem sesji (przy batchu z pierwszej sesji,
+   inne na prośbę usera) i otwórz ją, przy 2+ obrazach obok gridu:
+   ```bash
+   thumbforge preview <sessionId> --title "<tytuł użytkownika>" --out "$HOME/Downloads/<slug>"
+   ```
+   `preview` nie woła modelu. Zapisuje `feed-preview-dark.png` w katalogu odcinka
+   (kolejny podgląd go podmienia) i drukuje `✓ podgląd feedu (obraz <id>, motyw dark) → <plik>`.
+   `--title` to ten sam tytuł usera co w dry-runie. Bez tytułu pomiń flagę: makieta
+   pokaże temat sesji jako tekst zastępczy, a CLI dopisze linię `uwaga: bez --title ...`;
+   powiedz wtedy userowi jednym zdaniem, że w miejscu tytułu stoi temat.
+8. **Deliver.** Report the session id, UI path (`/history` / `/sessions/<id>`),
+   exported PNG dir, the preview-grid path (step 6), the feed-preview path (step 7),
+   and a one-line summary (preset, model, quality, variants, cost). Z linii mapy CLI
+   pokaż tabelę plik -> koncept, preset, wariant, sesja. No JSON dumps.
 
 ## Flags (confirm with `thumbforge generate --help`)
 
@@ -229,6 +251,7 @@ provider key; do not inspect or source secret/config files. Full rules:
 | `--preset <id>` | preset archetype (`list-presets`) |
 | `--topic <t>` | the video topic (quote it) |
 | `--visible-text <text>` | headline baked on the thumbnail (defaults to the preset's text style) |
+| `--title <text>` | tytuł filmu od usera (wpisany albo wybrany w `tf-titles`): tylko dla strażnika napisu w dry-runie, nie trafia do promptu |
 | `--text-style <id>` | `<id>` from `thumbforge list-styles --type text` (built-in + custom); `none` keeps a text-less base |
 | `--text-color <hex>` | headline color `#RRGGBB` (default `#FFFFFF`) |
 | `--glow-color <hex>` | brand glow / rim-light color `#RRGGBB` — tints background, rim light & accents (e.g. teal `#14B8A6`); hex only, non-hex dropped |
@@ -295,7 +318,7 @@ Komendy w tym skillu wołają **`thumbforge`** — cienki klient HTTP i domyśln
 powierzchnię. `pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym
 kontraktem po manifeście `package.json` z `name === "thumbforge"` w cwd.
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `cost-estimate`, `edit`, `generate`, `resume`, `retry-image`, `reverse`, `reverse:contract`, `reverse:import`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
+Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `cost-estimate`, `edit`, `generate`, `resume`, `retry-image`, `reverse`, `reverse:contract`, `reverse:import`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`, `preview`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
 Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
 są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast
