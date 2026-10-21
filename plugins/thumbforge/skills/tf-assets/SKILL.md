@@ -76,6 +76,19 @@ crop. The original `<id>.png` paths stay untouched.
 
 ## Workflow — add
 
+**Face photo for Postać** (`character-primary` / `character-secondary`): before the
+user picks the file, show the app's tips „Jak zrobić dobre zdjęcie do miniatur”
+word for word:
+
+- Kadr od pępka w górę, z odrobiną miejsca nad głową.
+- Równe, miękkie światło na twarzy, bez ostrych cieni.
+- Zdjęcie z dystansu (statyw, samowyzwalacz albo druga osoba) zamiast selfie z ręki, które zniekształca twarz.
+- Jednolite tło bez rozpraszających szczegółów.
+- Ubranie w wyrazistym kolorze, który odcina się od tła.
+- Kilka zdjęć z różnymi emocjami, każde z kontaktem wzrokowym z obiektywem.
+
+The tips are advice: a selfie or any other photo still uploads.
+
 **From a local file:**
 
 ```bash
@@ -90,7 +103,10 @@ file /tmp/tf-new-ref.png            # sanity-check it's actually an image
 thumbforge upload-ref --file /tmp/tf-new-ref.png --category icon --name "<label>"
 ```
 
-`upload-ref` accepts PNG/JPEG/WebP and prints `✓ ref <id> (<category>) → <path>`.
+`upload-ref` accepts PNG/JPEG/WebP and prints `Ref <id> (<category>) -> <path>`.
+For a Postać photo it may add `ostrzeżenie: <message>` lines (low resolution,
+unusual proportions): relay each line to the user word for word. The upload already
+succeeded, so a better photo is an option, not a requirement.
 Deliver that path + a one-line note; the ref is immediately usable — pass the
 printed `/references/...` path to `--refs` in `tf-generate`.
 

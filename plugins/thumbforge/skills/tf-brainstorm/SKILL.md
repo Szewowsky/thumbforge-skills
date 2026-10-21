@@ -54,7 +54,8 @@ Question order (skip any that is settled):
 
 1. **Tytuł filmu?** Two candidate titles are welcome — comment on which title
    plays best with which thumbnail type (a strong emotional title pairs with a
-   thumbnail that does not repeat its words).
+   thumbnail that does not repeat its words). Tytuł filmu tylko od usera: bez
+   tytułu albo przy „zdecyduj ty” pracujesz na samym temacie.
 2. **Masz transkrypt/scenariusz albo link do filmu?** Script text in hand →
    suggest `/tf-scenario`. A YouTube URL or local media file → suggest
    `/tf-transcript`. Suggestion + stop; never invoke either automatically.
