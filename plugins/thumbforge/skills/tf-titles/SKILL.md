@@ -39,7 +39,13 @@ secret/config files, and never repeat a confirmed call without fresh consent.
    context; do not invent a fourth candidate.
    Every candidate is the user's own title: with only a topic in hand, ask for
    their titles.
-2. **Run the free dry-run.** Keep the chosen model stable between dry-run and the
+2. **Name the hook (free).** Before the dry-run, read
+   `../thumbforge/references/title-hooks.md` and give one line per candidate, in
+   candidate order: `typ hooka -> preset + styl tekstu`, using only values from
+   its table. When no type fits, say so plainly instead of stretching the closest
+   one. This step classifies the user's titles; it never proposes, rewrites or
+   adds a title, and it does not change the analyzer result shown in step 6.
+3. **Run the free dry-run.** Keep the chosen model stable between dry-run and the
    real call.
    ```bash
    thumbforge analyze-titles \
@@ -49,10 +55,10 @@ secret/config files, and never repeat a confirmed call without fresh consent.
    ```
    Show the normalized titles, available ref categories, analyzer model and
    estimated cost. The absence of `--confirm` is the first lock.
-3. **Request consent for this analysis.** State the exact estimated cost and
+4. **Request consent for this analysis.** State the exact estimated cost and
    command scope. Existing consent for image generation or another analyzer call
    does not carry over.
-4. **Run the paid analysis once, only after consent.** Reuse the exact dry-run
+5. **Run the paid analysis once, only after consent.** Reuse the exact dry-run
    arguments and add both remaining locks:
    ```bash
    THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge analyze-titles \
@@ -61,11 +67,11 @@ secret/config files, and never repeat a confirmed call without fresh consent.
      --context "<optional context>" \
      --confirm
    ```
-5. **Present every proposal for selection.** For each proposal show the
+6. **Present every proposal for selection.** For each proposal show the
    recommended title, preset, topic, visible text, directive, slot values, ref
    hints and rationale. Preserve returned ids and fields; do not silently rewrite
    analyzer output. Ask the user which proposal to continue with.
-6. **Handoff only after the user chooses.** If the proposal is ready, save its
+7. **Handoff only after the user chooses.** If the proposal is ready, save its
    returned `szkic concepts-file` as an absolute JSON path and hand it to
    `tf-generate`; start with a free
    `thumbforge generate --concepts-file <path> --title "<tytuł użytkownika>"` dry-run,

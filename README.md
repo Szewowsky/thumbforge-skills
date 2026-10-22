@@ -44,6 +44,7 @@ W Claude Code:
 | `tf-edit` | Popraw gotową miniaturę instrukcją tekstową | tak (po Twojej zgodzie) |
 | `tf-preset` | Autoring presetów i stylów (fork archetypu) | nie (pliki/SQLite) |
 | `tf-assets` | Przeglądaj i dodawaj referencje (twarz, ikony, inspiracje) | nie |
+| `tf-preview` | Zobacz miniaturę w makiecie feedu YouTube + checklista 6 cech | nie |
 
 **Protokół płatny:** skille zawsze robią dry-run i pokazują plan + koszt, a płatny
 call odpalają **dopiero po Twojej jawnej zgodzie** dla każdego wywołania.

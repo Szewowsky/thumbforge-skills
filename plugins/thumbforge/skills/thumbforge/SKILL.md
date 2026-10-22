@@ -153,7 +153,7 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 | `list-sessions` | no | past generation sessions |
 | `cost-estimate` | no | estimate batch cost (no provider call) |
 | `grid <sessionId>` / `grid --batch <batchId>` | no | compose a session grid or whole Grid Runu → **tf-generate** |
-| `preview <sessionId>` | no | YouTube feed mockup PNG with the user's title; `--avatar` = channel photo file or link from the user → **tf-generate** |
+| `preview <sessionId>` | no | YouTube feed mockup PNG with the user's title; `--avatar` = channel photo file or link from the user → **tf-preview** |
 | `generate` | **yes** | generate thumbnails → **tf-generate** |
 | `resume <sessionId>` | no | dokończ pobieranie sesji po timeoucie klienta (thin) |
 | `retry-image` | **yes** | ponów jeden nieudany wariant sesji (thin) |
@@ -188,6 +188,7 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 ## Routing
 
 - Generate thumbnails from a topic/preset → **`/tf-generate`**.
+- Podgląd w feedzie / checklista miniatury (session image in a YouTube feed mockup, yes/no checklist) → **`/tf-preview`** (free).
 - Clone/adapt a visible competitor thumbnail → **`/tf-reverse`**. Explicitly request the app analyzer → **`/tf-reverse-auto`**.
 - Turn one of the user's YouTube videos or local media files into a transcript →
   suggest **`/tf-transcript`**; it is user-invoked, so never start it automatically.
@@ -225,6 +226,7 @@ Load on demand:
 - `references/presets-catalog.md` — the built-in archetypes + slots.
 - `references/thumbnail-craft.md` — universal design craft: layout, text, archetype→preset map, hooks, series continuity. Read before picking a preset/text.
 - `references/gotchas.md` — universal pitfalls that tank a thumbnail (read with craft).
+- `references/title-hooks.md` - typ hooka tytułu -> preset + styl tekstu, metody i format konceptu.
 - `references/troubleshooting.md` — common errors and fixes.
 
 ## Cienki klient (tester) i tryb dev

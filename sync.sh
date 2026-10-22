@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Re-kopiuje 11 skilli z repo thumbforge do tego marketplace, żeby nie driftowały.
+# Re-kopiuje 12 skilli z repo thumbforge do tego marketplace, żeby nie driftowały.
 # Źródło prawdy = .claude/skills/ w repo thumbforge; ten plugin to tylko opakowanie do dystrybucji.
 # Użycie: ./sync.sh [/ścieżka/do/repo/thumbforge]   (domyślnie: siblingowe ../thumbforge)
 set -euo pipefail
@@ -9,7 +9,7 @@ SRC="${1:-$HERE/../thumbforge}/.claude/skills"
 DEST="$(cd "$(dirname "$0")" && pwd)/plugins/thumbforge/skills"
 # Lista jest ZAMKNIĘTA i pilnowana niżej. Nowy skill trafia do paczki dopiero,
 # gdy wszystkie komendy, które wywołuje, istnieją w cienkim kliencie.
-SKILLS=(tf-generate tf-reverse tf-reverse-auto tf-scenario tf-titles tf-brand tf-preset tf-assets tf-brainstorm tf-edit thumbforge)
+SKILLS=(tf-generate tf-reverse tf-reverse-auto tf-scenario tf-titles tf-brand tf-preset tf-assets tf-brainstorm tf-edit tf-preview thumbforge)
 
 [ -d "$SRC" ] || { echo "Brak źródła: $SRC" >&2; exit 1; }
 
