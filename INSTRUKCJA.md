@@ -71,6 +71,7 @@ wygeneruje miniaturę.
 | `/tf-edit` | popraw już wygenerowaną miniaturę instrukcją tekstową |
 | `/tf-preset` | własne szablony i style (za darmo) |
 | `/tf-assets` | dodaj swoje referencje: twarz, ikony, logo (za darmo) |
+| `/tf-preview` | zobacz miniaturę w makiecie feedu YouTube + checklista 6 cech (za darmo) |
 
 ## Aktualizacja skilli (gdy wyjdzie nowsza wersja)
 ```

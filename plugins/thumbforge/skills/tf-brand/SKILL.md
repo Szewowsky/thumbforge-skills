@@ -161,6 +161,14 @@ nowego dry-runu i świeżej zgody.
   płatnej komendy bez nowego dry-runu i zgody.
 - Brak klucza: nie próbuj execute. Wskaż provider/model, poproś o konfigurację i
   potwierdź naprawę przez ponowienie tego samego dry-runu.
+- Akcent palety: po pełnym sukcesie analizy i po udanym imporcie, gdy żaden kolor
+  palety nie jest mocnym akcentem (wyraźnie nasycony kolor, nie szarość, beż,
+  pastel ani przygaszony odcień), dodaj dokładnie jedno zdanie:
+  „Paleta bez mocnego akcentu - świadomy wybór czy dodać akcent?”
+  Paletę oceniasz z kolorów `#RRGGBB` w design.md przy imporcie albo z lokalnych
+  miniatur źródłowych (`--file`, obejrzanych narzędziem Read) przy analizie. CLI
+  nie drukuje palety, więc bez widocznej palety pomiń zdanie zamiast zgadywać.
+  Ocena jest jakościowa, bez progu liczbowego.
 
 ## Import poprawionego design.md
 
@@ -184,6 +192,7 @@ marker machine-readable, blok `json`, wersję 1 lub 2, kolory `#RRGGBB`, dozwolo
 typografii i tła oraz reguły bez placeholderów. W v2 reguła ma `text` i
 `kind=prompt|note`. Popraw plik i ponów wyłącznie
 bezpłatny `brand:import`; błąd importu nie uzasadnia nowej płatnej analizy.
+Po udanym imporcie zastosuj regułę akcentu palety z sekcji „Wynik i błędy”.
 
 ## Cienki klient (tester) i tryb dev
 

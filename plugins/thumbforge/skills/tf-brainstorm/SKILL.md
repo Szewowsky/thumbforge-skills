@@ -38,6 +38,7 @@ Read and apply these guardrails before proposing concepts:
 - `../thumbforge/references/discovery-contract.md`
 - `../thumbforge/references/thumbnail-craft.md`
 - `../thumbforge/references/gotchas.md`
+- `../thumbforge/references/title-hooks.md`
 
 Triple lock for the later real run: env `THUMBFORGE_ALLOW_PAID_CALLS=1`
 (inline, never `export`) + `--confirm` + dry-run-first. Consent is per-call:
@@ -55,7 +56,10 @@ Question order (skip any that is settled):
 1. **Tytuł filmu?** Two candidate titles are welcome — comment on which title
    plays best with which thumbnail type (a strong emotional title pairs with a
    thumbnail that does not repeat its words). Tytuł filmu tylko od usera: bez
-   tytułu albo przy „zdecyduj ty” pracujesz na samym temacie.
+   tytułu albo przy „zdecyduj ty” pracujesz na samym temacie. Tytuł od usera
+   rozpoznaj według `title-hooks.md`: linia `typ hooka -> preset + styl tekstu`
+   jest zalążkiem jednego kierunku w rundzie Diverge; brak dopasowania nazwij
+   wprost.
 2. **Masz transkrypt/scenariusz albo link do filmu?** Script text in hand →
    suggest `/tf-scenario`. A YouTube URL or local media file → suggest
    `/tf-transcript`. Suggestion + stop; never invoke either automatically.
@@ -104,8 +108,13 @@ section `Zdecydowałem za ciebie:` listing every decision you took over.
    **3 named directions** in a numbered round: 3-5 proposals by default, or
    5-10 on request. Each has a distinct archetype, mood and composition. Give each a
    one-sentence
-   topic-specific rationale, układ, headline, refy, hook, ryzyko oraz osobną
-   linię `➡️ Typ/rekomendacja: <opinia skilla>`. Co najmniej jedna wychodzi
+   topic-specific rationale, linię `Metoda: <hak|widoczność|pomost|spójność>`,
+   sześć pól formatu konceptu z `title-hooks.md` (Twarz/mina, Tło, Obiekty,
+   Napis, Obietnica tytułu, Pierwsze 30 s), hook, ryzyko oraz osobną linię
+   `➡️ Typ/rekomendacja: <opinia skilla>`. Runda z 3+ kierunkami używa co
+   najmniej 3 różnych metod. Pomost tylko z refem `icon` z `list-refs` (bramka
+   marki z kroku 1), nigdy przez twarze ani podobizny znanych osób; bez takiego
+   refa wybierz inną metodę. Co najmniej jedna wychodzi
    outside the preset catalog i używa Swobodnego
    `--custom-prompt`. Przed pokazaniem odfiltruj kierunki sprzeczne z wybranym w
    intake miksem napisów oraz ogólnością: cały film albo jeden mechanizm.
