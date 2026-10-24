@@ -114,15 +114,18 @@ Notes:
   another image of that session), title cut at about 60 characters. `--title`
   takes only the user's title; without it the mockup shows the session topic as
   placeholder text and the CLI adds an `uwaga:` line. `--channel` defaults to the
-  active Profile's channel; `--duration` and `--theme dark|light` style the mockup.
+  session Profile's channel (no Profile: the active one); `--duration` and
+  `--theme dark|light` style the mockup.
   `--out` is a `.png` file or a directory that gets `feed-preview-<theme>.png`,
   replaced by the next preview there.
-  `--avatar <file|url>` puts the channel photo into this one PNG and never changes
-  the Profile: an `http(s)://` value is a channel link (the server reads the
-  page's public `og:image`), anything else a local PNG/JPG/WebP file up to 10 MB.
-  Pass only a file or link the user gave; never guess a channel URL. Without it
-  the mockup uses the active Profile's channel avatar, else the initial; the CLI
-  prints the source as `avatar: override|profile|initial`.
+  Without `--avatar` the mockup takes the avatar and the name from the session
+  Profile's channel (no Profile: the active one); a channel without a saved
+  avatar gets the initial. The CLI prints the source as
+  `avatar: override|profile|initial`. `--avatar <file|url>` only overrides the
+  photo in this one PNG and never changes the Profile: an `http(s)://` value is a
+  channel link (the server reads the page's public `og:image`), anything else a
+  local PNG/JPG/WebP file up to 10 MB. Pass only a file or link the user gave;
+  never guess a channel URL.
 - **Caption guard (`generate --title "<user's title>"`):** the title feeds only the
   caption guard and never reaches the prompt, session, spend or file names. The
   dry-run warns when the headline repeats the title, has a line over 5 words or
