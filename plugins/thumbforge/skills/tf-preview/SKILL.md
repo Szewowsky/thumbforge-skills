@@ -43,9 +43,10 @@ Bez `THUMBFORGE_ALLOW_PAID_CALLS`, `--confirm` i dry-runu: `preview` nic nie kos
    `sessionId` i `--out` są wymagane. `<slug>` to Slug odcinka z wcześniejszej generacji; gdy go nie znasz,
    zaproponuj 2-4 słowa z tytułu (ASCII, małe litery, myślniki, max 30 znaków). Pozostałe flagi tylko z prośby
    albo danych usera: `--image <id>` dla innego obrazu sesji (domyślnie pierwszy finalny), `--theme light` dla
-   jasnego feedu (domyślnie `dark`), `--avatar "<plik albo link>"` wyłącznie ze zdjęcia albo linku kanału od usera,
-   nigdy zgadywany. Pełna lista flag: `thumbforge preview --help`. W dev-mode wykrytym wspólnym kontraktem ta sama
-   komenda idzie jako `pnpm cli preview` z tymi samymi flagami.
+   jasnego feedu (domyślnie `dark`). Bez `--avatar` makieta bierze awatar i nazwę z Kanału Profilu sesji (sesja
+   bez Profilu: aktywnego); `--avatar "<plik albo link>"` służy tylko do nadpisania zdjęciem albo linkiem kanału
+   od usera, nigdy zgadywanym. Pełna lista flag: `thumbforge preview --help`. W dev-mode wykrytym wspólnym
+   kontraktem ta sama komenda idzie jako `pnpm cli preview` z tymi samymi flagami.
 3. **Pokaż makietę.** CLI drukuje `podgląd feedu (obraz <id>, motyw <motyw>) → <plik>`. Otwórz ten PNG narzędziem
    Read i podaj userowi ścieżkę. Makieta pokazuje miniaturę w trzech kafelkach: Strona główna, Następne, Telefon.
    Błąd CLI (np. brak sesji albo gotowego obrazu) przekaż słowo w słowo i poproś o inne `sessionId` albo `--image`.

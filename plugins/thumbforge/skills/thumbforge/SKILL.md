@@ -153,7 +153,7 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 | `list-sessions` | no | past generation sessions |
 | `cost-estimate` | no | estimate batch cost (no provider call) |
 | `grid <sessionId>` / `grid --batch <batchId>` | no | compose a session grid or whole Grid Runu → **tf-generate** |
-| `preview <sessionId>` | no | YouTube feed mockup PNG with the user's title; `--avatar` = channel photo file or link from the user → **tf-preview** |
+| `preview <sessionId>` | no | YouTube feed mockup PNG with the user's title; avatar and name from the session Profile's channel (no Profile: the active one); `--avatar` only overrides with a photo file or link from the user, never guessed → **tf-preview** |
 | `generate` | **yes** | generate thumbnails → **tf-generate** |
 | `resume <sessionId>` | no | dokończ pobieranie sesji po timeoucie klienta (thin) |
 | `retry-image` | **yes** | ponów jeden nieudany wariant sesji (thin) |
