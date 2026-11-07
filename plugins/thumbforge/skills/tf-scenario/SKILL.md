@@ -92,7 +92,9 @@ Present the concepts as a table so the user can pick/refine before any spend (th
 | # | preset | visible_text + text-style | refs | risk | est. cost |
 |---|--------|---------------------------|------|------|-----------|
 
-Use `thumbforge cost-estimate` (free) to fill the cost column; `cost-estimate` nie
+Use `thumbforge cost-estimate --model <model> --refs <liczba-referencji-konceptu>` (free) to fill
+the cost column for each concept; `--refs` is the number of references per call,
+not paths, and their cost is part of the estimate. `cost-estimate` nie
 czyta Ustawień, więc podaj `--model` modelu, którego użyje Run (model z Ustawień
 pokazuje darmowy dry-run). Respect the channel's
 own wording/voice — ask if unsure; don't impose a house style.
@@ -106,7 +108,7 @@ run them here under the triple lock. Cost-smart shape:
   registry entry (usually `medium` for comparison).
 - **Final:** the chosen winner at a quality chosen from that same `inventory`
   catalog; the catalog shows client models and is not proof of account access.
-  Sunburst and Flare each additionally offer `xhigh`, `max`, and `auto` when
+  Sunburst and Flare (2.5 and 2.6) each additionally offer `xhigh`, `max`, and `auto` when
   listed (`auto` is orientational, not a guaranteed cost ceiling). If the user
   already supplied model/quality, preserve it and let the dry-run validate the
   target before a paid call.

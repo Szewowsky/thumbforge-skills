@@ -47,7 +47,7 @@ In both modes keep `THUMBFORGE_ALLOW_PAID_CALLS=1` inline and ephemeral.
 # 1) dry-run (free) - show the plan + cost + Slug odcinka, then WAIT
 thumbforge generate --preset hero-pointing --topic "..." --quality low --refs /references/character-primary/<id>.png \
   --out "$HOME/Downloads/<slug>" --out-name <slug>
-thumbforge cost-estimate --count 1 --model <model> --quality low
+thumbforge cost-estimate --count 1 --model <model> --quality low --refs 1
 
 # 2) only after the user approves in this turn:
 THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge generate \
@@ -57,6 +57,7 @@ THUMBFORGE_ALLOW_PAID_CALLS=1 thumbforge generate \
   --confirm
 ```
 
+W `cost-estimate` `--refs` to liczba referencji na wywołanie, nie ścieżki, a koszt referencji jest częścią szacunku.
 `cost-estimate` nie czyta Ustawień, więc podaj model z linii dry-runu (cienki
 klient: `model: <dostawca>/<model> (<jakość>, źródło: ustawienia aplikacji)`,
 dev CLI: `plan: <dostawca>/<model> @ <jakość>`).
@@ -66,7 +67,7 @@ Slug odcinka (2-4 słowa z roboczego tytułu odcinka, np. `codex-sdk`) i katalog
 `$HOME/Downloads/<slug>`, żeby user mógł zmienić slug jednym słowem. Płatne
 wywołanie powtarza argumenty dry-runu i dodaje tylko inline env oraz `--confirm`.
 
-For optional GPT Image 2.5 Sunburst or Flare, use the registry id and one of
+For optional GPT Image 2.5 or 2.6 Sunburst or Flare, use the registry id and one of
 `low|medium|high|xhigh|max|auto` only when `inventory` lists that model. `auto`
 is an orientational max-output estimate, not a guaranteed cost ceiling. Preserve
 a model/quality already chosen by the user in the dry-run. Bez `--model` CLI

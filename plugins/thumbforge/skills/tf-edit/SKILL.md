@@ -91,7 +91,7 @@ do not inspect or source secret/config files. Full rules:
    **Model edycji:** bez `--model` edycja idzie zapisanym celem obrazu (model
    i jakość źródła; wycofane ID przechodzą na następcę). Override tylko na prośbę
    usera i tylko na cel, który przyjmie dry-run: model obrazu źródłowego albo
-   Sunburst lub Flare. Obraz z `gemini-nano-banana-2.1` edytujesz tym modelem,
+   Sunburst lub Flare (2.5 albo 2.6). Obraz z `gemini-nano-banana-2.1` edytujesz tym modelem,
    z jakością z jego drabinki `low`..`max`; obrazu z OpenAI nie przełączysz na 2.1.
    **Slug odcinka:** przed dry-runem zaproponuj 2-4 słowa z roboczego tytułu odcinka
    (ASCII, małe litery, myślniki, max 30 znaków, np. `codex-sdk`) i pokaż slug

@@ -108,10 +108,11 @@ provider key; do not inspect or source secret/config files. Full rules:
    - `high` - 1K, myślenie high: lepsze trzymanie się promptu.
    - `xhigh` - 2K, myślenie high: ostrzejszy obraz i RAW 2K.
    - `max` - 4K, myślenie high: RAW 4K, najdroższy tier.
-   When the catalog lists them, `gpt-image-2.5-sunburst` and
-   `gpt-image-2.5-flare` are explicit choices with `low`, `medium`, `high`,
-   `xhigh`, `max`, and `auto`. A beta54 app may not list Flare, so do not
-   promise or pass it there.
+   When the catalog lists them, `gpt-image-2.5-sunburst`, `gpt-image-2.5-flare`,
+   `gpt-image-2.6-sunburst`, and `gpt-image-2.6-flare` are explicit choices
+   with `low`, `medium`, `high`, `xhigh`, `max`, and `auto`. An older app may
+   not support 2.6, and a beta54 app may not list Flare. Do not promise or pass
+   an unsupported model; confirm support with a dry-run.
    **Quality gate:** jeśli user podał już model i jakość, zachowaj je bez ponownego
    pytania. W innym przypadku zanim wycenisz albo zbudujesz dry-run, zapytaj o jakość zgodną
    z katalogiem wybranego modelu. Dla GPT Image 2.5 dostępne są `low`, `medium`,
@@ -155,8 +156,9 @@ provider key; do not inspect or source secret/config files. Full rules:
    `/tf-preset` (`preset:edit --style-file`) before paying.
 3. **Estimate cost (free).**
    ```bash
-   thumbforge cost-estimate --count <variants> --model <model> --quality <q>
+   thumbforge cost-estimate --count <variants> --model <model> --quality <q> --refs <liczba-referencji-na-wywołanie>
    ```
+   W `cost-estimate` `--refs` to liczba referencji na wywołanie, nie ścieżki, a koszt referencji jest częścią szacunku.
    `cost-estimate` nie czyta Ustawień (bez `--model` liczy domyślny model
    dostawcy): podaj `--model` modelu, którego użyje Run; model z Ustawień
    pokazuje darmowy dry-run (krok 4).

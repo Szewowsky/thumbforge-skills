@@ -88,8 +88,10 @@ exist — discover them. Two rules, full detail in `references/discovery-contrac
 
 Image models and quality tiers come from `thumbforge inventory`, which shows the
 client model catalog. Inventory is not proof of account access or support in an
-older app. OpenAI `gpt-image-2.5-sunburst` and `gpt-image-2.5-flare` use `low`,
-`medium`, `high`, `xhigh`, `max`, and `auto` when the target accepts them; `auto`
+older app. OpenAI `gpt-image-2.5-sunburst`, `gpt-image-2.5-flare`,
+`gpt-image-2.6-sunburst`, and `gpt-image-2.6-flare` use `low`, `medium`,
+`high`, `xhigh`, `max`, and `auto` when the target accepts them. Version 2.6
+is an explicit choice and does not change the default model; `auto`
 is an orientational max-output estimate, not a guaranteed cost ceiling.
 
 **Model i jakość:** domyślnie model z Ustawień aplikacji. Bez `--model`

@@ -149,11 +149,12 @@ section `Zdecydowałem za ciebie:` listing every decision you took over.
    - `xhigh` - 2K, myślenie high: ostrzejszy obraz i RAW 2K.
    - `max` - 4K, myślenie high: RAW 4K, najdroższy tier.
    Jeśli użytkownik nie podał już modelu i jakości, zapytaj o jakość zgodną z
-   katalogiem wybranego modelu. Gdy katalog zwraca, zarówno
-   `gpt-image-2.5-sunburst`, jak i `gpt-image-2.5-flare` mają `low`, `medium`,
-   `high`, `xhigh`, `max`, `auto`; `auto` opisuj jako orientacyjny max outputu
-   bez gwarancji. Stara aplikacja może nie obsługiwać Flare, więc potwierdź to
-   dry-runem przed płatnym wywołaniem.
+   katalogiem wybranego modelu. Gdy katalog je zwraca, modele
+   `gpt-image-2.5-sunburst`, `gpt-image-2.5-flare`, `gpt-image-2.6-sunburst`
+   i `gpt-image-2.6-flare` mają `low`, `medium`, `high`, `xhigh`, `max`,
+   `auto`; `auto` opisuj jako orientacyjny max outputu bez gwarancji. Starsza
+   aplikacja może nie obsługiwać Flare lub 2.6. Nie obiecuj ani nie przekazuj
+   nieobsługiwanego modelu; potwierdź obsługę dry-runem przed płatnym wywołaniem.
 4. **Compose the Swobodny prompt.** `--custom-prompt`
    bypasses the preset resolver, so any normally injected safety must be present
    manually:
