@@ -189,7 +189,8 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 
 ## Routing
 
-- Jak zacząć / jak działa apka (mapa skilli, onboarding profilu i stylu kanału) → **`/tf-ask`** (free).
+- Jak działa apka, który skill do czego (mapa skilli) → **`/tf-ask`** (free).
+- Nowy user: [Stan onboardingu](../tf-ask/SKILL.md#stan-onboardingu) daje „nieukończony” (brak profilu albo stylu kanału) → **`/tf-onboarding`** (free).
 - Generate thumbnails from a topic/preset → **`/tf-generate`**.
 - Podgląd w feedzie / checklista miniatury (session image in a YouTube feed mockup, yes/no checklist) → **`/tf-preview`** (free).
 - Clone/adapt a visible competitor thumbnail → **`/tf-reverse`**. Explicitly request the app analyzer → **`/tf-reverse-auto`**.
