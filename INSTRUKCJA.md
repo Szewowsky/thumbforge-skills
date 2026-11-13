@@ -62,6 +62,8 @@ wygeneruje miniaturę.
 ## Co potrafią skille
 | Komenda | Do czego |
 |---------|----------|
+| `/tf-ask` | którego skilla użyć i jak działa apka (za darmo) |
+| `/tf-onboarding` | pierwsze kroki: profil kanału i jego styl (za darmo; analiza miniatur w `/tf-brand` po Twojej zgodzie) |
 | `/tf-generate` | miniatura z tematu |
 | `/tf-reverse` | skopiuj/zaadaptuj cudzą miniaturę (z linku/obrazka) |
 | `/tf-scenario` | miniatury ze scenariusza/transkryptu filmu |

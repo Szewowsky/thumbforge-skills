@@ -30,13 +30,16 @@ W Claude Code:
 
 (Do lokalnego testu przed publikacją: `/plugin marketplace add /ścieżka/do/thumbforge-skills`.)
 
-## Co dostajesz (10 skilli)
+## Co dostajesz (14 skilli)
 
 | Skill | Po co | Płatne? |
 |-------|-------|---------|
 | `thumbforge` | Router + wspólny protokół płatnych callów + katalog komend | — |
+| `tf-ask` | Którego skilla użyć i jak działa apka: mapa skilli | nie |
+| `tf-onboarding` | Pierwsze kroki: profil kanału i jego styl (z Twoich miniatur albo z krótkiego wywiadu) | nie |
 | `tf-generate` | Miniatury z tematu + presetu | tak (po Twojej zgodzie) |
 | `tf-reverse` | Sklonuj/zaadaptuj cudzą miniaturę (URL/obraz) | tak |
+| `tf-reverse-auto` | Analiza cudzej miniatury analizatorem apki, tylko po jawnym `/tf-reverse-auto` | tak (po Twojej zgodzie) |
 | `tf-scenario` | Koncepty miniatur ze scenariusza/transkryptu | tak (sama generacja) |
 | `tf-titles` | Porównaj 1–3 tytuły i przygotuj koncepty miniatur | tak (po Twojej zgodzie) |
 | `tf-brand` | Wyprowadź lub zaimportuj design system kanału/serii | analiza tak, import nie |
@@ -82,7 +85,7 @@ opakowanie do dystrybucji. Po zmianie skilli w repo odśwież je tutaj:
 ./sync.sh /inna/ścieżka/thumbforge
 ```
 
-Skrypt re-kopiuje 10 skilli, weryfikuje cross-ref `../thumbforge/references/`
+Skrypt re-kopiuje 14 skilli, weryfikuje cross-ref `../thumbforge/references/`
 i pilnuje, żeby paczka zawierała dokładnie te skille, co lista w skrypcie
 (osierocony katalog = błąd).
 
