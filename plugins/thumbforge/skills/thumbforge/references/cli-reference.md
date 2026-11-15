@@ -68,7 +68,7 @@ Notes:
 - Stale names that DON'T exist: `list`, `cost`. Use `list-presets`/`list-models`/
   `list-refs`/`list-sessions` and `cost-estimate`.
 - Paid commands (`generate`, `reverse`, `analyze-transcript`, `analyze-titles`, `brand:analyze`, `eval`, `retry`,
-  `edit`) need the triple lock - see `paid-call-protocol.md`.
+  `retry-image`, `edit`) need the triple lock - see `paid-call-protocol.md`.
 - `edit` resolves the selected image's saved target, then the session for legacy NULL metadata;
   `--provider`, `--model`, and `--quality` are one-edit overrides and persist on the new version.
   `thumbforge edit --help` describes flags accepted by the thin client, while `thumbforge inventory`

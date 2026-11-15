@@ -12,9 +12,12 @@ A paid command runs for real only when ALL THREE hold:
 2. flag `--confirm`
 3. the dry-run default is thereby overridden
 
-Paid commands: `generate`, `reverse`, `analyze-transcript`, `eval`, `retry`,
-`edit`. Everything else (`list-*`, `cost-estimate`, `config-set`, `upload-ref`,
-`refs:rethumb`, `refs:contact-sheet`) is free / local.
+Paid commands: `generate`, `reverse`, `analyze-transcript`, `analyze-titles`,
+`brand:analyze`, `eval`, `retry`, `retry-image`, `edit`. `eval` and `retry`
+exist only on the repo/dev CLI; the thin client retries one variant with
+`retry-image`. `brand:import` stays free. Everything else (`list-*`,
+`cost-estimate`, `config-set`, `upload-ref`, `refs:rethumb`,
+`refs:contact-sheet`) is free / local.
 
 ## Environment
 

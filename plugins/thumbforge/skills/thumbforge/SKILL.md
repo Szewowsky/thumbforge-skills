@@ -45,8 +45,9 @@ edits, Flare for fast daily iterations.
 
 ## Paid-call protocol (triple lock)
 
-Paid commands (`generate`, `reverse`, `eval`, `retry`, `analyze-transcript`, `analyze-titles`,
-`edit`) are dry-run by default. To actually spend money you need **all three**:
+Paid commands (`generate`, `reverse`, `analyze-transcript`, `analyze-titles`,
+`brand:analyze`, `eval`, `retry`, `retry-image`, `edit`) are dry-run by default.
+To actually spend money you need **all three**:
 env `THUMBFORGE_ALLOW_PAID_CALLS=1` + flag `--confirm` + the dry-run-default being
 overridden. The discipline that keeps this safe:
 
