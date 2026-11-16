@@ -141,9 +141,7 @@ Komendy w tym skillu wołają domyślnie **`thumbforge`** — cienki klient HTTP
 `pnpm cli <komenda>` wolno użyć tylko w dev-mode wykrytym wspólnym kontraktem po
 manifeście `package.json` z `name === "thumbforge"` w cwd.
 
-Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `inventory`, `cost-estimate`, `edit`, `generate`, `reverse`, `analyze-transcript`, `preset:create`,
-`preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`,
-`upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`.
+Które komendy ma cienki klient, a które są repo/dev-only, mówi [sekcja routera](../thumbforge/SKILL.md#cienki-klient-tester-i-tryb-dev).
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
 Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`,
 `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete` są
