@@ -147,13 +147,13 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 
 | Command | Paid? | Purpose |
 |---|---|---|
-| `list-models` | no | image models + pricing |
+| `list-models` | no | image models + pricing (repo/dev-only, `pnpm cli`; thin client: `inventory`) |
 | `list-presets` | no | built-in + custom presets |
 | `list-styles` | no | text / background / recipe styles (built-in + custom) |
 | `list-expressions` | no | built-in + custom mina/poza bricks and preset defaults |
 | `list-refs` | no | reference images on disk (`--category`) |
 | `inventory` | no | one-shot overview: presets + styles + models + refs |
-| `list-sessions` | no | past generation sessions |
+| `list-sessions` | no | past generation sessions (repo/dev-only, `pnpm cli`; thin client: Historia w aplikacji) |
 | `cost-estimate` | no | estimate batch cost (no provider call) |
 | `grid <sessionId>` / `grid --batch <batchId>` | no | compose a session grid or whole Grid Runu → **tf-generate** |
 | `preview <sessionId>` | no | YouTube feed mockup PNG with the user's title; avatar and name from the session Profile's channel (no Profile: the active one); `--avatar` only overrides with a photo file or link from the user, never guessed → **tf-preview** |
@@ -171,16 +171,16 @@ Authoritative flags: `thumbforge <cmd> --help`. Map: `references/cli-reference.m
 | `eval` | **yes** | golden-set eval (out of core scope) |
 | `retry` | **yes** | re-run a session (out of core scope) |
 | `edit` | **yes** | instruction-edit an image → **tf-edit** |
-| `config-set` | no | store an encrypted key (the user does setup) |
+| `config-set` | no | store an encrypted key (repo/dev-only, `pnpm cli`; thin client: Ustawienia) |
 | `upload-ref` | no | add a reference image → **tf-assets** |
-| `refs:rethumb` | no | rebuild reference `_thumb.png` previews → **tf-assets** |
-| `refs:contact-sheet` | no | labeled visual ref sheet → **tf-assets** |
-| `preset:slots` | no | a preset's slots → **tf-preset** |
+| `refs:rethumb` | no | rebuild reference `_thumb.png` previews (repo/dev-only, `pnpm cli`) → **tf-assets** |
+| `refs:contact-sheet` | no | labeled visual ref sheet (repo/dev-only, `pnpm cli`) → **tf-assets** |
+| `preset:slots` | no | a preset's slots (repo/dev-only, `pnpm cli`; thin client: `preset:show`) → **tf-preset** |
 | `preset:show` | no | a preset's 6 spec blocks (`--block` for raw) → **tf-preset** |
 | `preset:create` | no | fork a preset → **tf-preset** |
 | `preset:edit` | no | edit a custom preset → **tf-preset** |
-| `preset:preview` | no | replace a custom preset grid cover → **tf-preset** |
-| `preset:delete` | no | soft-delete a custom preset → **tf-preset** |
+| `preset:preview` | no | replace a custom preset grid cover (repo/dev-only, `pnpm cli`) → **tf-preset** |
+| `preset:delete` | no | soft-delete a custom preset (repo/dev-only, `pnpm cli`) → **tf-preset** |
 | `style:create` | no | author a text/background style → **tf-preset** |
 | `style:edit` | no | edit a custom style → **tf-preset** |
 | `style:delete` | no | soft-delete a custom style → **tf-preset** |
@@ -242,6 +242,6 @@ manifeście `package.json` z `name === "thumbforge"` w cwd.
 
 Cienki klient wspiera: `list-presets`, `list-refs`, `list-styles`, `list-expressions`, `inventory`, `spend`, `doctor`, `profile:list`, `profile:current`, `brand:analyze`, `brand:import`, `cost-estimate`, `edit`, `generate`, `resume`, `retry-image`, `cancel`, `fetch-media`, `reverse`, `reverse:contract`, `reverse:import`, `analyze-transcript`, `analyze-titles`, `preset:create`, `preset:show`, `preset:edit`, `style:create`, `style:edit`, `style:delete`, `expression:create`, `expression:edit`, `expression:delete`, `lesson:list`, `lesson:add`, `lesson:edit`, `lesson:delete`, `lesson:restore-seeds`, `upload-ref`, `rename-ref`, `move-ref`, `delete-ref`, `grid`, `preview`.
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
-Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
-są **repo/dev-only** (`pnpm cli <komenda>`) — cienki klient zwraca fail-fast
+Komendy `retry`, `eval`, `list-models`, `list-sessions`, `config-set`, `refs:contact-sheet`, `refs:rethumb`, `refs:audit`, `preset:preview`, `preset:slots`, `preset:delete`, `generations:rethumb`, `sessions:prune-stale`
+są **repo/dev-only** (`pnpm cli <komenda>`) - cienki klient zwraca fail-fast
 „dostępne tylko w trybie repo (dev)".

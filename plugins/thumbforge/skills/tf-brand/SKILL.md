@@ -202,6 +202,6 @@ manifeście `package.json` z `name === "thumbforge"` w cwd.
 
 Które komendy ma cienki klient, a które są repo/dev-only, mówi [sekcja routera](../thumbforge/SKILL.md#cienki-klient-tester-i-tryb-dev).
 Modele sprawdzaj przez `thumbforge inventory` zamiast repo/dev-only `list-models`.
-Komendy `retry`, `eval`, `list-models`, `refs:contact-sheet`, `refs:rethumb`, `preset:preview`, `preset:slots`, `preset:delete`
+Komendy `retry`, `eval`, `list-models`, `list-sessions`, `config-set`, `refs:contact-sheet`, `refs:rethumb`, `refs:audit`, `preset:preview`, `preset:slots`, `preset:delete`, `generations:rethumb`, `sessions:prune-stale`
 są **repo/dev-only** (`pnpm cli <komenda>`) - cienki klient zwraca fail-fast
 „dostępne tylko w trybie repo (dev)”.
