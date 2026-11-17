@@ -22,7 +22,7 @@ only for commands marked repo/dev-only and only after the shared manifest check.
 | `profile:current` | no | no | show the active profile | `--help` |
 | `brand:import <file>` | no | no | import a profile design.md | `--help` (`--profile`, `--overwrite`) |
 | `brand:analyze` | **yes** | no | derive a brand design from 2-12 thumbnails | `--help` (`--file`, `--image`, `--profile`, `--confirm`) |
-| `list-sessions` | no | no | past generation sessions | `--help` |
+| `list-sessions` | no | no | repo/dev-only past generation sessions (thin client: Historia w aplikacji) | `--help` |
 | `cost-estimate` | no | no | estimate batch cost (no provider call; cost is preset-independent) | `--help` (`--count`, `--model`, `--quality`, `--provider`) |
 | `generate` | **yes** | thin: yes; dev: opt (export) | generate thumbnails (single or batch) | `--help` (`--visible-text`, `--title`, `--text-style`, `--text-color`, `--glow-color`, `--background-style`, `--expression`, `--concepts-file`, `--out-name`) |
 | `grid` | no | yes (`--out`) | session grid or Grid Runu | `--help` (`<sessionId>` / `--batch`, `--out-name`) |
@@ -39,19 +39,19 @@ only for commands marked repo/dev-only and only after the shared manifest check.
 | `eval` | **yes** | yes (real run) | golden-set eval | `--help` |
 | `retry` | **yes** | yes (real run) | repo/dev-only: re-run a session (obrazy do historii, do `--out` tylko kopie) | `--help` (`--session`, `--out-name`) |
 | `edit` | **yes** | yes (real run) | instruction-edit an image | `--help` (`--session`, `--image`, `--provider`, `--model`, `--quality`, `--out-name`) |
-| `config-set` | no | no | store an encrypted API key | `--help` (`--provider`, `--key`) |
+| `config-set` | no | no | repo/dev-only: store an encrypted API key (thin client: Ustawienia) | `--help` (`--provider`, `--key`) |
 | `upload-ref` | no | no | add a reference image | `--help` (`--file`, `--category`, `--name`) |
 | `rename-ref <id>` | no | no | rename a reference display label (empty clears it) | `--help` (`--name`) |
 | `move-ref <id>` | no | no | move a reference to another category | `--help` (`--category`) |
 | `delete-ref <id>` | no | no | delete a reference image from the library | `--help` |
-| `refs:rethumb` | no | no | rebuild reference `_thumb.png` previews | `--help` (`--category`) |
+| `refs:rethumb` | no | no | repo/dev-only: rebuild reference `_thumb.png` previews | `--help` (`--category`) |
 | `refs:contact-sheet` | no | yes (`--out`) | labeled visual sheet for reference selection | `--help` (`--category`, `--out`) |
-| `preset:slots` | no | no | a preset's slots (built-in or custom) | `--help` |
+| `preset:slots` | no | no | repo/dev-only: a preset's slots (built-in or custom) | `--help` |
 | `preset:show` | no | no | a preset's 6 spec blocks; `--block` emits one raw block | `--help` (`--block`) |
 | `preset:create` | no | no | fork a built-in/custom into a custom preset | `--help` (`--from`, `--name`, `--*-style`, `--default-expression`, `--glow-color`, `--*-file`) |
 | `preset:edit` | no | no | edit a custom preset (name / styles / blocks) | `--help` (`--name`, `--*-style`, `--default-expression`, `--glow-color`, `--*-file`) |
-| `preset:preview` | no | no | replace a custom preset grid cover | `--help` (`--from`) |
-| `preset:delete` | no | no | soft-delete a custom preset | `--help` |
+| `preset:preview` | no | no | repo/dev-only: replace a custom preset grid cover | `--help` (`--from`) |
+| `preset:delete` | no | no | repo/dev-only: soft-delete a custom preset | `--help` |
 | `style:create` | no | no | author a text/background style | `--help` (`--type`, `--from`, `--sentence`, …) |
 | `style:edit` | no | no | edit a custom style (full-input merge) | `--help` |
 | `style:delete` | no | no | soft-delete a custom style | `--help` |
@@ -66,7 +66,8 @@ only for commands marked repo/dev-only and only after the shared manifest check.
 
 Notes:
 - Stale names that DON'T exist: `list`, `cost`. Use `list-presets`/`list-models`/
-  `list-refs`/`list-sessions` and `cost-estimate`.
+  `list-refs` and `cost-estimate`. `list-sessions` is a real name, but only on
+  `pnpm cli` (repo/dev); the thin client has no such command.
 - Paid commands (`generate`, `reverse`, `analyze-transcript`, `analyze-titles`, `brand:analyze`, `eval`, `retry`,
   `retry-image`, `edit`) need the triple lock - see `paid-call-protocol.md`.
 - `edit` resolves the selected image's saved target, then the session for legacy NULL metadata;
@@ -92,11 +93,12 @@ Notes:
   Kolejne rundy odcinka używają tego samego sluga i katalogu, bez podkatalogów rund.
 - `list-refs` prints `/references/<category>/<id>.png` paths — feed those to
   `--refs`.
-- `refs:rethumb` is free + local: it rebuilds display thumbnails only and never
-  rewrites the original reference PNG paths stored by sessions.
-- `refs:contact-sheet` is free + local: it composes existing `_thumb.png` previews
-  into a labeled PNG (`id` + display name) so agents choose refs by visible
-  content, not filenames.
+- `refs:rethumb` is free and repo/dev-only (`pnpm cli`): it rebuilds display
+  thumbnails only and never rewrites the original reference PNG paths stored
+  by sessions. The thin client answers that the command is repo/dev only.
+- `refs:contact-sheet` is free and repo/dev-only (`pnpm cli`): it composes
+  existing `_thumb.png` previews into a labeled PNG (`id` + display name) so
+  agents choose refs by visible content, not filenames.
 - **Headline text:** `generate --visible-text "..."` now bakes the headline. With
   no `--text-style` it defaults to the preset's text style (or `heavy-bold`);
   `--text-style none` keeps a clean text-less base. `--text-color` is `#RRGGBB`.

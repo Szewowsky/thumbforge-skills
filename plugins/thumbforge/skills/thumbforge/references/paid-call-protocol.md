@@ -16,8 +16,10 @@ Paid commands: `generate`, `reverse`, `analyze-transcript`, `analyze-titles`,
 `brand:analyze`, `eval`, `retry`, `retry-image`, `edit`. `eval` and `retry`
 exist only on the repo/dev CLI; the thin client retries one variant with
 `retry-image`. `brand:import` stays free. Everything else (`list-*`,
-`cost-estimate`, `config-set`, `upload-ref`, `refs:rethumb`,
-`refs:contact-sheet`) is free / local.
+`cost-estimate`, `upload-ref`) is free / local. `config-set`, `list-sessions`,
+`refs:rethumb` and `refs:contact-sheet` are free too, and repo/dev-only
+(`pnpm cli`). The thin client does not run them: keys go in the app Settings,
+past sessions are in Historia.
 
 ## Environment
 

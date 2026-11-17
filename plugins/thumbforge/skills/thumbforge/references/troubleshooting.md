@@ -3,8 +3,11 @@
 ## `command not found` / unknown command
 
 You used a stale name. `list` and `cost` do **not** exist. The real names are
-`list-models` / `list-presets` / `list-refs` / `list-sessions` and
-`cost-estimate`. Run `thumbforge --help` for the full list.
+`list-models` / `list-presets` / `list-refs` and `cost-estimate`. Run
+`thumbforge --help` for the thin-client list. A message that the command is
+available only in repo/dev mode is not a stale name: use `pnpm cli` (verified
+dev) or, for keys, Settings in the app. `list-sessions` and `config-set` are
+in that set.
 
 ## `429` / quota exceeded (Google free-tier)
 
